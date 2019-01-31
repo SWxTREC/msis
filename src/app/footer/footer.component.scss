@@ -1,0 +1,69 @@
+@import '../../theme/theme-lasp.scss';
+@import '../../theme/theme-colors.scss';
+
+.footer {
+  background-color: #04072d;
+  min-height: 350px;
+}
+
+.lasp-logo-footer {
+  height: 100px;
+  margin: 10px;
+}
+
+.nav-footer-row {
+  height: 56px;
+  padding: 0;
+  background-color: #04072d;
+
+  .mat-divider {
+    border-color: white;
+  }
+}
+
+.social-button-container {
+  margin: 10px 0 ;
+
+  .facebook-button {
+    background-color: #3b5998;
+    margin: 10px;
+  }
+
+  .twitter-button {
+    background-color: #1DA1F2;
+    margin: 10px;
+  }
+
+  .youtube-button {
+    background-color: #cc181e;
+    margin: 10px;
+  }
+}
+
+.footer-nav {
+  margin: 10px 0;
+}
+
+.outer-footer {
+  background-color: $color-primary;
+}
+
+.copyright {
+  color: white;
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+.nav-item {
+  font-size: 14px;
+  height: 56px;
+  line-height: 56px;
+  overflow-wrap: break-word;
+  padding: 0 24px;
+  color: white;
+
+  &:hover {
+    color: orange;
+    cursor: pointer;
+  }
+}
