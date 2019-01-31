@@ -1,0 +1,21 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'theme/theme-lasp.scss';
+@import 'theme/theme-colors.scss';
+
+html {
+  min-width: 320px;
+}
+
+body {
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+}
+
+.basic-container {
+  padding: 30px;
+}
+
+.version-info {
+  font-size: 8px;
+  float: right;
+}
