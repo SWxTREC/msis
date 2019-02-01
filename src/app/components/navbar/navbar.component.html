@@ -1,7 +1,7 @@
 <mat-toolbar color="primary" fxHide.lt-md="true">
   <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill class="logo-header-row">
-    <img src="https://github.com/hleise/lasp-images/raw/master/lisird-logo.jpg" class="logo-large" />
-    <img src="https://github.com/hleise/lasp-images/raw/master/lasp-logo-no-text.png" class="lasp-logo" />
+    <img src="../../../assets/images/lisird-logo.jpg" class="logo-header-row__logo-large" />
+    <img src="../../../assets/images/lasp-logo-no-text.png" class="logo-header-row__lasp-logo" />
   </mat-toolbar-row>
   <mat-toolbar-row class="nav-header-row mat-elevation-z3">
     <nav fxLayout="row" fxLayoutAlign="space-evenly center" fxFlexFill>
@@ -10,8 +10,8 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <mat-toolbar class="small-toolbar mat-elevation-z3" color="primary" [fxShow]="false || sticky" fxShow.lt-md="true" fxLayoutAlign="space-between center">
-  <img src="https://github.com/hleise/lasp-images/raw/master/lisird-logo-small.png" class="logo-mini" />
-  <button mat-stroked-button fxShow="false" fxShow.lt-md="true" class="menu-button" (click)="navOpen = true">
+  <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" />
+  <button mat-stroked-button fxShow="false" fxShow.lt-md="true" class="small-toolbar__menu-button" (click)="navOpen = true">
     Menu <mat-icon>menu</mat-icon>
   </button>
   <nav fxLayout="row" fxShow="false" fxShow.gt-sm="true">
@@ -21,8 +21,8 @@
 
 <div *ngIf="navOpen" class="nav-overlay expand-down">
   <mat-toolbar color="transparent" fxLayoutAlign="space-between center">
-    <img src="https://github.com/hleise/lasp-images/raw/master/lisird-logo-small.png" class="logo-mini" />
-    <button mat-button class="close-nav" (click)="navOpen = false">
+    <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" />
+    <button mat-button class="nav-overlay__close-nav" (click)="navOpen = false">
       <mat-icon>close</mat-icon>
     </button>
   </mat-toolbar>
