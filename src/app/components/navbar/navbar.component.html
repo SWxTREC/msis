@@ -1,0 +1,35 @@
+<mat-toolbar color="primary" fxHide.lt-md="true">
+  <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill class="logo-header-row">
+    <img src="../../../assets/images/lisird-logo.jpg" class="logo-header-row__logo-large" />
+    <img src="../../../assets/images/lasp-logo-no-text.png" class="logo-header-row__lasp-logo" />
+  </mat-toolbar-row>
+  <mat-toolbar-row class="nav-header-row mat-elevation-z3">
+    <nav fxLayout="row" fxLayoutAlign="space-evenly center" fxFlexFill>
+      <a *ngFor="let nav of fillerNav" routerLink="." class="nav-item">{{nav}}</a>
+    </nav>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-toolbar class="small-toolbar mat-elevation-z3" color="primary" [fxShow]="false || sticky" fxShow.lt-md="true" fxLayoutAlign="space-between center">
+  <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" />
+  <button mat-stroked-button fxShow="false" fxShow.lt-md="true" class="small-toolbar__menu-button" (click)="navOpen = true">
+    Menu <mat-icon>menu</mat-icon>
+  </button>
+  <nav fxLayout="row" fxShow="false" fxShow.gt-sm="true">
+    <a *ngFor="let nav of fillerNav" routerLink="." class="nav-item">{{nav}}</a>
+  </nav>
+</mat-toolbar>
+
+<div *ngIf="navOpen" class="nav-overlay expand-down">
+  <mat-toolbar color="transparent" fxLayoutAlign="space-between center">
+    <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" />
+    <button mat-button class="nav-overlay__close-nav" (click)="navOpen = false">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-nav-list>
+    <mat-list-item *ngFor="let nav of fillerNav; last as last">
+      <a routerLink="." class="overlay-nav-item">{{nav}}</a>
+      <mat-divider *ngIf="!last"></mat-divider>
+    </mat-list-item>
+  </mat-nav-list>
+</div>
