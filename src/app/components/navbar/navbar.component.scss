@@ -13,93 +13,37 @@
   }
 }
 
-.nav-header-row,
-.sticky-toolbar {
-  overflow: hidden;
-}
-
-$navHeight: 56px;
-$stickyHeaderHeight: 64px;
-
 .nav-header-row {
-  height: $navHeight;
+  height: 56px;
   padding: 0;
-  align-items: initial;
-}
-
-.nav-top {
-  min-width: 0;
-  width: 100%;
-  height: 100%;
-  max-width: 950px;
-  margin: 0 auto;
-  align-self: flex-start;
-  transition: margin-top 0.25s;
-
-  > * {
-    height: 100%;
-  }
-
-  > form {
-    // the search input field overflows slightly above the upper border of the <form> element. Because of this, when
-    // the search bar is hidden, a user could click in the empty space at the bottom of the nav bar and the search input
-    // field would be focused, scrolling it into view. Hiding the overflow fixes this.
-    overflow: hidden;
-  }
-
-  .flex-spacer {
-    flex-grow: 1;
-  }
-}
-
-.nav-header-row .nav-top.search-open {
-  margin-top: -$navHeight;
-}
-.sticky-toolbar .nav-top {
-  max-width: none;
-  margin-left: 16px;
-  &.search-open {
-    margin-top: -$stickyHeaderHeight;
-  }
-  .search-form-field {
-    max-width: 950px;
-  }
 }
 
 .nav-item {
   font-size: 14px;
-  height: $navHeight;
-  line-height: $navHeight;
+  height: 56px;
+  line-height: 56px;
   overflow-wrap: break-word;
   padding: 0 24px;
   color: white;
-  cursor: pointer;
 
   &:hover {
     color: orange;
+    cursor: pointer;
   }
 }
 
 .overlay-nav-item {
   font-size: 14px;
-  height: $navHeight;
-  line-height: $navHeight;
+  height: 56px;
+  line-height: 56px;
   overflow-wrap: break-word;
   color: white;
   width: 100%;
-  cursor: pointer;
 
   &:hover {
     color: orange;
+    cursor: pointer;
   }
-}
-
-.search-button {
-  font-size: 100%;
-}
-
-.search-form-field {
-  flex-grow: 1;
 }
 
 .small-toolbar {
@@ -117,49 +61,42 @@ $stickyHeaderHeight: 64px;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 0;
-  overflow: hidden;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.98);
   color: white;
   z-index: 1000;
-  // since the transition duration and timing function are redefined in the .nav-open class,
-  // the transition definitions below apply to when the overlay is closing (i.e. when '.nav-open' is not applied)
-  transition: height 0.25s cubic-bezier(0.4, 0.0, 1, 1);
-
-  &.nav-open {
-    overflow: auto;
-    height: 100%;
-    // define transition properties for when the overlay is opening
-    transition-duration: 0.3s;
-    transition-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
-  }
 
   mat-toolbar {
     background-color: transparent;
   }
 
   mat-nav-list {
-    padding: 0 16px;
-  }
-  mat-card {
-    padding: 0 32px;
-  }
-
-  mat-nav-list,
-  mat-card {
-    margin-bottom: 16px;
+    padding: 0 40px;
   }
 
   &__close-nav {
     color: white;
   }
+}
 
-  .search-form-field, .search-form-field * {
-    color: white;
+.expand-down {
+  animation: expand-down 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  overflow: hidden;
+}
+
+@keyframes expand-down {
+  0% {
+    height: 0;
   }
-
+  100% {
+    height: 100%;
+  }
 }
 
 .logo-mini {
   height: 32px;
+}
+
+.mat-divider {
+  border-color: white;
 }

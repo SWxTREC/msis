@@ -7,14 +7,10 @@ import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 })
 export class NavbarComponent {
   @ViewChild('stickyMenu') menuElement: ElementRef;
-  @ViewChild('searchInput') searchInputElement: ElementRef;
-  @ViewChild('stickySearchInput') stickySearchInputElement: ElementRef;
 
   fillerNav = ['Data', 'Missions', 'Tools', 'About', 'Reference', 'Science', 'Instruments'];
   navOpen = false;
   sticky = false;
-  searchOpen = false;
-  searchInputValue = '';
 
   @HostListener('window:scroll', ['$event'])
   handleScroll() {
@@ -24,28 +20,5 @@ export class NavbarComponent {
     } else {
       this.sticky = false;
     }
-  }
-
-  /**
-   * Open the sitewide search area, then clear and focus the input field.
-   * For wide screens.
-   */
-  openSearch() {
-    this.searchOpen = true;
-    this.searchInputValue = '';
-    let element = this.sticky ? this.stickySearchInputElement : this.searchInputElement;
-    element.nativeElement.focus({ preventScroll: true });
-  }
-
-  /**
-   * Close the sitewide search area.
-   * For wide screens.
-   */
-  closeSearch() {
-    this.searchOpen = false;
-  }
-
-  submitSearch() {
-    console.log( "Searched for: " + this.searchInputValue );
   }
 }
