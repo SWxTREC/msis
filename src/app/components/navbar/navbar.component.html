@@ -10,7 +10,7 @@
         <span class="flex-spacer"></span>
         <i class="material-icons nav-item search-button" (click)="openSearch()">search</i>
       </div>
-      <form fxLayout="row" fxLayoutAlign="flex-start center" (submit)="submitSearch()">
+      <form class="lasp-dark-theme" fxLayout="row" fxLayoutAlign="flex-start center" (submit)="submitSearch()">
         <mat-form-field floatLabel="never" class="search-form-field">
           <input #searchInput matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
         </mat-form-field>
@@ -30,7 +30,7 @@
       <a *ngFor="let nav of fillerNav" routerLink="." class="nav-item">{{nav}}</a>
       <i class="material-icons nav-item search-button" (click)="openSearch()">search</i>
     </div>
-    <form fxLayout="row" fxLayoutAlign="flex-end center" (submit)="submitSearch()">
+    <form class="lasp-dark-theme" fxLayout="row" fxLayoutAlign="flex-end center" (submit)="submitSearch()">
       <mat-form-field floatLabel="never" class="search-form-field">
         <input #stickySearchInput matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
       </mat-form-field>
@@ -50,7 +50,7 @@
   <mat-card>
     <form fxFlexFill fxLayout="row" fxLayoutAlign="flex-start center" (submit)="submitSearch()">
       <mat-form-field floatLabel="never" class="search-form-field">
-        <input #searchInput2 matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
+        <input matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
       </mat-form-field>
       <button mat-button color="primary" type="submit" [disabled]="!searchInputValue">Go</button>
     </form>
