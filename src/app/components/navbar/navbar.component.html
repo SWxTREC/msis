@@ -3,14 +3,15 @@
     <img src="../../../assets/images/lisird-logo.jpg" class="logo-header-row__logo-large" />
     <img src="../../../assets/images/lasp-logo-no-text.png" class="logo-header-row__lasp-logo" />
   </mat-toolbar-row>
+
+  <!-- Menu toolbar for wide screens, only shown when the page is scrolled to the top -->
   <mat-toolbar-row class="nav-header-row mat-elevation-z3">
     <nav class="nav-top" [class.search-open]="searchOpen">
-      <div fxLayout="row" fxLayoutAlign="flex-start center">
+      <div fxLayout="row" fxLayoutAlign="space-between center">
         <a *ngFor="let nav of fillerNav" routerLink="." class="nav-item">{{nav}}</a>
-        <span class="flex-spacer"></span>
         <i class="material-icons nav-item search-button" (click)="openSearch()">search</i>
       </div>
-      <form class="lasp-dark-theme" fxLayout="row" fxLayoutAlign="flex-start center" (submit)="submitSearch()">
+      <form class="lasp-dark-theme" fxLayout="row" fxLayoutAlign="space-between center" (submit)="submitSearch()">
         <mat-form-field floatLabel="never" class="search-form-field">
           <input #searchInput matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
         </mat-form-field>
@@ -19,18 +20,28 @@
       </form>
     </nav>
   </mat-toolbar-row>
+
 </mat-toolbar>
-<mat-toolbar class="small-toolbar mat-elevation-z3 sticky-toolbar" color="primary" [fxShow]="false || sticky" fxShow.lt-md="true" fxLayoutAlign="space-between center">
-  <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" />
-  <button mat-stroked-button fxShow="false" fxShow.lt-md="true" class="small-toolbar__menu-button" (click)="navOpen = true">
-    Menu <mat-icon>menu</mat-icon>
-  </button>
+
+
+<mat-toolbar class="small-toolbar mat-elevation-z3 sticky-toolbar" color="primary" [fxShow]="false || sticky" fxShow.lt-md="true">
+
+  <!-- Menu toolbar for narrow screens -->
+  <div fxFlexFill fxShow="false" fxShow.lt-md="true" fxLayoutAlign="space-between center">
+    <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" />
+    <button mat-stroked-button class="small-toolbar__menu-button" (click)="navOpen = true">
+      Menu <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+
+  <!-- Menu toolbar for wide screens, only shown when the page scrolled down enough to hide the header -->
   <nav class="nav-top" [class.search-open]="searchOpen" fxShow="false" fxShow.gt-sm="true">
-    <div fxLayout="row" fxLayoutAlign="flex-end center">
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" />
       <a *ngFor="let nav of fillerNav" routerLink="." class="nav-item">{{nav}}</a>
       <i class="material-icons nav-item search-button" (click)="openSearch()">search</i>
     </div>
-    <form class="lasp-dark-theme" fxLayout="row" fxLayoutAlign="flex-end center" (submit)="submitSearch()">
+    <form class="lasp-dark-theme" fxLayout="row" fxLayoutAlign="space-between center" (submit)="submitSearch()">
       <mat-form-field floatLabel="never" class="search-form-field">
         <input #stickySearchInput matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
       </mat-form-field>
@@ -38,8 +49,10 @@
       <i class="material-icons nav-item search-button" (click)="closeSearch()">close</i>
     </form>
   </nav>
+
 </mat-toolbar>
 
+<!-- Overlay nav menu for narrow screens, hidden until "Menu" is clicked -->
 <div class="nav-overlay expand-down lasp-dark-theme" [class.nav-open]="navOpen">
   <mat-toolbar color="transparent" fxLayoutAlign="space-between center">
     <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" />

@@ -31,7 +31,7 @@ $stickyHeaderHeight: 64px;
   min-width: 0;
   width: 100%;
   height: 100%;
-  max-width: 950px;
+  max-width: 1000px;
   margin: 0 auto;
   align-self: flex-start;
   transition: margin-top 0.25s;
@@ -46,23 +46,14 @@ $stickyHeaderHeight: 64px;
     // field would be focused, scrolling it into view. Hiding the overflow fixes this.
     overflow: hidden;
   }
-
-  .flex-spacer {
-    flex-grow: 1;
-  }
 }
 
 .nav-header-row .nav-top.search-open {
   margin-top: -$navHeight;
 }
 .sticky-toolbar .nav-top {
-  max-width: none;
-  margin-left: 16px;
   &.search-open {
     margin-top: -$stickyHeaderHeight;
-  }
-  .search-form-field {
-    max-width: 950px;
   }
 }
 
@@ -100,6 +91,7 @@ $stickyHeaderHeight: 64px;
 
 .search-form-field {
   flex-grow: 1;
+  padding-left: 16px;
 }
 
 .small-toolbar {
