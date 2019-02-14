@@ -3,24 +3,11 @@
 
 @include mat-core();
 
-// $primary: mat-palette($slate-gray, 400);
-$primary: mat-palette($lasp-blue, 700);
-$accent: mat-palette($lisird-orange, 500, 700, 900);
-$warn: mat-palette($lasp-red, A200, A100, 500);
+$theme: mat-light-theme( $primary, $accent, $warn );
+$theme-dark: mat-dark-theme( $primary-dark, $accent-dark, $warn-dark );
 
-$theme: mat-light-theme($primary, $accent, $warn);
-$color-primary: $primary;
-$color-accent: mat-color($accent);
-$color-warn: mat-color($warn);
-
-@include angular-material-theme($theme);
+@include angular-material-theme( $theme );
 
 .lasp-dark-theme {
-  $primary: mat-palette($mat-blue-gray, 600);
-  $accent: mat-palette($mat-lime, A100);
-  $warn: mat-palette($mat-red, A200);
-
-  $theme: mat-dark-theme($primary, $accent, $warn);
-
-  @include angular-material-theme($theme);
+  @include angular-material-theme( $theme-dark );
 }

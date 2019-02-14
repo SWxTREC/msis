@@ -15,7 +15,7 @@
         <mat-form-field floatLabel="never" class="search-form-field">
           <input #searchInput matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
         </mat-form-field>
-        <button mat-button color="accent" type="submit" [disabled]="!searchInputValue">Go</button>
+        <button mat-button color="primary" type="submit" [disabled]="!searchInputValue">Go</button>
         <i class="material-icons nav-item search-button" (click)="closeSearch()">close</i>
       </form>
     </nav>
@@ -45,7 +45,7 @@
       <mat-form-field floatLabel="never" class="search-form-field">
         <input #stickySearchInput matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
       </mat-form-field>
-      <button mat-button color="accent" type="submit" [disabled]="!searchInputValue">Go</button>
+      <button mat-button color="primary" type="submit" [disabled]="!searchInputValue">Go</button>
       <i class="material-icons nav-item search-button" (click)="closeSearch()">close</i>
     </form>
   </nav>

@@ -10,26 +10,23 @@
 
 // this file defines color variables that can be used throughout the app
 // the initial variable declarations with the palettes need to be repeated from the theme file
-$primary: mat-palette($lasp-blue, 700);
-$accent: mat-palette($lisird-orange, 500, 700, 900);
-$warn: mat-palette($lasp-red, A200, A100, 500);
 
-$color-primary: mat-color($primary);
-$color-accent: mat-color($accent);
-$color-warn: mat-color($warn);
+// $primary:           mat-palette($slate-gray, 400);
+$primary:            mat-palette($lasp-blue, 700);
+$accent:             mat-palette($lisird-orange, 500, 300, 700);
+$warn:               mat-palette($lasp-red, A200, A100, 500);
 
-$primary-dark: mat-palette($mat-blue-gray, 600);
-$secondary-dark: mat-palette($mat-blue-gray, 700);
-$accent-dark:  mat-palette($mat-lime, A100);
-$warn-dark:    mat-palette($mat-red, A200);
+$color-primary:      mat-color($primary);
+$color-accent:       mat-color($accent);
+$color-warn:         mat-color($warn);
 
-$primary-dark: mat-palette($mat-blue-gray, 600);
-$accent-dark: mat-palette($mat-lime, A100);
-$warn-dark: mat-palette($mat-red, A200);
+$primary-dark:       mat-palette($lisird-orange, 500, 300, 700);
+$accent-dark:        mat-palette($mat-blue-gray, 600);
+$warn-dark:          mat-palette($mat-red, A200);
 
 $color-primary-dark: mat-color($primary-dark);
-$color-accent-dark: mat-color($accent-dark);
-$color-warn-dark: mat-color($warn-dark);
+$color-accent-dark:  mat-color($accent-dark);
+$color-warn-dark:    mat-color($warn-dark);
 
 $color-background-dark: #26375a;
 
