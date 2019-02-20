@@ -9,15 +9,11 @@
     <nav class="nav-top" [class.search-open]="searchOpen">
       <div fxLayout="row" fxLayoutAlign="space-between center">
         <a *ngFor="let nav of fillerNav" routerLink="." class="nav-item">{{nav}}</a>
-        <i class="material-icons nav-item search-button" (click)="openSearch()">search</i>
+        <button mat-icon-button (click)="openSearch()">
+            <mat-icon aria-label="open search">search</mat-icon>
+        </button>
       </div>
-      <form class="lasp-dark-theme" fxLayout="row" fxLayoutAlign="space-between center" (submit)="submitSearch()">
-        <mat-form-field floatLabel="never" class="search-form-field">
-          <input #searchInput matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
-        </mat-form-field>
-        <button mat-button color="primary" type="submit" [disabled]="!searchInputValue">Go</button>
-        <i class="material-icons nav-item search-button" (click)="closeSearch()">close</i>
-      </form>
+      <app-search (close)="closeSearch()"></app-search>
     </nav>
   </mat-toolbar-row>
 
@@ -41,13 +37,7 @@
       <a *ngFor="let nav of fillerNav" routerLink="." class="nav-item">{{nav}}</a>
       <i class="material-icons nav-item search-button" (click)="openSearch()">search</i>
     </div>
-    <form class="lasp-dark-theme" fxLayout="row" fxLayoutAlign="space-between center" (submit)="submitSearch()">
-      <mat-form-field floatLabel="never" class="search-form-field">
-        <input #stickySearchInput matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
-      </mat-form-field>
-      <button mat-button color="primary" type="submit" [disabled]="!searchInputValue">Go</button>
-      <i class="material-icons nav-item search-button" (click)="closeSearch()">close</i>
-    </form>
+    <app-search (close)="closeSearch()"></app-search>
   </nav>
 
 </mat-toolbar>
@@ -61,12 +51,7 @@
     </button>
   </mat-toolbar>
   <mat-card>
-    <form fxFlexFill fxLayout="row" fxLayoutAlign="flex-start center" (submit)="submitSearch()">
-      <mat-form-field floatLabel="never" class="search-form-field">
-        <input matInput placeholder="Search" name="searchInputValue" [(ngModel)]="searchInputValue">
-      </mat-form-field>
-      <button mat-button color="primary" type="submit" [disabled]="!searchInputValue">Go</button>
-    </form>
+    <app-search (close)="closeSearch()"></app-search>
   </mat-card>
   <mat-nav-list>
     <mat-list-item *ngFor="let nav of fillerNav; last as last">

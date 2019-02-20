@@ -1,5 +1,8 @@
 @import '../../../theme/theme-colors';
 
+// so we can easily play with the size of the font for the nav
+$font-size: 20px;
+
 .logo-header-row {
   height: 100px;
   background-color: black;
@@ -21,7 +24,7 @@
 }
 
 $navHeight: 56px;
-$stickyHeaderHeight: 64px;
+$stickyHeaderHeight: 56px;
 
 .nav-header-row {
   height: $navHeight;
@@ -60,7 +63,8 @@ $stickyHeaderHeight: 64px;
 }
 
 .nav-item {
-  font-size: 14px;
+  position: relative;
+  font-size: $font-size;
   height: $navHeight;
   line-height: $navHeight;
   overflow-wrap: break-word;
@@ -71,10 +75,32 @@ $stickyHeaderHeight: 64px;
   &:hover {
     color: $color-accent;
   }
+
+
+}
+
+a {
+  &:hover:after {
+    visibility: visible;
+    transform: scaleX(1);
+  }
+
+  &:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    bottom: 0;
+    left: 0;
+    visibility: hidden;
+    transform: scaleX(0);
+    transition: all .2s ease-in-out 0s;
+    background-color: $color-accent;
+  }
 }
 
 .overlay-nav-item {
-  font-size: 14px;
+  font-size: $font-size;
   height: $navHeight;
   line-height: $navHeight;
   overflow-wrap: break-word;
@@ -152,6 +178,12 @@ $stickyHeaderHeight: 64px;
     color: white;
   }
 
+}
+
+mat-toolbar {
+  i {
+    font-size: 24px;
+  }
 }
 
 .logo-mini {
