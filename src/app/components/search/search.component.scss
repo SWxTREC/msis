@@ -1,7 +1,7 @@
-$component-height: 48px;
+$component-height: 40px;
 
 .search-container {
-    max-width: 960px;
+    max-width: 800px;
     width: 100%;
     color: #000;
     background-color: #fafafa;
@@ -25,7 +25,21 @@ $component-height: 48px;
         width: $component-height;
 
         mat-icon {
-            font-size: $component-height - 24px;
+            font-size: 24px;
         }
     }
 }
+
+/*
+.search-container {
+  background-color: transparent;
+  color: white;
+
+  ::placeholder {
+    color: #b7b7b7;
+  }
+
+  input {
+    color: white;
+  }
+}*/

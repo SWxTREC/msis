@@ -2,7 +2,7 @@
     <button mat-icon-button>
         <mat-icon aria-label="search">search</mat-icon>
     </button>
-    <input fxFlex [placeholder]="placeholder" name="searchText" [(ngModel)]="searchText">
+    <input fxFlex [placeholder]="placeholder" name="searchText" [(ngModel)]="searchText" autocomplete="off">
     <button mat-icon-button (click)="closeSearch()">
         <mat-icon aria-label="close search">close</mat-icon>
     </button>

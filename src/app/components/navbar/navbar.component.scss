@@ -1,7 +1,7 @@
 @import '../../../theme/theme-colors';
 
 // so we can easily play with the size of the font for the nav
-$font-size: 16px;
+$font-size: 14px;
 
 .logo-header-row {
   height: 100px;
@@ -23,8 +23,8 @@ $font-size: 16px;
   overflow: hidden;
 }
 
-$navHeight: 64px;
-$stickyHeaderHeight: 64px;
+$navHeight: 56px;
+$stickyHeaderHeight: 56px;
 
 .nav-header-row {
   height: $navHeight;
