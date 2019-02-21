@@ -11,6 +11,10 @@ import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SearchComponent } from './components/search/search.component';
 
+import { DatasetService } from './services/datasets.service';
+import { MissionService } from './services/mission.service';
+import { SearchService } from './services/search.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +30,11 @@ import { SearchComponent } from './components/search/search.component';
     HttpClientModule,
     MaterialModule
   ],
-  providers: [],
+  providers: [
+    DatasetService,
+    MissionService,
+    SearchService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

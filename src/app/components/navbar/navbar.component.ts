@@ -7,14 +7,12 @@ import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 })
 export class NavbarComponent {
   @ViewChild('stickyMenu') menuElement: ElementRef;
-  @ViewChild('searchInput') searchInputElement: ElementRef;
-  @ViewChild('stickySearchInput') stickySearchInputElement: ElementRef;
 
   fillerNav = ['Data', 'Missions', 'Tools', 'About', 'Reference', 'Science', 'Instruments'];
   navOpen = false;
   sticky = false;
-  searchOpen = false;
-  searchInputValue = '';
+  searchOpen = true;
+  placeholder = 'Search Datasets or Missions';
 
   @HostListener('window:scroll', ['$event'])
   handleScroll() {
@@ -32,9 +30,6 @@ export class NavbarComponent {
    */
   openSearch() {
     this.searchOpen = true;
-    this.searchInputValue = '';
-    let element = this.sticky ? this.stickySearchInputElement : this.searchInputElement;
-    element.nativeElement.focus({ preventScroll: true });
   }
 
   /**
@@ -43,9 +38,5 @@ export class NavbarComponent {
    */
   closeSearch() {
     this.searchOpen = false;
-  }
-
-  submitSearch() {
-    console.log( "Searched for: " + this.searchInputValue );
   }
 }

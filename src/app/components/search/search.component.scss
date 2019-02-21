@@ -1,7 +1,31 @@
-:host {
-    max-width: 560px;
+$component-height: 48px;
+
+.search-container {
+    max-width: 960px;
     width: 100%;
+    color: #000;
     background-color: #fafafa;
-    height: 48px;
-    margin: 0 auto;
+    height: $component-height;
+    line-height: $component-height;
+    margin: 8px auto;
+
+    input {
+        background-color: transparent;
+        font-size: 17px;
+        outline: none;
+        text-rendering: auto;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 0 1px;
+        outline: none;
+    }
+
+    button {
+        height: $component-height;
+        width: $component-height;
+
+        mat-icon {
+            font-size: $component-height - 24px;
+        }
+    }
 }

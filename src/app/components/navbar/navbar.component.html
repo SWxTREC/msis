@@ -13,7 +13,7 @@
             <mat-icon aria-label="open search">search</mat-icon>
         </button>
       </div>
-      <app-search (close)="closeSearch()"></app-search>
+      <app-search [placeholder]="placeholder" (close)="closeSearch()"></app-search>
     </nav>
   </mat-toolbar-row>
 
@@ -37,7 +37,7 @@
       <a *ngFor="let nav of fillerNav" routerLink="." class="nav-item">{{nav}}</a>
       <i class="material-icons nav-item search-button" (click)="openSearch()">search</i>
     </div>
-    <app-search (close)="closeSearch()"></app-search>
+    <app-search [placeholder]="placeholder" (close)="closeSearch()"></app-search>
   </nav>
 
 </mat-toolbar>
@@ -51,7 +51,7 @@
     </button>
   </mat-toolbar>
   <mat-card>
-    <app-search (close)="closeSearch()"></app-search>
+    <app-search [placeholder]="placeholder" (close)="closeSearch()"></app-search>
   </mat-card>
   <mat-nav-list>
     <mat-list-item *ngFor="let nav of fillerNav; last as last">
