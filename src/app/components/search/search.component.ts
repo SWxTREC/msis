@@ -3,9 +3,9 @@ import { SearchService, ISearchResults } from '../../services/search.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+    selector: 'app-search',
+    templateUrl: './search.component.html',
+    styleUrls: ['./search.component.scss']
 })
 export class SearchComponent {
     @Output() close = new EventEmitter();
@@ -14,10 +14,10 @@ export class SearchComponent {
     $results: Observable<ISearchResults>;
 
     constructor( private searchService: SearchService ) {
-      this.$results = searchService.getResults();
-      this.$results.subscribe( result => {
-        console.log( result );
-      });
+        this.$results = searchService.getResults();
+        this.$results.subscribe( result => {
+            console.log( result );
+        });
     }
 
     closeSearch() {
@@ -26,6 +26,6 @@ export class SearchComponent {
     }
 
     search( query: string ) {
-      this.searchService.getSearch( query );
+        this.searchService.getSearch( query );
     }
 }

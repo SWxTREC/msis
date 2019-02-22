@@ -1,13 +1,12 @@
-$component-height: 40px;
+$component-height: 44px;
 
-.search-container {
-    max-width: 800px;
+#search-container {
     width: 100%;
     color: #000;
     background-color: #fafafa;
     height: $component-height;
     line-height: $component-height;
-    margin: 8px auto;
+    margin: 0 auto;
 
     input {
         background-color: transparent;
@@ -31,7 +30,7 @@ $component-height: 40px;
 }
 
 /*
-.search-container {
+#search-container {
   background-color: transparent;
   color: white;
 

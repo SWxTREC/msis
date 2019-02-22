@@ -9,5 +9,5 @@ $theme-dark: mat-dark-theme( $primary-dark, $accent-dark, $warn-dark );
 @include angular-material-theme( $theme );
 
 .lasp-dark-theme {
-  @include angular-material-theme( $theme-dark );
+    @include angular-material-theme( $theme-dark );
 }

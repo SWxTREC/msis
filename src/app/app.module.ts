@@ -16,25 +16,25 @@ import { MissionService } from './services/mission.service';
 import { SearchService } from './services/search.service';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    FooterComponent,
-    NavbarComponent,
-    SearchComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    FlexLayoutModule,
-    HttpClientModule,
-    MaterialModule
-  ],
-  providers: [
-    DatasetService,
-    MissionService,
-    SearchService
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        FooterComponent,
+        NavbarComponent,
+        SearchComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        FlexLayoutModule,
+        HttpClientModule,
+        MaterialModule
+    ],
+    providers: [
+        DatasetService,
+        MissionService,
+        SearchService
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
