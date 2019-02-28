@@ -14,7 +14,9 @@ import { AppComponent } from './app.component';
 // Containers
 import { MainComponent } from './containers/main/main.container';
 import { SearchResultsComponent } from './containers/search-results/search-results.container';
-const CONTAINERS = [ MainComponent, SearchResultsComponent ];
+import { MissionsComponent } from './containers/missions/missions.container';
+import { DatasetsComponent } from './containers/datasets/datasets.container';
+const CONTAINERS = [ MainComponent, SearchResultsComponent, MissionsComponent, DatasetsComponent ];
 
 // Components
 import { FooterComponent } from './components/footer/footer.component';

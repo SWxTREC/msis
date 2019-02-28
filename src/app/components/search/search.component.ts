@@ -1,6 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { SearchService, ISearchResults } from '../../services/search.service';
-import { Observable } from 'rxjs';
+import { Component, Input, Output, EventEmitter, Sanitizer, SecurityContext } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,9 +10,11 @@ export class SearchComponent {
     @Output() close = new EventEmitter();
     @Input() placeholder = 'Search';
     searchText = '';
-    $results: Observable<ISearchResults>;
 
-    constructor( private searchService: SearchService, private router: Router ) {}
+    constructor(
+        private router: Router,
+        private sanitizer: Sanitizer
+    ) {}
 
     closeSearch() {
         this.searchText = '';
@@ -22,7 +22,6 @@ export class SearchComponent {
     }
 
     search( query: string ) {
-        this.searchService.getSearch( query );
-        this.router.navigateByUrl('/search');
+        this.router.navigateByUrl( this.sanitizer.sanitize( SecurityContext.URL, '/search?query=' + query  ) );
     }
 }
