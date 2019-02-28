@@ -31,6 +31,6 @@ export class MissionService {
     }
 
     searchMissions( query: string ) {
-        return this.missions.filter( mission => mission.name.includes( query ) );
+        return this.missions.filter( mission => mission.name.toLowerCase().includes( query ) );
     }
 }

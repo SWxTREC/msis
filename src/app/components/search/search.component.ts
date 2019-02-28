@@ -13,12 +13,7 @@ export class SearchComponent {
     searchText = '';
     $results: Observable<ISearchResults>;
 
-    constructor( private searchService: SearchService ) {
-        this.$results = searchService.getResults();
-        this.$results.subscribe( result => {
-            console.log( result );
-        });
-    }
+    constructor( private searchService: SearchService ) {}
 
     closeSearch() {
         this.searchText = '';

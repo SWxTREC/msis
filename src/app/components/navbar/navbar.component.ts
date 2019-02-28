@@ -29,6 +29,8 @@ export class NavbarComponent {
     * For wide screens.
     */
     openSearch() {
+        const element = document.getElementById('search');
+        element.focus({ preventScroll: true });
         this.searchOpen = true;
     }
 

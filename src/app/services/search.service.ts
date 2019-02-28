@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DatasetService, IDataset } from './datasets.service';
 import { MissionService, IMission } from './mission.service';
 import { BehaviorSubject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 export interface ISearchResults {
     missions: IMission[];
@@ -38,8 +39,15 @@ export class SearchService {
             return;
         }
 
+        query = query.toLowerCase();
+
         const missions = this.missionService.searchMissions( query );
         const datasets = this.datasetService.searchDatasets( query );
+
+        console.log({
+            missions: missions,
+            datasets: datasets
+        });
 
         // push our results to the subscribers
         this.$results.next({

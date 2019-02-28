@@ -32,6 +32,6 @@ export class DatasetService {
     }
 
     searchDatasets( query: string ) {
-        return this.datasets.filter( dataset => dataset.name.includes( query ) );
+        return this.datasets.filter( dataset => dataset.name.toLowerCase().includes( query ) );
     }
 }
