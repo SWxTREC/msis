@@ -1,0 +1,21 @@
+<div class="search-results-container">
+    <h1>Search Results</h1>
+    <div class="empty-results" *ngIf="searchResults.datasets.length < 1 && searchResults.missions.length < 1">
+        <h2>Search Returned No Results</h2>
+    </div>
+    <mat-list class="search-results" *ngIf="searchResults.datasets.length > 0 || searchResults.missions.length > 0">
+        <h3 matSubheader>Datasets</h3>
+        <mat-list-item *ngFor="let dataset of searchResults.datasets">
+            <mat-icon mat-list-icon>pets</mat-icon>
+            <h4 mat-line>{{dataset.name}}</h4>
+            <p mat-line> This is a dataset </p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <h3 matSubheader>Missions</h3>
+        <mat-list-item *ngFor="let mission of searchResults.missions">
+            <mat-icon mat-list-icon>games</mat-icon>
+            <h4 mat-line>{{mission.name}}</h4>
+            <p mat-line> This is a mission </p>
+        </mat-list-item>
+    </mat-list>
+</div>

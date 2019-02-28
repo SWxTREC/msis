@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { SearchService, ISearchResults } from '../../services/search.service';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-search',
@@ -13,7 +14,7 @@ export class SearchComponent {
     searchText = '';
     $results: Observable<ISearchResults>;
 
-    constructor( private searchService: SearchService ) {}
+    constructor( private searchService: SearchService, private router: Router ) {}
 
     closeSearch() {
         this.searchText = '';
@@ -22,5 +23,6 @@ export class SearchComponent {
 
     search( query: string ) {
         this.searchService.getSearch( query );
+        this.router.navigateByUrl('/search');
     }
 }

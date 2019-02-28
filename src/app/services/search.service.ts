@@ -44,11 +44,6 @@ export class SearchService {
         const missions = this.missionService.searchMissions( query );
         const datasets = this.datasetService.searchDatasets( query );
 
-        console.log({
-            missions: missions,
-            datasets: datasets
-        });
-
         // push our results to the subscribers
         this.$results.next({
             missions: missions,
