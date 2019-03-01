@@ -39,10 +39,6 @@
         }
     }
 
-    &__nav {
-        margin: 10px 0;
-    }
-
     &__nav-item {
         font-size: 14px;
         height: 56px;
@@ -50,10 +46,12 @@
         overflow-wrap: break-word;
         padding: 0 24px;
         color: white;
+        text-decoration: none;
 
         &:hover {
             color: orange;
             cursor: pointer;
+            text-decoration: underline;
         }
     }
 }
