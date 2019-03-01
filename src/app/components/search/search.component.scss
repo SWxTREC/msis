@@ -1,0 +1,35 @@
+$component-height: 44px;
+
+#search-container {
+    width: 100%;
+    color: #fff;
+    background-color: transparent;
+    height: $component-height;
+    line-height: $component-height;
+    margin: 0 auto;
+
+    input {
+        background-color: transparent;
+        color: #fff;
+        font-size: 17px;
+        outline: none;
+        text-rendering: auto;
+        border-color: transparent;
+        border-style: solid;
+        border-width: 0 1px;
+        outline: none;
+    }
+
+    ::placeholder {
+      color: #b7b7b7;
+    }
+
+    button {
+        height: $component-height;
+        width: $component-height;
+
+        mat-icon {
+            font-size: 24px;
+        }
+    }
+}
