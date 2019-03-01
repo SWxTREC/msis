@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 })
 export class SearchComponent {
     @Output() close = new EventEmitter();
+    @Output() searchSent = new EventEmitter(); // emit when we send a search
     @Input() placeholder = 'Search';
     searchText = '';
 
@@ -22,6 +23,7 @@ export class SearchComponent {
     }
 
     search( query: string ) {
+        this.searchSent.emit();
         this.router.navigateByUrl( this.sanitizer.sanitize( SecurityContext.URL, '/search?query=' + query  ) );
     }
 }

@@ -34,6 +34,8 @@ $stickyHeaderHeight: 44px;
 }
 
 a {
+    text-decoration: none;
+
     &:hover:after {
       visibility: visible;
       transform: scaleX(1);

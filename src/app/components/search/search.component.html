@@ -4,7 +4,7 @@
     </button>
     <input id="search" fxFlex [placeholder]="placeholder" name="searchText" [(ngModel)]="searchText" autocomplete="off">
     <button mat-button (click)="search(searchText)">Go</button>
-    <button mat-icon-button (click)="closeSearch()">
+    <button mat-icon-button (click)="closeSearch()" fxHide.xs>
         <mat-icon aria-label="close search">close</mat-icon>
     </button>
 </form>

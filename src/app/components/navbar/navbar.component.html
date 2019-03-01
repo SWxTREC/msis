@@ -24,13 +24,13 @@
 
     <mat-toolbar color="transparent" fxLayoutAlign="space-between center">
         <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" />
-        <button mat-button class="nav-overlay__close-nav" (click)="navOpen = false">
+        <button mat-button class="nav-overlay__close-nav" (click)="navOpen=false">
             <mat-icon>close</mat-icon>
         </button>
     </mat-toolbar>
 
     <mat-card>
-        <app-search [placeholder]="placeholder" (close)="closeSearch()"></app-search>
+        <app-search [placeholder]="placeholder" (close)="closeSearch()" (searchSent)="navOpen=false"></app-search>
     </mat-card>
 
     <mat-nav-list>
