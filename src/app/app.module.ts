@@ -5,12 +5,26 @@ import { MaterialModule } from './modules';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
+// App Initialization
+import { routes } from './routes';
 import { AppComponent } from './app.component';
+
+// Containers
+import { MainComponent } from './containers/main/main.container';
+import { SearchResultsComponent } from './containers/search-results/search-results.container';
+import { MissionsComponent } from './containers/missions/missions.container';
+import { DatasetsComponent } from './containers/datasets/datasets.container';
+const CONTAINERS = [ MainComponent, SearchResultsComponent, MissionsComponent, DatasetsComponent ];
+
+// Components
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SearchComponent } from './components/search/search.component';
+const COMPONENTS = [ FooterComponent, NavbarComponent, SearchComponent ];
 
+// Services
 import { DatasetService } from './services/datasets.service';
 import { MissionService } from './services/mission.service';
 import { SearchService } from './services/search.service';
@@ -18,9 +32,8 @@ import { SearchService } from './services/search.service';
 @NgModule({
     declarations: [
         AppComponent,
-        FooterComponent,
-        NavbarComponent,
-        SearchComponent
+        COMPONENTS,
+        CONTAINERS
     ],
     imports: [
         BrowserModule,
@@ -28,7 +41,8 @@ import { SearchService } from './services/search.service';
         FormsModule,
         FlexLayoutModule,
         HttpClientModule,
-        MaterialModule
+        MaterialModule,
+        RouterModule.forRoot( routes )
     ],
     providers: [
         DatasetService,

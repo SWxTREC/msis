@@ -1,6 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { SearchService, ISearchResults } from '../../services/search.service';
-import { Observable } from 'rxjs';
+import { Component, Input, Output, EventEmitter, Sanitizer, SecurityContext } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-search',
@@ -9,11 +8,14 @@ import { Observable } from 'rxjs';
 })
 export class SearchComponent {
     @Output() close = new EventEmitter();
+    @Output() searchSent = new EventEmitter(); // emit when we send a search
     @Input() placeholder = 'Search';
     searchText = '';
-    $results: Observable<ISearchResults>;
 
-    constructor( private searchService: SearchService ) {}
+    constructor(
+        private router: Router,
+        private sanitizer: Sanitizer
+    ) {}
 
     closeSearch() {
         this.searchText = '';
@@ -21,6 +23,7 @@ export class SearchComponent {
     }
 
     search( query: string ) {
-        this.searchService.getSearch( query );
+        this.searchSent.emit();
+        this.router.navigateByUrl( this.sanitizer.sanitize( SecurityContext.URL, '/search?query=' + query  ) );
     }
 }
