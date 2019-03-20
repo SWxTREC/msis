@@ -1,11 +1,12 @@
-import {Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, ViewChild} from '@angular/core';
+import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
 
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnDestroy{
     @ViewChild('stickyMenu') menuElement: ElementRef;
 
     fillerNav = ['Data', 'Missions', 'Tools', 'About', 'Reference', 'Science', 'Instruments'];
@@ -13,6 +14,7 @@ export class NavbarComponent {
     sticky = false;
     searchOpen = false;
     placeholder = 'Search Datasets or Missions';
+    breakpointObserverSubscription: any;
 
     @HostListener('window:scroll', ['$event'])
     handleScroll() {
@@ -22,6 +24,22 @@ export class NavbarComponent {
         } else {
             this.sticky = false;
         }
+    }
+
+    constructor(
+        private breakPointObserver: BreakpointObserver
+    ) {
+        this.breakpointObserverSubscription = breakPointObserver.observe([
+            ('(min-width: 960px)')
+        ]).subscribe((state: BreakpointState) => {
+            if (state.matches) {
+                this.navOpen = false;
+            }
+        })
+    }
+
+    ngOnDestroy() {
+        this.breakpointObserverSubscription.unsubscribe();
     }
 
     /**
