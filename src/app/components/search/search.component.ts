@@ -1,6 +1,7 @@
 import {Component, Input, Output, EventEmitter, Sanitizer, SecurityContext, OnDestroy} from '@angular/core';
 import { Router } from '@angular/router';
-import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
+import {BreakpointObserver, Breakpoints, BreakpointState} from '@angular/cdk/layout';
+import {Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-search',
@@ -12,19 +13,19 @@ export class SearchComponent implements OnDestroy{
     @Output() searchSent = new EventEmitter(); // emit when we send a search
     @Input() placeholder = 'Search';
     searchText = '';
-    breakpointObserverSubscription: any;
+    breakpointObserverSubscription: Subscription;
 
 
 
     constructor(
         private router: Router,
         private sanitizer: Sanitizer,
-        private breakPointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver
     ) {
-        this.breakpointObserverSubscription = breakPointObserver.observe([
-            ('(max-width: 960px)')
-        ]).subscribe((state: BreakpointState) => {
-            if (state.matches) {
+        this.breakpointObserverSubscription = breakpointObserver.observe([
+            Breakpoints.HandsetLandscape,
+        ]).subscribe(result => {
+            if (result.matches) {
                 this.close.emit();
             }
         })

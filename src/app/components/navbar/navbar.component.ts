@@ -1,5 +1,6 @@
 import {Component, ElementRef, HostListener, OnDestroy, ViewChild} from '@angular/core';
-import {BreakpointObserver, BreakpointState} from '@angular/cdk/layout';
+import {BreakpointObserver, BreakpointState, Breakpoints} from '@angular/cdk/layout';
+import {Subscription} from 'rxjs';
 
 @Component({
     selector: 'app-navbar',
@@ -14,7 +15,7 @@ export class NavbarComponent implements OnDestroy{
     sticky = false;
     searchOpen = false;
     placeholder = 'Search Datasets or Missions';
-    breakpointObserverSubscription: any;
+    breakpointObserverSubscription: Subscription;
 
     @HostListener('window:scroll', ['$event'])
     handleScroll() {
@@ -27,12 +28,12 @@ export class NavbarComponent implements OnDestroy{
     }
 
     constructor(
-        private breakPointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver
     ) {
-        this.breakpointObserverSubscription = breakPointObserver.observe([
-            ('(min-width: 960px)')
-        ]).subscribe((state: BreakpointState) => {
-            if (state.matches) {
+        this.breakpointObserverSubscription = breakpointObserver.observe([
+            Breakpoints.TabletLandscape,
+        ]).subscribe(result => {
+            if (result.matches) {
                 this.navOpen = false;
             }
         })
