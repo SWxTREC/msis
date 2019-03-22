@@ -1,5 +1,5 @@
 import {Component, ElementRef, HostListener, OnDestroy, ViewChild} from '@angular/core';
-import {BreakpointObserver, BreakpointState, Breakpoints} from '@angular/cdk/layout';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 
 @Component({

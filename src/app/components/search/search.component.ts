@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter, Sanitizer, SecurityContext, OnDestroy} from '@angular/core';
 import { Router } from '@angular/router';
-import {BreakpointObserver, Breakpoints, BreakpointState} from '@angular/cdk/layout';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -14,8 +14,6 @@ export class SearchComponent implements OnDestroy{
     @Input() placeholder = 'Search';
     searchText = '';
     breakpointObserverSubscription: Subscription;
-
-
 
     constructor(
         private router: Router,
@@ -34,20 +32,6 @@ export class SearchComponent implements OnDestroy{
     ngOnDestroy() {
         this.breakpointObserverSubscription.unsubscribe();
     }
-
-    // @HostListener( 'window:resize', ['$event'] )
-    // onResize( event ): void {
-    //     this.screenWidth = window.innerWidth;
-    //     this.handleScreenSizeChange( this.screenWidth );
-    // }
-    //
-    // handleScreenSizeChange(screenSize: number) {
-    //     if (screenSize < 960) {
-    //         this.close.emit();
-    //     }
-    // }
-
-
 
     closeSearch() {
         this.searchText = '';
