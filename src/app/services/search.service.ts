@@ -15,7 +15,9 @@ const DEFAULT_RESULTS: ISearchResults = {
 };
 
 /** Service to provide appwide search functions */
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SearchService {
     $results: BehaviorSubject<ISearchResults>;
 

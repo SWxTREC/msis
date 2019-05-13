@@ -23,7 +23,9 @@ export const exampleDatasets: IDataset[] = [{
     name: 'TIMED SEE EGS SSI - Level 2'
 }];
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class DatasetService {
     private datasets = exampleDatasets;
 
