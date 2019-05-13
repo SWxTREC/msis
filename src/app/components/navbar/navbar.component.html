@@ -35,7 +35,7 @@
 
     <mat-nav-list>
         <mat-list-item *ngFor="let nav of fillerNav; last as last">
-            <a routerLink="." class="overlay-nav-item">{{nav}}</a>
+            <a routerLink="." (click)="navOpen=false" class="overlay-nav-item">{{nav}}</a>
         </mat-list-item>
     </mat-nav-list>
 </div>

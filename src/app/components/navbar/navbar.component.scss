@@ -116,7 +116,7 @@ a {
     z-index: 1000;
     // since the transition duration and timing function are redefined in the .nav-open class,
     // the transition definitions below apply to when the overlay is closing (i.e. when '.nav-open' is not applied)
-    transition: height 0.25s cubic-bezier(0.4, 0.0, 1, 1);
+    transition-duration: 0s;
 
     &.nav-open {
         overflow: auto;
