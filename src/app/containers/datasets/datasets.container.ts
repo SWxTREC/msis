@@ -8,10 +8,10 @@ import { ActivatedRoute } from '@angular/router';
 export class DatasetsComponent implements OnInit {
     name: string;
 
-    constructor( private route: ActivatedRoute ) {}
+    constructor( private _route: ActivatedRoute ) {}
 
     ngOnInit() {
-        this.route.paramMap.subscribe(
+        this._route.paramMap.subscribe(
             params => this.name = params.get('id')
         );
     }

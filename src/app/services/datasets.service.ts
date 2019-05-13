@@ -25,13 +25,13 @@ export const exampleDatasets: IDataset[] = [{
 
 @Injectable()
 export class DatasetService {
-    private datasets = exampleDatasets;
+    private _datasets = exampleDatasets;
 
     getAllDatasets() {
-        return this.datasets;
+        return this._datasets;
     }
 
     searchDatasets( query: string ) {
-        return this.datasets.filter( dataset => dataset.name.toLowerCase().includes( query ) );
+        return this._datasets.filter( dataset => dataset.name.toLowerCase().includes( query ) );
     }
 }
