@@ -22,7 +22,9 @@ export const exampleMissions: IMission[] = [{
     name: 'TIMED'
 }];
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class MissionService {
     private _missions = exampleMissions;
 
