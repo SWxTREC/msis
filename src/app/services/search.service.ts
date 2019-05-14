@@ -19,7 +19,10 @@ const DEFAULT_RESULTS: ISearchResults = {
 export class SearchService {
     $results: BehaviorSubject<ISearchResults>;
 
-    constructor( private datasetService: DatasetService, private missionService: MissionService ) {
+    constructor(
+        private _datasetService: DatasetService,
+        private _missionService: MissionService
+    ) {
         this.$results = <BehaviorSubject<ISearchResults>>new BehaviorSubject( DEFAULT_RESULTS );
     }
 
@@ -41,8 +44,8 @@ export class SearchService {
 
         query = query.toLowerCase();
 
-        const missions = this.missionService.searchMissions( query );
-        const datasets = this.datasetService.searchDatasets( query );
+        const missions = this._missionService.searchMissions( query );
+        const datasets = this._datasetService.searchDatasets( query );
 
         // push our results to the subscribers
         this.$results.next({

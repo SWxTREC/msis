@@ -16,11 +16,11 @@ export class SearchComponent implements OnDestroy{
     breakpointObserverSubscription: Subscription;
 
     constructor(
-        private router: Router,
-        private sanitizer: Sanitizer,
-        private breakpointObserver: BreakpointObserver
+        private _router: Router,
+        private _sanitizer: Sanitizer,
+        private _breakpointObserver: BreakpointObserver
     ) {
-        this.breakpointObserverSubscription = breakpointObserver.observe([
+        this.breakpointObserverSubscription = this._breakpointObserver.observe([
             Breakpoints.HandsetLandscape,
         ]).subscribe(result => {
             if (result.matches) {
@@ -40,6 +40,6 @@ export class SearchComponent implements OnDestroy{
 
     search( query: string ) {
         this.searchSent.emit();
-        this.router.navigateByUrl( this.sanitizer.sanitize( SecurityContext.URL, '/search?query=' + query  ) );
+        this._router.navigateByUrl( this._sanitizer.sanitize( SecurityContext.URL, '/search?query=' + query  ) );
     }
 }

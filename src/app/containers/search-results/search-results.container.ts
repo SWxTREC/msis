@@ -11,16 +11,19 @@ export class SearchResultsComponent implements OnInit {
     query: string;
     searchResults = {};
 
-    constructor( private searchService: SearchService, private route: ActivatedRoute ) {}
+    constructor(
+        private _searchService: SearchService,
+        private _route: ActivatedRoute
+    ) {}
 
     ngOnInit() {
-        this.searchService.getResults().subscribe(
+        this._searchService.getResults().subscribe(
             results => this.searchResults = results
         );
-        this.route.queryParamMap.subscribe(
+        this._route.queryParamMap.subscribe(
             query => {
                 this.query = query.get('query');
-                this.searchService.getSearch( this.query );
+                this._searchService.getSearch( this.query );
             }
         );
     }

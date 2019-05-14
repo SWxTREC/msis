@@ -28,9 +28,9 @@ export class NavbarComponent implements OnDestroy{
     }
 
     constructor(
-        private breakpointObserver: BreakpointObserver
+        private _breakpointObserver: BreakpointObserver
     ) {
-        this.breakpointObserverSubscription = breakpointObserver.observe([
+        this.breakpointObserverSubscription = this._breakpointObserver.observe([
             Breakpoints.TabletLandscape,
         ]).subscribe(result => {
             if (result.matches) {
