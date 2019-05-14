@@ -4,9 +4,19 @@
 .inner-footer {
     background-color: #04072d;
     min-height: 350px;
+    height: auto;
 
-    &__lasp-logo {
-        height: 100px;
+    &__org-logos {
+        text-align: center;
+        white-space: normal;
+        > a {
+            display: inline-block;
+        }
+    }
+
+    &__org-logo {
+        max-width: 100%;
+        max-height: 100px;
         margin: 10px;
     }
 

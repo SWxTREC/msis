@@ -1,6 +1,18 @@
-<app-navbar></app-navbar>
+<app-navbar
+    largeLogoSrc="../../../assets/images/lisird-logo.jpg"
+    smallLogoSrc="../../../assets/images/lisird-logo-small.png"
+    orgLogoSrc="../../../assets/images/lasp-logo-no-text.png"
+    searchPlaceholder="Search Datasets or Missions"
+    largeHeaderBgColor="black"
+    mobileNavBgColor="black"
+    [navItems]="navItems">
+</app-navbar>
 
 <router-outlet></router-outlet>
 <!-- Routed components go here -->
 
-<app-footer></app-footer>
+<app-footer
+    [orgLogos]="orgLogos"
+    [navItems]="navItems"
+    [socialLinks]="socialLinks">
+</app-footer>

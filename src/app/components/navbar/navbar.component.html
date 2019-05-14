@@ -1,13 +1,19 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" fxFlexFill class="logo-header-row" fxHide.lt-md>
-    <img src="../../../assets/images/lisird-logo.jpg" class="logo-header-row__logo-large"/>
-    <img src="../../../assets/images/lasp-logo-no-text.png" class="logo-header-row__lasp-logo"/>
+<div
+  class="logo-header-row"
+  fxLayout="row"
+  fxLayoutAlign="space-between center"
+  fxFlexFill
+  fxHide.lt-md
+  [style.backgroundColor]="largeHeaderBgColor">
+    <img [src]="largeLogoSrc" class="logo-header-row__logo-large"/>
+    <img [src]="orgLogoSrc" class="logo-header-row__lasp-logo"/>
 </div>
 
 <mat-toolbar class="small-toolbar mat-elevation-z3" [class.sticky-toolbar]="sticky" color="primary">
     <nav class="nav-top" [class.search-open]="searchOpen">
         <div fxLayout="row" fxLayoutAlign="space-between center">
-            <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" [fxHide]="!sticky" fxShow.lt-md/>
-            <a *ngFor="let nav of fillerNav" routerLink="." class="nav-item" fxHide.lt-md>{{nav}}</a>
+            <img [src]="smallLogoSrc" class="logo-mini" [fxHide]="!sticky" fxShow.lt-md/>
+            <a *ngFor="let navItem of navItems" [routerLink]="navItem.link" class="nav-item" fxHide.lt-md>{{navItem.label}}</a>
             <button mat-icon-button (click)="openSearch()" fxHide.lt-md>
                 <mat-icon aria-label="open search">search</mat-icon>
             </button>
@@ -15,27 +21,27 @@
                 Menu <mat-icon>menu</mat-icon>
             </button>
         </div>
-        <app-search [placeholder]="placeholder" (close)="closeSearch()"></app-search>
+        <app-search [placeholder]="searchPlaceholder" (close)="closeSearch()"></app-search>
     </nav>
 </mat-toolbar>
 
 <!-- Overlay nav menu for narrow screens, hidden until "Menu" is clicked -->
-<div class="nav-overlay expand-down lasp-dark-theme" [class.nav-open]="navOpen">
+<div class="nav-overlay expand-down lasp-dark-theme" [class.nav-open]="navOpen" [style.backgroundColor]="mobileNavBgColor">
 
     <mat-toolbar color="transparent" fxLayoutAlign="space-between center">
-        <img src="../../../assets/images/lisird-logo-small.png" class="logo-mini" />
+        <img [src]="smallLogoSrc" class="logo-mini" />
         <button mat-button class="nav-overlay__close-nav" (click)="navOpen=false">
             <mat-icon>close</mat-icon>
         </button>
     </mat-toolbar>
 
     <mat-card>
-        <app-search [placeholder]="placeholder" (close)="closeSearch()" (searchSent)="navOpen=false"></app-search>
+        <app-search [placeholder]="searchPlaceholder" (close)="closeSearch()" (searchSent)="navOpen=false"></app-search>
     </mat-card>
 
     <mat-nav-list>
-        <mat-list-item *ngFor="let nav of fillerNav; last as last">
-            <a routerLink="." class="overlay-nav-item">{{nav}}</a>
+        <mat-list-item *ngFor="let navItem of navItems; last as last">
+            <a [routerLink]="navItem.link" class="overlay-nav-item">{{navItem.label}}</a>
         </mat-list-item>
     </mat-nav-list>
 </div>

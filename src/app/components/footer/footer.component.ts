@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { INavItem, IImageLink, ISocialLinks } from 'src/app/models/header-footer';
 
 @Component({
     selector: 'app-footer',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
     styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent {
-    fillerNav = ['Data', 'Missions', 'Tools', 'About', 'Reference', 'Science', 'Instruments'];
+
+    @Input() orgLogos: IImageLink[] = [];
+    @Input() navItems: INavItem[] = [];
+    @Input() socialLinks: ISocialLinks = {};
+
+    currentYear = new Date().getFullYear();
 }

@@ -1,6 +1,7 @@
-import {Component, ElementRef, HostListener, OnDestroy, ViewChild} from '@angular/core';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Subscription} from 'rxjs';
+import { Component, ElementRef, HostListener, OnDestroy, ViewChild, Input } from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subscription } from 'rxjs';
+import { INavItem } from '../../models/header-footer';
 
 @Component({
     selector: 'app-navbar',
@@ -8,16 +9,23 @@ import {Subscription} from 'rxjs';
     styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnDestroy{
-    @ViewChild('stickyMenu') menuElement: ElementRef;
 
-    fillerNav = ['Data', 'Missions', 'Tools', 'About', 'Reference', 'Science', 'Instruments'];
+    @Input() largeLogoSrc: string;
+    @Input() smallLogoSrc: string;
+    @Input() orgLogoSrc: string;
+    @Input() searchPlaceholder: string = 'Search';
+    @Input() largeHeaderBgColor: string = 'black';
+    @Input() mobileNavBgColor: string = 'black';
+    @Input() navItems: INavItem[];
+
+    @ViewChild( 'stickyMenu' ) menuElement: ElementRef;
+
     navOpen = false;
     sticky = false;
     searchOpen = false;
-    placeholder = 'Search Datasets or Missions';
     breakpointObserverSubscription: Subscription;
 
-    @HostListener('window:scroll', ['$event'])
+    @HostListener( 'window:scroll', ['$event'] )
     handleScroll() {
         const windowScroll = window.pageYOffset;
         if (windowScroll >= 160) {
@@ -48,7 +56,7 @@ export class NavbarComponent implements OnDestroy{
     * For wide screens.
     */
     openSearch() {
-        const element = document.getElementById('search');
+        const element = document.getElementById( 'search' );
         element.focus({ preventScroll: true });
         this.searchOpen = true;
     }
