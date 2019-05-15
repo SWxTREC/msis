@@ -24,11 +24,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { SearchComponent } from './components/search/search.component';
 const COMPONENTS = [ FooterComponent, NavbarComponent, SearchComponent ];
 
-// Services
-import { DatasetService } from './services/datasets.service';
-import { MissionService } from './services/mission.service';
-import { SearchService } from './services/search.service';
-
 @NgModule({
     declarations: [
         AppComponent,
@@ -44,11 +39,7 @@ import { SearchService } from './services/search.service';
         MaterialModule,
         RouterModule.forRoot( routes )
     ],
-    providers: [
-        DatasetService,
-        MissionService,
-        SearchService
-    ],
+    providers: [],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

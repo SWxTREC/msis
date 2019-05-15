@@ -22,15 +22,17 @@ export const exampleMissions: IMission[] = [{
     name: 'TIMED'
 }];
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class MissionService {
-    private missions = exampleMissions;
+    private _missions = exampleMissions;
 
     getAllMissions() {
-        return this.missions;
+        return this._missions;
     }
 
     searchMissions( query: string ) {
-        return this.missions.filter( mission => mission.name.toLowerCase().includes( query ) );
+        return this._missions.filter( mission => mission.name.toLowerCase().includes( query ) );
     }
 }

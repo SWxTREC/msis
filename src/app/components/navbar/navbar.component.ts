@@ -21,6 +21,7 @@ export class NavbarComponent implements OnDestroy{
     @ViewChild( 'stickyMenu' ) menuElement: ElementRef;
 
     navOpen = false;
+    closeNavImmediately = false;
     sticky = false;
     searchOpen = false;
     breakpointObserverSubscription: Subscription;
@@ -36,9 +37,9 @@ export class NavbarComponent implements OnDestroy{
     }
 
     constructor(
-        private breakpointObserver: BreakpointObserver
+        private _breakpointObserver: BreakpointObserver
     ) {
-        this.breakpointObserverSubscription = breakpointObserver.observe([
+        this.breakpointObserverSubscription = this._breakpointObserver.observe([
             Breakpoints.TabletLandscape,
         ]).subscribe(result => {
             if (result.matches) {
@@ -49,6 +50,26 @@ export class NavbarComponent implements OnDestroy{
 
     ngOnDestroy() {
         this.breakpointObserverSubscription.unsubscribe();
+    }
+
+    /**
+     * Open the nav menu, for narrow screens.
+     */
+    openNav() {
+        this.navOpen = true;
+        // the flag below will be set to true if one of the nav items is clicked on
+        this.closeNavImmediately = false;
+    }
+
+    /**
+     * Close the nav menu, either with an animation or immediately.
+     * @param immediately 
+     */
+    closeNav( immediately = false ) {
+        if ( immediately ) {
+            this.closeNavImmediately = true;
+        }
+        this.navOpen = false;
     }
 
     /**

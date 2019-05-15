@@ -17,7 +17,7 @@
             <button mat-icon-button (click)="openSearch()" fxHide.lt-md>
                 <mat-icon aria-label="open search">search</mat-icon>
             </button>
-            <button mat-stroked-button class="small-toolbar__menu-button" (click)="navOpen = true" fxHide.gt-sm>
+            <button mat-stroked-button class="small-toolbar__menu-button" (click)="openNav()" fxHide.gt-sm>
                 Menu <mat-icon>menu</mat-icon>
             </button>
         </div>
@@ -26,22 +26,22 @@
 </mat-toolbar>
 
 <!-- Overlay nav menu for narrow screens, hidden until "Menu" is clicked -->
-<div class="nav-overlay expand-down lasp-dark-theme" [class.nav-open]="navOpen" [style.backgroundColor]="mobileNavBgColor">
+<div class="nav-overlay expand-down lasp-dark-theme" [class.nav-open]="navOpen" [class.immediate-close]="closeNavImmediately" [style.backgroundColor]="mobileNavBgColor">
 
     <mat-toolbar color="transparent" fxLayoutAlign="space-between center">
         <img [src]="smallLogoSrc" class="logo-mini" />
-        <button mat-button class="nav-overlay__close-nav" (click)="navOpen=false">
+        <button mat-button class="nav-overlay__close-nav" (click)="closeNav()">
             <mat-icon>close</mat-icon>
         </button>
     </mat-toolbar>
 
     <mat-card>
-        <app-search [placeholder]="searchPlaceholder" (close)="closeSearch()" (searchSent)="navOpen=false"></app-search>
+        <app-search [placeholder]="searchPlaceholder" (close)="closeSearch()" (searchSent)="closeNav(true)"></app-search>
     </mat-card>
 
     <mat-nav-list>
         <mat-list-item *ngFor="let navItem of navItems; last as last">
-            <a [routerLink]="navItem.link" class="overlay-nav-item">{{navItem.label}}</a>
+            <a [routerLink]="navItem.link" (click)="closeNav(true)" class="overlay-nav-item">{{navItem.label}}</a>
         </mat-list-item>
     </mat-nav-list>
 </div>
