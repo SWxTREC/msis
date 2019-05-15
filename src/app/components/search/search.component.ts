@@ -12,6 +12,7 @@ export class SearchComponent implements OnDestroy{
     @Output() close = new EventEmitter();
     @Output() searchSent = new EventEmitter(); // emit when we send a search
     @Input() placeholder = 'Search';
+    
     searchText = '';
     breakpointObserverSubscription: Subscription;
 

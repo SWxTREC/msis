@@ -4,9 +4,19 @@
 .inner-footer {
     background-color: #04072d;
     min-height: 350px;
+    height: auto;
 
-    &__lasp-logo {
-        height: 100px;
+    &__org-logos {
+        text-align: center;
+        white-space: normal;
+        > a {
+            display: inline-block;
+        }
+    }
+
+    &__org-logo {
+        max-width: 100%;
+        max-height: 100px;
         margin: 10px;
     }
 
@@ -24,18 +34,10 @@
                     fill: white;
                 }
             }
-        }
 
-        .inner-footer__facebook-button {
-            background-color: #3b5998;
-        }
-
-        .inner-footer__twitter-button {
-            background-color: #1DA1F2;
-        }
-
-        .inner-footer__youtube-button {
-            background-color: #cc181e;
+            &--facebook { background-color: #3b5998 }
+            &--twitter  { background-color: #1DA1F2 }
+            &--youtube  { background-color: #cc181e }
         }
     }
 
