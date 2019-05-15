@@ -12,6 +12,7 @@ export class NavbarComponent implements OnDestroy{
 
     fillerNav = ['Data', 'Missions', 'Tools', 'About', 'Reference', 'Science', 'Instruments'];
     navOpen = false;
+    closeNavImmediately = false;
     sticky = false;
     searchOpen = false;
     placeholder = 'Search Datasets or Missions';
@@ -41,6 +42,26 @@ export class NavbarComponent implements OnDestroy{
 
     ngOnDestroy() {
         this.breakpointObserverSubscription.unsubscribe();
+    }
+
+    /**
+     * Open the nav menu, for narrow screens.
+     */
+    openNav() {
+        this.navOpen = true;
+        // the flag below will be set to true if one of the nav items is clicked on
+        this.closeNavImmediately = false;
+    }
+
+    /**
+     * Close the nav menu, either with an animation or immediately.
+     * @param immediately 
+     */
+    closeNav( immediately = false ) {
+        if ( immediately ) {
+            this.closeNavImmediately = true;
+        }
+        this.navOpen = false;
     }
 
     /**

@@ -116,7 +116,7 @@ a {
     z-index: 1000;
     // since the transition duration and timing function are redefined in the .nav-open class,
     // the transition definitions below apply to when the overlay is closing (i.e. when '.nav-open' is not applied)
-    transition-duration: 0s;
+    transition: height 0.25s cubic-bezier(0.4, 0.0, 1, 1);
 
     &.nav-open {
         overflow: auto;
@@ -124,6 +124,10 @@ a {
         // define transition properties for when the overlay is opening
         transition-duration: 0.3s;
         transition-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+    }
+
+    &.immediate-close {
+        transition-duration: 0s;
     }
 
     mat-toolbar {
