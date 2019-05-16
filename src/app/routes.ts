@@ -3,11 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: '/main',
-        pathMatch: 'full'
-    }, {
-        path: 'main',
-        loadChildren: './containers/main/main.module#MainModule'
+        loadChildren: './containers/home/home.module#HomeModule'
     }, {
         path: 'search',
         loadChildren: './containers/search-results/search-results.module#SearchResultsModule'
@@ -19,7 +15,7 @@ export const routes: Routes = [
         loadChildren: './containers/datasets/datasets.module#DatasetsModule'
     }, {
         path: '**',
-        redirectTo: '/main',
+        redirectTo: '/',
         pathMatch: 'full'
     },
 ];
