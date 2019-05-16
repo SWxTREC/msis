@@ -11,13 +11,6 @@ import { RouterModule } from '@angular/router';
 import { routes } from './routes';
 import { AppComponent } from './app.component';
 
-// Containers
-import { MainComponent } from './containers/main/main.container';
-import { SearchResultsComponent } from './containers/search-results/search-results.container';
-import { MissionsComponent } from './containers/missions/missions.container';
-import { DatasetsComponent } from './containers/datasets/datasets.container';
-const CONTAINERS = [ MainComponent, SearchResultsComponent, MissionsComponent, DatasetsComponent ];
-
 // Components
 import { FooterComponent } from './components/footer/footer.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -27,8 +20,7 @@ const COMPONENTS = [ FooterComponent, NavbarComponent, SearchComponent ];
 @NgModule({
     declarations: [
         AppComponent,
-        COMPONENTS,
-        CONTAINERS
+        COMPONENTS
     ],
     imports: [
         BrowserModule,

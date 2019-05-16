@@ -1,30 +1,21 @@
 import { Routes } from '@angular/router';
 
-import { MainComponent } from './containers/main/main.container';
-import { SearchResultsComponent } from './containers/search-results/search-results.container';
-import { MissionsComponent } from './containers/missions/missions.container';
-import { DatasetsComponent } from './containers/datasets/datasets.container';
-
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: '/main',
-        pathMatch: 'full'
-    }, {
-        path: 'main',
-        component: MainComponent
+        loadChildren: './containers/home/home.module#HomeModule'
     }, {
         path: 'search',
-        component: SearchResultsComponent
+        loadChildren: './containers/search-results/search-results.module#SearchResultsModule'
     }, {
         path: 'missions/:id',
-        component: MissionsComponent
+        loadChildren: './containers/missions/missions.module#MissionsModule'
     }, {
         path: 'datasets/:id',
-        component: DatasetsComponent
+        loadChildren: './containers/datasets/datasets.module#DatasetsModule'
     }, {
         path: '**',
-        redirectTo: '/main',
+        redirectTo: '/',
         pathMatch: 'full'
     },
 ];
