@@ -1,9 +1,9 @@
 <form id="search-container" fxLayout="row">
-    <button mat-icon-button (click)="search(searchText)">
+    <div fxLayoutAlign="center center">
         <mat-icon aria-label="search">search</mat-icon>
-    </button>
+    </div>
     <input id="search" fxFlex [placeholder]="placeholder" name="searchText" [(ngModel)]="searchText" autocomplete="off">
-    <button mat-button (click)="search(searchText)">Go</button>
+    <button mat-button (click)="search(searchText.trim())" [disabled]="searchText.trim().length === 0">Go</button>
     <button mat-icon-button (click)="closeSearch()" fxHide.xs>
         <mat-icon aria-label="close search">close</mat-icon>
     </button>
