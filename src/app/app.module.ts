@@ -1,7 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MaterialModule } from './modules';
+import {
+    LaspNavModule,
+    MaterialModule
+ } from './modules';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
@@ -13,14 +16,11 @@ import { AppComponent } from './app.component';
 
 // Components
 import { FooterComponent } from './components/footer/footer.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { SearchComponent } from './components/search/search.component';
-const COMPONENTS = [ FooterComponent, NavbarComponent, SearchComponent ];
 
 @NgModule({
     declarations: [
         AppComponent,
-        COMPONENTS
+        FooterComponent,
     ],
     imports: [
         BrowserModule,
@@ -28,6 +28,7 @@ const COMPONENTS = [ FooterComponent, NavbarComponent, SearchComponent ];
         FormsModule,
         FlexLayoutModule,
         HttpClientModule,
+        LaspNavModule,
         MaterialModule,
         RouterModule.forRoot( routes )
     ],

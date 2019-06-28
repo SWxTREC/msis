@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { INavItem, IImageLink, ISocialLinks } from 'src/app/models/header-footer';
 
 @Component({
-    selector: 'app-footer',
+    selector: 'lasp-footer',
     templateUrl: './footer.component.html',
     styleUrls: ['./footer.component.scss']
 })

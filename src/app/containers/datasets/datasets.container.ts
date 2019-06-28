@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-datasets',
+    selector: 'lasp-datasets',
     templateUrl: './datasets.container.html'
 })
 export class DatasetsComponent implements OnInit {

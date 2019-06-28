@@ -1,14 +1,15 @@
 import { Component, ElementRef, HostListener, OnDestroy, ViewChild, Input } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subscription } from 'rxjs';
-import { INavItem } from '../../models/header-footer';
+import { INavItem } from './models/nav';
 
 @Component({
-    selector: 'lasp-navbar',
-    templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.scss']
+    selector: 'lasp-nav',
+    templateUrl: './lasp-nav.component.html',
+    styleUrls: ['./lasp-nav.component.scss']
 })
-export class NavbarComponent implements OnDestroy {
+
+export class LaspNavComponent implements OnDestroy {
 
     @Input() largeLogoSrc: string;
     @Input() smallLogoSrc: string;
@@ -63,7 +64,7 @@ export class NavbarComponent implements OnDestroy {
 
     /**
      * Close the nav menu, either with an animation or immediately.
-     * @param immediately
+     * @param immediately: boolean
      */
     closeNav( immediately = false ) {
         if ( immediately ) {
