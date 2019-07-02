@@ -19,7 +19,7 @@ export class LaspNavComponent implements OnDestroy {
     @Input() mobileNavBgColor = 'black';
     @Input() navItems: INavItem[];
 
-    @ViewChild( 'stickyMenu' ) menuElement: ElementRef;
+    @ViewChild( 'stickyMenu', {static: false} ) menuElement: ElementRef;
 
     navOpen = false;
     closeNavImmediately = false;
