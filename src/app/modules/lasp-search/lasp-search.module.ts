@@ -7,7 +7,7 @@ import {
     // MatAutocompleteModule,
     // MatBadgeModule,
     // MatBottomSheetModule,
-    // MatButtonModule,
+    MatButtonModule,
     // MatButtonToggleModule,
     // MatCardModule,
     // MatCheckboxModule,
@@ -51,6 +51,7 @@ import { LaspSearchComponent } from './lasp-search.component';
         CommonModule,
         FlexLayoutModule,
         FormsModule,
+        MatButtonModule,
         MatIconModule
     ],
     exports: [

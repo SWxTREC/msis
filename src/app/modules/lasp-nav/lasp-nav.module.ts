@@ -6,7 +6,7 @@ import {
     // MatAutocompleteModule,
     // MatBadgeModule,
     // MatBottomSheetModule,
-    // MatButtonModule,
+    MatButtonModule,
     // MatButtonToggleModule,
     MatCardModule,
     // MatCheckboxModule,
@@ -51,6 +51,7 @@ import { LaspNavComponent } from './lasp-nav.component';
     imports: [
         CommonModule,
         FlexLayoutModule,
+        MatButtonModule,
         MatCardModule,
         MatIconModule,
         MatListModule,

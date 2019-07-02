@@ -4,8 +4,8 @@
   fxFlexFill
   fxHide.lt-md
   [style.backgroundColor]="largeHeaderBgColor">
-    <img [src]="largeLogoSrc" class="header-logo header-logo--large"/>
-    <img [src]="orgLogoSrc" class="header-logo header-logo--lasp"/>
+    <img [src]="largeLogoSrc" class="header__logo header__logo--large"/>
+    <img [src]="orgLogoSrc" class="header__logo header__logo--lasp"/>
 </div>
 
 <mat-toolbar class="nav-toolbar mat-elevation-z3" color="primary">
@@ -13,7 +13,9 @@
         <div fxLayout="row" fxLayoutAlign="space-between center">
             <img [src]="smallLogoSrc" class="nav__logo" [fxHide]="!sticky" fxShow.lt-md/>
             <a *ngFor="let navItem of navItems" [routerLink]="navItem.link" class="nav__item" fxHide.lt-md>{{navItem.label}}</a>
-            <mat-icon class="nav__search-icon" (click)="openSearch()" fxHide.lt-md>search</mat-icon>
+            <button mat-icon-button>
+                <mat-icon class="nav__search-icon" (click)="openSearch()" fxHide.lt-md>search</mat-icon>
+            </button>
             <button mat-stroked-button class="nav__menu-button" (click)="openNav()" fxHide.gt-sm>
                 Menu <mat-icon>menu</mat-icon>
             </button>
@@ -23,22 +25,22 @@
 </mat-toolbar>
 
 <!-- Overlay nav menu for narrow screens, hidden until "Menu" is clicked -->
-<div class="nav-overlay expand-down lasp-dark-theme" [class.nav-open]="navOpen" [class.immediate-close]="closeNavImmediately" [style.backgroundColor]="mobileNavBgColor">
+<div class="nav-overlay lasp-dark-theme" [class.nav-overlay--open]="navOpen" [class.nav-overlay--immediate-close]="closeNavImmediately" [style.backgroundColor]="mobileNavBgColor">
 
-    <mat-toolbar color="transparent" fxLayoutAlign="space-between center">
-        <img [src]="smallLogoSrc" class="logo-mini" />
-        <button mat-button class="nav-overlay__close-nav" (click)="closeNav()">
+    <mat-toolbar class="nav-overlay__toolbar" fxLayoutAlign="space-between center">
+        <img [src]="smallLogoSrc" class="nav__logo" />
+        <button mat-icon-button class="nav-overlay__close" (click)="closeNav()">
             <mat-icon>close</mat-icon>
         </button>
     </mat-toolbar>
 
-    <mat-card>
-        <lasp-search [placeholder]="searchPlaceholder" (close)="closeSearch()" (searchSent)="closeNav(true)"></lasp-search>
+    <mat-card class="nav-overlay__search">
+        <lasp-search [placeholder]="searchPlaceholder" (searchSent)="closeNav(true)"></lasp-search>
     </mat-card>
 
-    <mat-nav-list>
+    <mat-nav-list class="nav-overlay__items">
         <mat-list-item *ngFor="let navItem of navItems; last as last">
-            <a [routerLink]="navItem.link" (click)="closeNav(true)" class="overlay-nav-item">{{navItem.label}}</a>
+            <a [routerLink]="navItem.link" (click)="closeNav(true)" class="nav-overlay__item">{{navItem.label}}</a>
         </mat-list-item>
     </mat-nav-list>
 </div>

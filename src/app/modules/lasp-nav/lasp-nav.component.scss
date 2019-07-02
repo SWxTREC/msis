@@ -1,11 +1,10 @@
 @import '../../../theme/theme-colors';
-
 $font-size: 14px;
 $headerHeight: 104px;
 $navHeight: 44px;
 $stickyHeaderHeight: 44px;
 
-.header-logo {
+.header__logo {
     &--large {
         height: $headerHeight;
     }
@@ -14,7 +13,6 @@ $stickyHeaderHeight: 44px;
         height: $headerHeight / 2;
         margin-right: 2rem;
     }
-
 }
 
 .nav {
@@ -45,12 +43,13 @@ $stickyHeaderHeight: 44px;
             left: 0;
             visibility: hidden;
             transform: scaleX(0);
-            transition: all .2s ease-in-out 0s;
+            transition: all 0.2s ease-in-out 0s;
             background-color: $color-accent;
         }
 
         &:hover {
             color: $color-accent;
+
             &:after {
                 visibility: visible;
                 transform: scaleX(1);
@@ -64,11 +63,6 @@ $stickyHeaderHeight: 44px;
 
     &__menu-button {
         border-color: white !important;
-        border-image: none !important;
-        background: transparent;
-        color: white;
-        display: flex;
-        align-items: center;
     }
 
     &__search-icon {
@@ -78,29 +72,6 @@ $stickyHeaderHeight: 44px;
     &--search-open {
         margin-top: -$navHeight;
     }
-}
-
-.overlay-nav-item {
-    font-size: $font-size;
-    height: $navHeight;
-    line-height: $navHeight;
-    overflow-wrap: break-word;
-    color: white;
-    width: 100%;
-    cursor: pointer;
-
-    &:hover {
-        color: $color-accent;
-    }
-}
-
-.nav-toolbar {
-    position: sticky;
-    height: $navHeight;
-    top: 0;
-    z-index: 5;
-    overflow: hidden;
-
 }
 
 .nav-overlay {
@@ -117,7 +88,7 @@ $stickyHeaderHeight: 44px;
     // the transition definitions below apply to when the overlay is closing (i.e. when '.nav-open' is not applied)
     transition: height 0.25s cubic-bezier(0.4, 0.0, 1, 1);
 
-    &.nav-open {
+    &--open {
         overflow: auto;
         height: 100%;
         // define transition properties for when the overlay is opening
@@ -125,42 +96,43 @@ $stickyHeaderHeight: 44px;
         transition-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
     }
 
-    &.immediate-close {
+    &--immediate-close {
         transition-duration: 0s;
     }
 
-    mat-toolbar {
-        background-color: transparent;
+    &__close {
+        color: white;
     }
 
-    mat-nav-list {
+    &__item {
+        font-size: $font-size;
+        height: $navHeight;
+        line-height: $navHeight;
+        overflow-wrap: break-word;
+        color: white;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    &__items {
         padding: 0 16px;
-    }
-    mat-card {
-        padding: 0 32px;
-    }
-
-    mat-nav-list,
-    mat-card {
         margin-bottom: 16px;
     }
 
-    &__close-nav {
-        color: white;
+    &__search {
+        padding: 0 32px;
+        margin-bottom: 16px;
     }
 
-    .search-form-field, .search-form-field * {
-        color: white;
-    }
-
-}
-
-mat-toolbar {
-    i {
-        font-size: 24px;
+    &__toolbar {
+        background-color: transparent;
     }
 }
 
-.logo-mini {
-    height: 32px;
+.nav-toolbar {
+    position: sticky;
+    height: $navHeight;
+    top: 0;
+    z-index: 5;
+    overflow: hidden;
 }
