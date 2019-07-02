@@ -1,23 +1,20 @@
 <div
-  class="logo-header-row"
   fxLayout="row"
   fxLayoutAlign="space-between center"
   fxFlexFill
   fxHide.lt-md
   [style.backgroundColor]="largeHeaderBgColor">
-    <img [src]="largeLogoSrc" class="logo-header-row__logo-large"/>
-    <img [src]="orgLogoSrc" class="logo-header-row__lasp-logo"/>
+    <img [src]="largeLogoSrc" class="header-logo header-logo--large"/>
+    <img [src]="orgLogoSrc" class="header-logo header-logo--lasp"/>
 </div>
 
-<mat-toolbar class="small-toolbar mat-elevation-z3" [class.sticky-toolbar]="sticky" color="primary">
-    <nav class="nav-top" [class.search-open]="searchOpen">
+<mat-toolbar class="nav-toolbar mat-elevation-z3" color="primary">
+    <nav class="nav" [class.nav--search-open]="searchOpen">
         <div fxLayout="row" fxLayoutAlign="space-between center">
-            <img [src]="smallLogoSrc" class="logo-mini" [fxHide]="!sticky" fxShow.lt-md/>
-            <a *ngFor="let navItem of navItems" [routerLink]="navItem.link" class="nav-item" fxHide.lt-md>{{navItem.label}}</a>
-            <button mat-icon-button (click)="openSearch()" fxHide.lt-md>
-                <mat-icon aria-label="open search">search</mat-icon>
-            </button>
-            <button mat-stroked-button class="small-toolbar__menu-button" (click)="openNav()" fxHide.gt-sm>
+            <img [src]="smallLogoSrc" class="nav__logo" [fxHide]="!sticky" fxShow.lt-md/>
+            <a *ngFor="let navItem of navItems" [routerLink]="navItem.link" class="nav__item" fxHide.lt-md>{{navItem.label}}</a>
+            <mat-icon class="nav__search-icon" (click)="openSearch()" fxHide.lt-md>search</mat-icon>
+            <button mat-stroked-button class="nav__menu-button" (click)="openNav()" fxHide.gt-sm>
                 Menu <mat-icon>menu</mat-icon>
             </button>
         </div>
