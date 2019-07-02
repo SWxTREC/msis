@@ -1,6 +1,6 @@
 $component-height: 44px;
 
-#search-container {
+.search-container {
     width: 100%;
     color: #fff;
     background-color: transparent;
@@ -8,29 +8,29 @@ $component-height: 44px;
     line-height: $component-height;
     margin: 0 auto;
 
-    input {
+    &__input {
         background-color: transparent;
+        border: none;
         color: #fff;
         font-size: 17px;
+        margin-left: 10px;
         outline: none;
         text-rendering: auto;
-        border-color: transparent;
-        border-style: solid;
-        border-width: 0 1px;
-        outline: none;
-        margin-left: 10px;
+        &::placeholder {
+            color: #b7b7b7;
+        }
     }
 
-    ::placeholder {
-      color: #b7b7b7;
-    }
-
-    button {
+    &__button {
         height: $component-height;
         width: $component-height;
-
-        mat-icon {
-            font-size: 24px;
+        transition: color 1000ms;
+        &:disabled {
+            color: transparent;
         }
+    }
+
+    &__icon {
+        font-size: 24px;
     }
 }
