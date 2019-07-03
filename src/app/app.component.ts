@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
-import { INavItem, IImageLink, ISocialLinks } from './models/header-footer';
+import {
+    INavItem,
+    IImageLink,
+    ISocialLinks
+} from './modules';
 
 /** Entry Component */
 @Component({

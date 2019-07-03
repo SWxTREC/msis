@@ -8,7 +8,7 @@ import {
     // MatBottomSheetModule,
     MatButtonModule,
     // MatButtonToggleModule,
-    MatCardModule,
+    // MatCardModule,
     // MatCheckboxModule,
     // MatChipsModule,
     // MatDatepickerModule,
@@ -16,9 +16,9 @@ import {
     // MatDividerModule,
     // MatExpansionModule,
     // MatGridListModule,
-    MatIconModule,
+    // MatIconModule,
     // MatInputModule,
-    MatListModule,
+    // MatListModule,
     // MatMenuModule,
     // MatNativeDateModule,
     // MatPaginatorModule,
@@ -40,28 +40,23 @@ import {
     // MatTreeModule,
 } from '@angular/material';
 
-import { LaspSearchModule } from '../lasp-search/lasp-search.module';
+export {
+    // INavItem, uncomment this line if you are using the LaspFooterComponent without the LaspNavComponent
+    IImageLink,
+    ISocialLinks
+} from './models';
+import { LaspFooterComponent } from './lasp-footer.component';
 
-import { LaspNavComponent } from './lasp-nav.component';
-export { INavItem } from './models';
 
 @NgModule({
-    declarations: [
-        LaspNavComponent
-    ],
+    declarations: [LaspFooterComponent],
     imports: [
         CommonModule,
         FlexLayoutModule,
         MatButtonModule,
-        MatCardModule,
-        MatIconModule,
-        MatListModule,
         MatToolbarModule,
-        LaspSearchModule,
         RouterModule
     ],
-    exports: [
-        LaspNavComponent
-    ]
+    exports: [LaspFooterComponent]
 })
-export class LaspNavModule { }
+export class LaspFooterModule { }
