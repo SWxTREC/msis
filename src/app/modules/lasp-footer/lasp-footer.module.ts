@@ -8,7 +8,7 @@ import {
 } from '@angular/material';
 
 export {
-    // INavItem, // uncomment this line if you are using the LaspFooterComponent alone, without the LaspNavComponent
+    // INavItem, // uncomment this line if you are using the LaspFooterComponent without the LaspNavComponent
     IImageLink,
     ISocialLinks
 } from './models';
