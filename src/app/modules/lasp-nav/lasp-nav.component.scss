@@ -112,6 +112,10 @@ $stickyHeaderHeight: 44px;
         color: white;
         width: 100%;
         cursor: pointer;
+
+        &:hover {
+            color: $color-accent;
+        }
     }
 
     &__items {

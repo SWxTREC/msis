@@ -10,11 +10,11 @@
 
 <mat-toolbar class="nav-toolbar mat-elevation-z3" color="primary">
     <nav class="nav" [class.nav--search-open]="searchOpen">
-        <div fxLayout="row" fxLayoutAlign="space-between center">
+        <div fxFlexFill fxLayout="row" fxLayoutAlign="space-between center">
             <img [src]="smallLogoSrc" class="nav__logo" [fxHide]="!sticky" fxShow.lt-md/>
             <a *ngFor="let navItem of navItems" [routerLink]="navItem.link" class="nav__item" fxHide.lt-md>{{navItem.label}}</a>
-            <button mat-icon-button>
-                <mat-icon class="nav__search-icon" (click)="openSearch()" fxHide.lt-md>search</mat-icon>
+            <button mat-icon-button fxHide.lt-md>
+                <mat-icon class="nav__search-icon" (click)="openSearch()">search</mat-icon>
             </button>
             <button mat-stroked-button class="nav__menu-button" (click)="openNav()" fxHide.gt-sm>
                 Menu <mat-icon>menu</mat-icon>
