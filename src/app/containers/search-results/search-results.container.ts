@@ -3,7 +3,7 @@ import { SearchService } from '../../services/search.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'lasp-search-results',
+    selector: 'app-search-results',
     templateUrl: './search-results.container.html',
     styleUrls: ['./search-results.container.scss']
 })
