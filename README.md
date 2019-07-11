@@ -1,20 +1,20 @@
-# BaseAppPrototype
+# BaseApp
 
-This project contains the modules needed to build the Lasp base prototype app. The basic modules include a standard Lasp nav, search, and footer.
+This project contains the modules needed to build the LASP base app. The basic modules include a standard LASP nav, search, and footer.
 
-## Lasp Nav
+## LASP Nav
 
 This module requires and imports the LaspSearchModule.
 
-## Lasp Search
+## LASP Search
 
 This module can stand alone, but is required in the LaspNavModule.
 
-## Lasp Footer
+## LASP Footer
 
 This module is a stand-alone LaspFooterModule.
 
-## Lasp App
+## LASP App
 
 The LaspAppModule rolls up the LaspNavModule and the LaspFooterModule into one module.
 
