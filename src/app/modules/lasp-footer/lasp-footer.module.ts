@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { RouterModule } from '@angular/router';
 import {
     MatButtonModule,
-    MatToolbarModule,
+    MatToolbarModule
 } from '@angular/material';
+import { RouterModule } from '@angular/router';
 
 export {
     // INavItem, // uncomment this line if you are using the LaspFooterComponent without the LaspNavComponent
@@ -16,7 +16,7 @@ import { LaspFooterComponent } from './lasp-footer.component';
 
 
 @NgModule({
-    declarations: [LaspFooterComponent],
+    declarations: [ LaspFooterComponent ],
     imports: [
         CommonModule,
         FlexLayoutModule,
@@ -24,6 +24,6 @@ import { LaspFooterComponent } from './lasp-footer.component';
         MatToolbarModule,
         RouterModule
     ],
-    exports: [LaspFooterComponent]
+    exports: [ LaspFooterComponent ]
 })
 export class LaspFooterModule { }

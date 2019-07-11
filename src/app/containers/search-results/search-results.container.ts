@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { SearchService } from '../../services/search.service';
 import { ActivatedRoute } from '@angular/router';
+
+import { SearchService } from '../../services/search.service';
 
 @Component({
     selector: 'app-search-results',
     templateUrl: './search-results.container.html',
-    styleUrls: ['./search-results.container.scss']
+    styleUrls: [ './search-results.container.scss' ]
 })
 export class SearchResultsComponent implements OnInit {
     query: string;
@@ -22,7 +23,7 @@ export class SearchResultsComponent implements OnInit {
         );
         this._route.queryParamMap.subscribe(
             query => {
-                this.query = query.get('query');
+                this.query = query.get( 'query' );
                 this._searchService.getSearch( this.query );
             }
         );

@@ -1,12 +1,13 @@
-import { Component, ElementRef, HostListener, OnDestroy, ViewChild, Input } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, ElementRef, HostListener, Input, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
+
 import { INavItem } from './models/nav';
 
 @Component({
     selector: 'lasp-nav',
     templateUrl: './lasp-nav.component.html',
-    styleUrls: ['./lasp-nav.component.scss']
+    styleUrls: [ './lasp-nav.component.scss' ]
 })
 
 export class LaspNavComponent implements OnDestroy {
@@ -19,7 +20,7 @@ export class LaspNavComponent implements OnDestroy {
     @Input() mobileNavBgColor = 'black';
     @Input() navItems: INavItem[];
 
-    @ViewChild( 'stickyMenu', {static: false} ) menuElement: ElementRef;
+    @ViewChild( 'stickyMenu', { static: false } ) menuElement: ElementRef;
 
     navOpen = false;
     closeNavImmediately = false;
@@ -27,10 +28,10 @@ export class LaspNavComponent implements OnDestroy {
     searchOpen = false;
     breakpointObserverSubscription: Subscription;
 
-    @HostListener( 'window:scroll', ['$event'] )
+    @HostListener( 'window:scroll', [ '$event' ] )
     handleScroll() {
         const windowScroll = window.pageYOffset;
-        if (windowScroll >= 160) {
+        if ( windowScroll >= 160 ) {
             this.sticky = true;
         } else {
             this.sticky = false;
@@ -41,7 +42,7 @@ export class LaspNavComponent implements OnDestroy {
         private _breakpointObserver: BreakpointObserver
     ) {
         this.breakpointObserverSubscription = this._breakpointObserver.observe([
-            Breakpoints.TabletLandscape,
+            Breakpoints.TabletLandscape
         ]).subscribe(result => {
             if (result.matches) {
                 this.navOpen = false;
@@ -74,9 +75,9 @@ export class LaspNavComponent implements OnDestroy {
     }
 
     /**
-    * Open the sitewide search area, then clear and focus the input field.
-    * For wide screens.
-    */
+     * Open the sitewide search area, then clear and focus the input field.
+     * For wide screens.
+     */
     openSearch() {
         const element = document.getElementById( 'search' );
         element.focus({ preventScroll: true });
@@ -84,9 +85,9 @@ export class LaspNavComponent implements OnDestroy {
     }
 
     /**
-    * Close the sitewide search area.
-    * For wide screens.
-    */
+     * Close the sitewide search area.
+     * For wide screens.
+     */
     closeSearch() {
         this.searchOpen = false;
     }

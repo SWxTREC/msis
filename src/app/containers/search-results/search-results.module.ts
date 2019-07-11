@@ -1,8 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+
 import { MaterialModule } from '../../modules';
-import { SearchResultsComponent } from './search-results.container';
+
 import { SearchResultsRoutingModule } from './search-results-routing.module';
+import { SearchResultsComponent } from './search-results.container';
 
 
 @NgModule({

@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { RouterTestingModule } from '@angular/router/testing';
 import {
     MatButtonModule,
     MatCardModule,
@@ -8,8 +7,9 @@ import {
     MatListModule,
     MatToolbarModule
 } from '@angular/material';
-import { LaspSearchModule } from '../lasp-search/lasp-search.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
+import { LaspSearchModule } from '../lasp-search/lasp-search.module';
 
 import { LaspNavComponent } from './lasp-nav.component';
 

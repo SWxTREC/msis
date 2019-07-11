@@ -40,11 +40,11 @@ import {
     MatTabsModule,
     MatToolbarModule,
     MatTooltipModule,
-    MatTreeModule,
+    MatTreeModule
 } from '@angular/material';
 
 import {
-    MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS
+    MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule
 } from '@angular/material-moment-adapter';
 
 @NgModule({
@@ -88,7 +88,7 @@ import {
         MatToolbarModule,
         MatTooltipModule,
         MatTreeModule,
-        ScrollingModule,
+        ScrollingModule
     ],
     providers: [
         { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }

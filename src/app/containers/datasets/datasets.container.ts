@@ -12,7 +12,7 @@ export class DatasetsComponent implements OnInit {
 
     ngOnInit() {
         this._route.paramMap.subscribe(
-            params => this.name = params.get('id')
+            params => this.name = params.get( 'id' )
         );
     }
 }

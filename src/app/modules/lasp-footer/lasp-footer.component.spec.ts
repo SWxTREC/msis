@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { RouterTestingModule } from '@angular/router/testing';
 import {
     MatButtonModule,
-    MatToolbarModule,
+    MatToolbarModule
 } from '@angular/material';
+import { RouterTestingModule } from '@angular/router/testing';
 
 
 import { LaspFooterComponent } from './lasp-footer.component';
