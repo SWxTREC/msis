@@ -26,16 +26,16 @@ describe('AppComponent', () => {
         expect(app).toBeTruthy();
     });
 
-    xit(`should have as title 'base-app-prototype'`, () => {
+    xit(`should have as title 'base-app'`, () => {
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.debugElement.componentInstance;
-        expect(app.title).toEqual('base-app-prototype');
+        expect(app.title).toEqual('base-app');
     });
 
     xit('should render title in a h1 tag', () => {
         const fixture = TestBed.createComponent(AppComponent);
         fixture.detectChanges();
         const compiled = fixture.debugElement.nativeElement;
-        expect(compiled.querySelector('h1').textContent).toContain('Welcome to base-app-prototype!');
+        expect(compiled.querySelector('h1').textContent).toContain('Welcome to base-app!');
     });
 });
