@@ -4,10 +4,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { NgModule } from '@angular/core';
 
-/**
- * Because this is still in early production its fine to just import everything for convenience
- * Later on though, we should only import the packages we actually use
- */
+// TODO remove unused Angular Material modules
 import {
     MatAutocompleteModule,
     MatBadgeModule,
