@@ -7,6 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
+    "lint:watch": "nodemon --exec \"ng lint\" --ext ts --ignore node_modules/",
     "e2e": "ng e2e"
   },
   "private": true,
@@ -50,6 +52,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
+    "tslint-default": "git+https://bitbucket.lasp.colorado.edu/scm/webapps/tslint-default.git",
     "typescript": "~3.4.5"
   }
 }
