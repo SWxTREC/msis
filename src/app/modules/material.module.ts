@@ -5,8 +5,8 @@ import { CdkTreeModule } from '@angular/cdk/tree';
 import { NgModule } from '@angular/core';
 
 /**
- * Because this is a prototype its fine to just import everything for convenience
- * For production apps though, we should only import the packages we actually use
+ * Because this is still in early production its fine to just import everything for convenience
+ * Later on though, we should only import the packages we actually use
  */
 import {
     MatAutocompleteModule,

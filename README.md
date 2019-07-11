@@ -1,6 +1,6 @@
-# BaseAppPrototype
+# BaseApp
 
-This project contains the modules needed to build the Lasp base prototype app. The basic modules include a standard Lasp nav, search, and footer.
+This project contains the modules needed to build the Lasp base app. The basic modules include a standard Lasp nav, search, and footer.
 
 ## Lasp Nav
 
