@@ -23,7 +23,7 @@ export class SearchResultsComponent implements OnInit {
         );
         this._route.queryParamMap.subscribe(
             query => {
-                this.query = query.get('query');
+                this.query = query.get( 'query' );
                 this._searchService.getSearch( this.query );
             }
         );

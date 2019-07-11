@@ -23,8 +23,8 @@ export class LaspSearchComponent implements OnDestroy {
     ) {
         this.breakpointObserverSubscription = this._breakpointObserver.observe([
             Breakpoints.HandsetLandscape
-        ]).subscribe(result => {
-            if (result.matches) {
+        ]).subscribe( result => {
+            if ( result.matches ) {
                 this.close.emit();
             }
         });
@@ -41,6 +41,6 @@ export class LaspSearchComponent implements OnDestroy {
 
     search( query: string ) {
         this.searchSent.emit();
-        this._router.navigateByUrl( this._sanitizer.sanitize( SecurityContext.URL, '/search?query=' + query  ) );
+        this._router.navigateByUrl( this._sanitizer.sanitize( SecurityContext.URL, '/search?query=' + query ) );
     }
 }

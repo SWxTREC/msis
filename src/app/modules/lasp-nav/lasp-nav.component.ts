@@ -31,7 +31,7 @@ export class LaspNavComponent implements OnDestroy {
     @HostListener( 'window:scroll', [ '$event' ] )
     handleScroll() {
         const windowScroll = window.pageYOffset;
-        if (windowScroll >= 160) {
+        if ( windowScroll >= 160 ) {
             this.sticky = true;
         } else {
             this.sticky = false;
