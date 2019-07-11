@@ -1,12 +1,3 @@
-/**
- * Models used in the app header and footer.
- */
-
-export interface INavItem {
-    label: string;
-    link: string;
-}
-
 export interface IImageLink {
     src: string;
     href: string;

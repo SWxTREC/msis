@@ -1,0 +1,159 @@
+@import '../../../theme/theme-colors';
+$font-size: 14px;
+$headerHeight: 104px;
+$navHeight: 44px;
+$stickyHeaderHeight: 44px;
+
+.header__logo {
+    &--large {
+        height: $headerHeight;
+    }
+
+    &--lasp {
+        height: $headerHeight / 2;
+        margin-right: 2rem;
+    }
+}
+
+.nav {
+    min-width: 0;
+    width: 100%;
+    height: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    align-self: flex-start;
+    transition: margin-top 0.25s;
+
+    &__item {
+        position: relative;
+        font-size: $font-size;
+        height: $navHeight;
+        line-height: $navHeight;
+        overflow-wrap: break-word;
+        color: white;
+        cursor: pointer;
+        text-decoration: none;
+
+        &::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            visibility: hidden;
+            transform: scaleX(0);
+            transition: all 0.2s ease-in-out 0s;
+            background-color: $color-accent;
+        }
+
+        &:hover {
+            color: $color-accent;
+
+            &::after {
+                visibility: visible;
+                transform: scaleX(1);
+            }
+        }
+    }
+
+    &__logo {
+        height: $headerHeight / 3;
+    }
+
+    &__menu-button {
+        border-color: white !important;
+    }
+
+    &__search-icon {
+        cursor: pointer;
+    }
+
+    &--search-open {
+        margin-top: -$navHeight;
+    }
+}
+
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.98);
+    color: white;
+    z-index: 1000;
+    // since the transition duration and timing function are redefined in the .nav-open class,
+    // the transition definitions below apply to when the overlay is closing (i.e. when '.nav-open' is not applied)
+    transition: height 0.25s cubic-bezier(0.4, 0.0, 1, 1);
+
+    &--open {
+        overflow: auto;
+        height: 100%;
+        // define transition properties for when the overlay is opening
+        transition-duration: 0.3s;
+        transition-timing-function: cubic-bezier(0.0, 0.0, 0.2, 1);
+    }
+
+    &--immediate-close {
+        transition-duration: 0s;
+    }
+
+    &__close {
+        color: white;
+    }
+
+    &__item {
+        font-size: $font-size;
+        height: $navHeight;
+        line-height: $navHeight;
+        overflow-wrap: break-word;
+        color: white;
+        width: 100%;
+        cursor: pointer;
+        &::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            visibility: hidden;
+            transform: scaleX(0);
+            transition: all 0.2s ease-in-out 0s;
+            background-color: $color-accent;
+        }
+
+
+        &:hover {
+            color: $color-accent;
+            &::after {
+                visibility: visible;
+                transform: scaleX(1);
+            }
+        }
+    }
+
+    &__items {
+        padding: 0 16px;
+        margin-bottom: 16px;
+    }
+
+    &__search {
+        padding: 0 32px;
+        margin-bottom: 16px;
+    }
+
+    &__toolbar {
+        background-color: transparent;
+    }
+}
+
+.nav-toolbar {
+    position: sticky;
+    height: $navHeight;
+    top: 0;
+    z-index: 5;
+    overflow: hidden;
+}

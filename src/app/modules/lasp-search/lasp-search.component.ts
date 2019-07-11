@@ -4,15 +4,15 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Subscription} from 'rxjs';
 
 @Component({
-    selector: 'app-search',
-    templateUrl: './search.component.html',
-    styleUrls: ['./search.component.scss']
+    selector: 'lasp-search',
+    templateUrl: './lasp-search.component.html',
+    styleUrls: ['./lasp-search.component.scss']
 })
-export class SearchComponent implements OnDestroy{
+export class LaspSearchComponent implements OnDestroy {
     @Output() close = new EventEmitter();
     @Output() searchSent = new EventEmitter(); // emit when we send a search
     @Input() placeholder = 'Search';
-    
+
     searchText = '';
     breakpointObserverSubscription: Subscription;
 
@@ -27,7 +27,7 @@ export class SearchComponent implements OnDestroy{
             if (result.matches) {
                 this.close.emit();
             }
-        })
+        });
     }
 
     ngOnDestroy() {

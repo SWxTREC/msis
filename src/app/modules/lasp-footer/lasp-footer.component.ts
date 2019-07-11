@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { INavItem, IImageLink, ISocialLinks } from 'src/app/models/header-footer';
+import { INavItem, IImageLink, ISocialLinks } from './models';
 
 @Component({
-    selector: 'app-footer',
-    templateUrl: './footer.component.html',
-    styleUrls: ['./footer.component.scss']
+    selector: 'lasp-footer',
+    templateUrl: './lasp-footer.component.html',
+    styleUrls: ['./lasp-footer.component.scss']
 })
-export class FooterComponent {
+export class LaspFooterComponent {
 
     @Input() orgLogos: IImageLink[] = [];
     @Input() navItems: INavItem[] = [];

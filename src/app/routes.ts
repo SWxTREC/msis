@@ -3,16 +3,16 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
         path: '',
-        loadChildren: './containers/home/home.module#HomeModule'
+        loadChildren: () => import('./containers/home/home.module').then(m => m.HomeModule)
     }, {
         path: 'search',
-        loadChildren: './containers/search-results/search-results.module#SearchResultsModule'
+        loadChildren: () => import('./containers/search-results/search-results.module').then(m => m.SearchResultsModule)
     }, {
         path: 'missions/:id',
-        loadChildren: './containers/missions/missions.module#MissionsModule'
+        loadChildren: () => import('./containers/missions/missions.module').then(m => m.MissionsModule)
     }, {
         path: 'datasets/:id',
-        loadChildren: './containers/datasets/datasets.module#DatasetsModule'
+        loadChildren: () => import('./containers/datasets/datasets.module').then(m => m.DatasetsModule)
     }, {
         path: '**',
         redirectTo: '/',
