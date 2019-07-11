@@ -9,9 +9,12 @@ import { IImageLink, INavItem, ISocialLinks } from './models';
 })
 export class LaspFooterComponent {
 
-    @Input() orgLogos: IImageLink[] = [];
     @Input() navItems: INavItem[] = [];
-    @Input() socialLinks: ISocialLinks = {};
+    @Input() orgLogos?: IImageLink[] = [];
+    @Input() socialLinks?: ISocialLinks = {};
+    @Input() partners?: IImageLink[] = [];
+    @Input() privacyPolicyRoute?: string;
+    @Input() termsOfServiceRoute?: string;
 
     currentYear = new Date().getFullYear();
 }

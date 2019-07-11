@@ -25,6 +25,13 @@
         <a *ngFor="let navItem of navItems" [routerLink]="navItem.link" class="inner-footer__nav-item">{{navItem.label}}</a>
     </nav>
 </mat-toolbar>
-<mat-toolbar fxLayoutAlign="center center" class="outer-footer">
-    <p class="outer-footer__copyright">© Regents of the University of Colorado {{currentYear}}</p>
+<mat-toolbar *ngIf="partners.length > 0" fxLayout="row wrap" fxLayoutAlign="center center" class="partner-logos">
+    <a *ngFor="let partner of partners" [href]="partner.href" target="_blank">
+        <img [src]="partner.src" />
+    </a>
+</mat-toolbar>
+<mat-toolbar fxLayoutAlign="center center" fxLayout="row wrap" class="outer-footer">
+    <p *ngIf="privacyPolicyRoute"><a routerLink="/privacy-policy">Privacy policy</a></p>
+    <p *ngIf="termsOfServiceRoute"><a routerLink="/terms-of-service">Terms of service</a></p>
+    <p>© Regents of the University of Colorado {{currentYear}}</p>
 </mat-toolbar>
