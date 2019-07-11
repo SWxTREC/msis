@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { SearchService } from '../../services/search.service';
 import { ActivatedRoute } from '@angular/router';
+
+import { SearchService } from '../../services/search.service';
 
 @Component({
     selector: 'app-search-results',
     templateUrl: './search-results.container.html',
-    styleUrls: ['./search-results.container.scss']
+    styleUrls: [ './search-results.container.scss' ]
 })
 export class SearchResultsComponent implements OnInit {
     query: string;

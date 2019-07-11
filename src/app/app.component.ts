@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
+
 import {
-    INavItem,
     IImageLink,
+    INavItem,
     ISocialLinks
 } from './modules';
 
@@ -21,10 +22,10 @@ export class AppComponent {
             link: '.'
         }, {
             label: 'Tools',
-            link: '.',
+            link: '.'
         }, {
             label: 'About',
-            link: '.',
+            link: '.'
         }, {
             label: 'Reference',
             link: '.'

@@ -5,7 +5,7 @@ export interface IDataset {
     description?: string;
 }
 
-export const exampleDatasets: IDataset[] = [{
+export const exampleDatasets: IDataset[] = [ {
     name: 'Bremen Composite Mg II Index'
 }, {
     name: 'CA II K-Line'
@@ -21,7 +21,7 @@ export const exampleDatasets: IDataset[] = [{
     name: 'SDO EVE Bands - Level 2B'
 }, {
     name: 'TIMED SEE EGS SSI - Level 2'
-}];
+} ];
 
 @Injectable({
     providedIn: 'root'

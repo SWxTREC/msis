@@ -6,7 +6,7 @@ export interface IMission {
     image?: string;
 }
 
-export const exampleMissions: IMission[] = [{
+export const exampleMissions: IMission[] = [ {
     name: 'SDO'
 }, {
     name: 'SME'
@@ -20,7 +20,7 @@ export const exampleMissions: IMission[] = [{
     name: 'UARS'
 }, {
     name: 'TIMED'
-}];
+} ];
 
 @Injectable({
     providedIn: 'root'

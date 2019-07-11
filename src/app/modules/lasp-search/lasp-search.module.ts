@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import {
     MatButtonModule,
-    MatIconModule,
+    MatIconModule
 } from '@angular/material';
 
 import { LaspSearchComponent } from './lasp-search.component';

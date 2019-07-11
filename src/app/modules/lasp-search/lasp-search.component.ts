@@ -1,12 +1,12 @@
-import {Component, Input, Output, EventEmitter, Sanitizer, SecurityContext, OnDestroy} from '@angular/core';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, EventEmitter, Input, OnDestroy, Output, Sanitizer, SecurityContext } from '@angular/core';
 import { Router } from '@angular/router';
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Subscription} from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'lasp-search',
     templateUrl: './lasp-search.component.html',
-    styleUrls: ['./lasp-search.component.scss']
+    styleUrls: [ './lasp-search.component.scss' ]
 })
 export class LaspSearchComponent implements OnDestroy {
     @Output() close = new EventEmitter();
@@ -22,7 +22,7 @@ export class LaspSearchComponent implements OnDestroy {
         private _breakpointObserver: BreakpointObserver
     ) {
         this.breakpointObserverSubscription = this._breakpointObserver.observe([
-            Breakpoints.HandsetLandscape,
+            Breakpoints.HandsetLandscape
         ]).subscribe(result => {
             if (result.matches) {
                 this.close.emit();
