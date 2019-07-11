@@ -15,6 +15,7 @@ export class LaspFooterComponent {
     @Input() partners?: IImageLink[] = [];
     @Input() privacyPolicyRoute?: string;
     @Input() termsOfServiceRoute?: string;
+    @Input() copyrightedBy ? = 'Regents of the University of Colorado';
 
     currentYear = new Date().getFullYear();
 }
