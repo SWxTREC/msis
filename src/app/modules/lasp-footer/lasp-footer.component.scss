@@ -60,10 +60,31 @@
 
 .outer-footer {
     background-color: $color-primary;
+    font-size: 12px;
+    padding: 0.5em;
+    height: auto;
+    color: white;
 
-    &__copyright {
-        color: white;
-        font-size: 12px;
-        margin: 10px 0;
+    a, a:link, a:visited { color: white }
+    a:hover { color: #ccc }
+
+    > p {
+        margin: 0 1em;
+    }
+}
+
+.partner-logos {
+    background-color: $color-primary;
+    height: auto;
+    padding: 0.5em;
+
+    a {
+        display: block;
+        line-height: 0;
+        margin: 0 10px 10px 0;
+
+        img {
+            height: 100px;
+        }
     }
 }
