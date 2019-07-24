@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, HostListener, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { INavItem } from './models/nav';
@@ -39,7 +40,8 @@ export class LaspNavComponent implements OnDestroy {
     }
 
     constructor(
-        private _breakpointObserver: BreakpointObserver
+        private _breakpointObserver: BreakpointObserver,
+        private _router: Router
     ) {
         this.breakpointObserverSubscription = this._breakpointObserver.observe([
             Breakpoints.TabletLandscape
@@ -90,5 +92,12 @@ export class LaspNavComponent implements OnDestroy {
      */
     closeSearch() {
         this.searchOpen = false;
+    }
+
+    /**
+     * Navigate to a local route, or open an external link in a new window/tab.
+     */
+    onNavClick( urlOrRoute: string ) {
+        urlOrRoute.match(/^https?:\/\//) === null ? this._router.navigateByUrl( urlOrRoute ) : window.open( urlOrRoute, '_blank' );
     }
 }

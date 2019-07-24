@@ -22,7 +22,7 @@
         </button>
     </div>
     <nav fxLayout="row wrap" fxLayoutAlign="center center" class="inner-footer__nav">
-        <a *ngFor="let navItem of navItems" [routerLink]="navItem.link" class="inner-footer__nav-item">{{navItem.label}}</a>
+        <a *ngFor="let navItem of navItems" (click)="onNavClick(navItem.link)" class="inner-footer__nav-item">{{navItem.label}}</a>
     </nav>
 </mat-toolbar>
 <mat-toolbar *ngIf="partners.length > 0" fxLayout="row wrap" fxLayoutAlign="center center" class="partner-logos">

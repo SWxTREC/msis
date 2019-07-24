@@ -12,7 +12,7 @@
     <nav class="nav" [class.nav--search-open]="searchOpen">
         <div fxFlexFill fxLayout="row" fxLayoutAlign="space-between center">
             <img [src]="smallLogoSrc" class="nav__logo" [fxHide]="!sticky" fxShow.lt-md/>
-            <a *ngFor="let navItem of navItems" [routerLink]="navItem.link" class="nav__item" fxHide.lt-md>{{navItem.label}}</a>
+            <a *ngFor="let navItem of navItems" (click)="onNavClick(navItem.link)" class="nav__item" fxHide.lt-md>{{navItem.label}}</a>
             <button mat-icon-button fxHide.lt-md>
                 <mat-icon class="nav__search-icon" (click)="openSearch()">search</mat-icon>
             </button>
@@ -40,7 +40,7 @@
 
     <mat-nav-list class="nav-overlay__items">
         <mat-list-item *ngFor="let navItem of navItems; last as last">
-            <a [routerLink]="navItem.link" (click)="closeNav(true)" class="nav-overlay__item">{{navItem.label}}</a>
+            <a (click)="onNavClick(navItem.link); closeNav(true)" class="nav-overlay__item">{{navItem.label}}</a>
         </mat-list-item>
     </mat-nav-list>
 </div>
