@@ -26,13 +26,17 @@ $stickyHeaderHeight: 44px;
 
     &__item {
         position: relative;
-        font-size: $font-size;
+        min-width: 80px;
         height: $navHeight;
+
+        font-size: $font-size;
+        text-align: center;
         line-height: $navHeight;
         overflow-wrap: break-word;
         color: white;
-        cursor: pointer;
         text-decoration: none;
+
+        cursor: pointer;
 
         &::after {
             content: "";
