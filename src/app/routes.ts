@@ -5,6 +5,9 @@ export const routes: Routes = [
         path: '',
         loadChildren: () => import( './containers/home/home.module').then( m => m.HomeModule )
     }, {
+        path: 'about',
+        loadChildren: () => import( './containers/about/about.module').then( m => m.AboutModule )
+    }, {
         path: 'search',
         loadChildren: () => import( './containers/search-results/search-results.module' ).then( m => m.SearchResultsModule )
     }, {
