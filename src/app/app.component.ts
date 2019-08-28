@@ -19,31 +19,31 @@ export class AppComponent {
     navItems: INavItem[] = [
         {
             label: 'Data',
-            link: '.'
+            link: '/data'
         }, {
             label: 'Missions',
-            link: '.'
+            link: '/missions'
         }, {
             label: 'Tools',
-            link: '.'
+            link: '/tools'
         }, {
             label: 'About',
-            link: '.'
+            link: '/about'
         }, {
             label: 'Reference',
-            link: '.'
+            link: 'https://google.com'
         }, {
             label: 'Science',
-            link: '.'
+            link: '/science'
         }, {
             label: 'Instruments',
-            link: '.'
+            link: '/instruments'
         }
     ];
 
     orgLogos: IImageLink[] = [
         {
-            src: '../../../assets/images/lasp-logo-black.png',
+            src: 'assets/images/lasp-logo-black.png',
             href: 'http://lasp.colorado.edu'
         }
     ];
