@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
-import { environment } from '../environments/environment';
-
 import {
     IImageLink,
     INavItem,
-    ISocialLinks
-} from './modules';
+    ISocialLinks,
+    IVersion
+} from 'lasp-footer';
+
+import { environment } from '../environments/environment';
 
 /** Entry Component */
 @Component({
     selector: 'app-root',
-    templateUrl: './app.component.html'
+    templateUrl: './app.component.html',
+    styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent {
 
@@ -53,6 +55,21 @@ export class AppComponent {
         twitter: 'https://twitter.com/LASPatCU',
         youtube: 'https://www.youtube.com/user/LASPatCUBoulder'
     };
+
+    versions: IVersion[] = [
+        {
+            version: 'v0.1.2'
+        }, {
+            productName: 'LaTiS',
+            version: 'v9.87.6-SNAPSHOT',
+            link: 'https://en.wikipedia.org/wiki/Latis'
+        }, {
+            productName: 'foo',
+            version: '3.5.5',
+            link: 'http://bar.com',
+            linkedPart: 'version'
+        }
+    ];
 
     constructor( private _router: Router ) {
         // we will load an external script for Google Analytics. The script may not load until after the router has changed one or more

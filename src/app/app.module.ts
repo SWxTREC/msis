@@ -6,11 +6,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
+import { LaspFooterModule } from 'lasp-footer';
+import { LaspNavModule } from 'lasp-nav';
+
 import { AppComponent } from './app.component';
-import {
-    LaspAppModule,
-    MaterialModule
-} from './modules';
+import { MaterialModule } from './modules';
 import { routes } from './routes';
 
 @NgModule({
@@ -22,8 +22,9 @@ import { routes } from './routes';
         BrowserAnimationsModule,
         FormsModule,
         FlexLayoutModule,
+        LaspFooterModule,
+        LaspNavModule,
         HttpClientModule,
-        LaspAppModule,
         MaterialModule,
         RouterModule.forRoot( routes )
     ],
