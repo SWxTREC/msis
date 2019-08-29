@@ -1,0 +1,4 @@
+// allows the navbar to stick to the top of the page in Safari
+:host {
+    display: contents;
+}
