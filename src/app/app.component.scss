@@ -2,3 +2,11 @@
 :host {
     display: contents;
 }
+
+.page-content {
+    min-width: 360px;
+    max-width: 960px;
+    min-height: 300px;
+    margin: 0 auto;
+    padding: 2em 1.5em 3em 1.5em;
+}

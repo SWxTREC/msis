@@ -3,10 +3,14 @@
 @import 'theme/theme-lasp.scss';
 
 html {
-    min-width: 320px;
+    min-width: 360px;
 }
 
 body {
     font-family: Roboto, Arial, sans-serif;
     margin: 0;
+}
+
+* {
+    box-sizing: border-box;
 }
