@@ -5,22 +5,22 @@ import {
 } from '../../modules';
 
 
-import { AboutComponent } from './about.component';
+import { FullwidthComponent } from './fullwidth.component';
 
 describe('AboutComponent', () => {
-    let component: AboutComponent;
-    let fixture: ComponentFixture<AboutComponent>;
+    let component: FullwidthComponent;
+    let fixture: ComponentFixture<FullwidthComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ AboutComponent ],
+            declarations: [ FullwidthComponent ],
             imports: [ MaterialModule ]
         })
     .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(AboutComponent);
+        fixture = TestBed.createComponent(FullwidthComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
