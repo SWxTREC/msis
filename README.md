@@ -21,6 +21,8 @@ You *will* need to change the following items:
 * header and footer configuration in `src/app.component.html`
 * selector prefixes in `src/tslint.json` -- change `["app", "lasp"],` to something more specific to your app, i.e. `["lisird", "lasp"],`
 * selector prefixes in your components -- change them to match the prefixes in the last step, i.e. `lisird-search-results` instead of `app-search-results`
+* selectors in html templates, i.e. in `app/index.html`, use `<lisird-root>` instead of `<app-root>`
+* selectors in scss files, i.e. in `app/styles.scss`, use `lisird-root` instead of `app-root`
 * Pare down the list of imports in `src/app/modules/material.module.ts` to only include what you need
 * Delete this README file and rename `README.after-fork.md` to `README.md`, and replace placeholder text with actual information
 
