@@ -12,10 +12,12 @@ import { LaspNavModule } from 'lasp-nav';
 import { AppComponent } from './app.component';
 import { MaterialModule } from './modules';
 import { routes } from './routes';
+import { Four04ComponentComponent } from './four04-component/four04-component.component';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        Four04ComponentComponent
     ],
     imports: [
         BrowserModule,
