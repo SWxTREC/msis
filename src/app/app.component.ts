@@ -18,8 +18,15 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent {
 
+    // please have no more than 7 items in the nav menu
     navItems: INavItem[] = [
         {
+            label: 'Full-width page',
+            link: '/fullwidth'
+        }, {
+            label: 'External link',
+            link: 'https://google.com'
+        }, {
             label: 'Data',
             link: '/data'
         }, {
@@ -28,12 +35,6 @@ export class AppComponent {
         }, {
             label: 'Tools',
             link: '/tools'
-        }, {
-            label: 'About',
-            link: '/about'
-        }, {
-            label: 'Reference',
-            link: 'https://google.com'
         }, {
             label: 'Science',
             link: '/science'

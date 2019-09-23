@@ -2,11 +2,19 @@
 @import 'theme/theme-colors.scss';
 @import 'theme/theme-lasp.scss';
 
-html {
-    min-width: 320px;
-}
-
 body {
     font-family: Roboto, Arial, sans-serif;
     margin: 0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+app-root > .page-content > *:not(router-outlet) {
+    display: block;
+    max-width: 960px;
+    min-height: 400px;
+    margin: 0 auto;
+    padding: 2em 1.5em 3em 1.5em;
 }
