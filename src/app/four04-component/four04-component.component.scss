@@ -1,10 +1,9 @@
 .wrapper{
-  // Needs to be dynamically served
-  background: url("https://www.nasa.gov/sites/default/files/thumbnails/image/potw1918a.jpg") no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  background-position: center center;
 }
 
 .title-wrap{
@@ -26,7 +25,6 @@
 }
 
 .subtitle{
-  padding-top: 25px;
   width: 300px;
   margin: 0 auto;
 }
