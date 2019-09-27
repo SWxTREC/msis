@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { shuffle } from "lodash";
 
 export interface IGallery {
   title: string;
@@ -35,7 +36,7 @@ export class Four04ComponentComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+    this.gallery = shuffle(this.gallery);
   }
 
 }
