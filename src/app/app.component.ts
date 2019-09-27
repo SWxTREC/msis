@@ -46,7 +46,7 @@ export class AppComponent {
 
     orgLogos: IImageLink[] = [
         {
-            src: 'assets/images/lasp-logo-black.png',
+            src: 'https://lasp.colorado.edu/media/projects/base-app/images/footer-lasp-logo.png',
             href: 'http://lasp.colorado.edu'
         }
     ];
