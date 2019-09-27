@@ -8,11 +8,11 @@ export interface IGallery {
 };
 
 @Component({
-  selector: 'lasp-four04-component',
-  templateUrl: './four04-component.component.html',
-  styleUrls: ['./four04-component.component.scss']
+  selector: 'lasp-four04',
+  templateUrl: './four04.component.html',
+  styleUrls: ['./four04.component.scss']
 })
-export class Four04ComponentComponent implements OnInit {
+export class Four04Component implements OnInit {
   gallery: IGallery[];
 
   constructor() {

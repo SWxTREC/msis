@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Four04ComponentComponent } from './four04-component/four04-component.component';
+import { Four04Component } from './four04/four04.component';
 
 export const routes: Routes = [
     {
@@ -19,7 +19,7 @@ export const routes: Routes = [
         loadChildren: () => import( './containers/datasets/datasets.module' ).then( m => m.DatasetsModule )
     }, {
         path: '404',
-        component: Four04ComponentComponent
+        component: Four04Component
     }, {
         path: '**',
         redirectTo: '/404',
