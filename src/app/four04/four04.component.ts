@@ -21,17 +21,17 @@ export class Four04Component implements OnInit {
         this.gallery = [
             {
                 title : 'Not Found',
-                imagePath : 'assets/images/404/hubble1.jpg',
+                imagePath : 'http://lasp.colorado.edu/media/projects/base-app/images/404/hubble1.jpg',
                 text : 'Sorry, the page you\'re looking for seems to be lost in space.'
             },
             {
                 title : 'Hmm…',
-                imagePath : 'assets/images/404/andromeda.jpg',
+                imagePath : 'http://lasp.colorado.edu/media/projects/base-app/images/404/andromeda.jpg',
                 text : 'Out of all the pages in the galaxy, we couldn\'t find that one. '
             },
             {
                 title : 'Not Found',
-                imagePath : 'assets/images/404/UGC_Cluster.jpg',
+                imagePath : 'http://lasp.colorado.edu/media/projects/base-app/images/404/UGC_Cluster.jpg',
                 text : 'Sorry, the page you\'re looking for seems to be lost in space.'
             }
         ];
