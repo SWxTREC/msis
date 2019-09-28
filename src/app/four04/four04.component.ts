@@ -12,8 +12,10 @@ export interface IGallery {
   templateUrl: './four04.component.html',
   styleUrls: ['./four04.component.scss']
 })
+
 export class Four04Component implements OnInit {
   gallery: IGallery[];
+  selectedGalleryItem = {};
 
   constructor() {
     this.gallery = [
@@ -36,7 +38,8 @@ export class Four04Component implements OnInit {
   }
 
   ngOnInit() {
-    this.gallery = shuffle(this.gallery);
+    let selectedIndex = Math.floor( Math.random() * this.gallery.length );
+    this.selectedGalleryItem = this.gallery[ selectedIndex ];
   }
 
 }
