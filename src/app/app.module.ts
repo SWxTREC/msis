@@ -10,9 +10,9 @@ import { LaspFooterModule } from 'lasp-footer';
 import { LaspNavModule } from 'lasp-nav';
 
 import { AppComponent } from './app.component';
+import { Four04Component } from './four04/four04.component';
 import { MaterialModule } from './modules';
 import { routes } from './routes';
-import { Four04Component } from './four04/four04.component';
 
 @NgModule({
     declarations: [

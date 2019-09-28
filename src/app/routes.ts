@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { Four04Component } from './four04/four04.component';
 
 export const routes: Routes = [
