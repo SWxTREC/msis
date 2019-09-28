@@ -22,7 +22,6 @@ export const routes: Routes = [
         component: Four04Component
     }, {
         path: '**',
-        redirectTo: '/404',
-        pathMatch: 'full'
+        component: Four04Component
     }
 ];
