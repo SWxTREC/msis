@@ -1,0 +1,27 @@
+.wrapper{
+  background-size: cover;
+  background-position: center center;
+}
+
+.title-wrap{
+  padding: 100px 0;
+  background: rgba(0,0,0,.3);
+}
+
+.title, .subtitle{
+  color: #fff;
+  text-align: center;
+  a{
+    color: #fff;
+  }
+}
+
+.title{
+  margin: 25px;
+  font-size: 60px;
+}
+
+.subtitle{
+  width: 300px;
+  margin: 0 auto;
+}

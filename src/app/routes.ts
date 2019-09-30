@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 
+import { Four04Component } from './four04/four04.component';
+
 export const routes: Routes = [
     {
         path: '',
@@ -17,8 +19,10 @@ export const routes: Routes = [
         path: 'datasets/:id',
         loadChildren: () => import( './containers/datasets/datasets.module' ).then( m => m.DatasetsModule )
     }, {
+        path: '404',
+        component: Four04Component
+    }, {
         path: '**',
-        redirectTo: '/',
-        pathMatch: 'full'
+        component: Four04Component
     }
 ];
