@@ -2,6 +2,10 @@
 @import 'theme/theme-colors.scss';
 @import 'theme/theme-lasp.scss';
 
+html {
+    background: #f4f4f4;
+}
+
 body {
     font-family: Roboto, Arial, sans-serif;
     margin: 0;
