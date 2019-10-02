@@ -6,26 +6,7 @@ BaseApp includes some sample pages and graphics, and includes the standard LASP 
 
 ## After you fork
 
-You *might* need to change the following items:
-
-* `src/favicon.ico` (unless you want to use the LASP logo)
-* the Google Analytics ID in `src/environments/environment.prod.ts`
-* the site's theme colors in `src/theme/theme-colors.scss`
-
-You *will* need to change the following items:
-
-* the name of the app in `package.json`
-* the name of the project in `angular.json` -- change all instances of `base-app` to the name of your project
-* the `<title>` tag in `src/index.html`
-* navigation items, logos, social links, etc in `src/app.component.ts`
-* header and footer configuration in `src/app.component.html`
-* selector prefixes in `src/tslint.json` -- change `["app", "lasp"],` to something more specific to your app, i.e. `["lisird", "lasp"],`
-* selector prefixes in your components -- change them to match the prefixes in the last step, i.e. `lisird-search-results` instead of `app-search-results`
-* selectors in html templates, i.e. in `app/index.html`, use `<lisird-root>` instead of `<app-root>`
-* selectors in scss files, i.e. in `app/styles.scss`, use `lisird-root` instead of `app-root`
-* Pare down the list of imports in `src/app/modules/material.module.ts` to only include what you need
-* Delete this README file and rename `README.after-fork.md` to `README.md`, and replace placeholder text with actual information
-
+Run `npm run after-fork` and follow the prompts.
 
 ## Contacts
 
@@ -44,6 +25,10 @@ BaseApp is collectively owned by the front-end developers in the LASP web team.
 
 
 ## Development
+
+Whenever you make changes to BaseApp, keep in mind what a developer may need to do after forking this repo, and make changes to `after-fork.ts` or `after-fork.instructions` if necessary.
+
+`after-fork.ts` is a script that automates many tasks, such as replacing 'base-app' with the name of the new project. `after-fork.instructions` is a set of instructions shown to the user which cannot easily be automated.
 
 ### Development server
 

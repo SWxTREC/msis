@@ -12,7 +12,7 @@ import { environment } from '../environments/environment';
 
 /** Entry Component */
 @Component({
-    selector: 'app-root',
+    selector: 'base-app-root',
     templateUrl: './app.component.html',
     styleUrls: [ './app.component.scss' ]
 })

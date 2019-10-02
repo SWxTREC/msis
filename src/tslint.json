@@ -4,13 +4,13 @@
         "component-selector": [
             true,
             "element",
-            ["app", "lasp"],
+            ["base-app", "lasp"],
             "kebab-case"
         ],
         "directive-selector": [
             true,
             "attribute",
-            ["app", "lasp"],
+            ["baseApp", "lasp"],
             "camelCase"
         ]
     }

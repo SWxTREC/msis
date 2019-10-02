@@ -2,6 +2,7 @@
   "name": "base-app",
   "version": "0.0.0",
   "scripts": {
+    "after-fork": "npx tsc after-fork.ts --lib 'es2018,dom' && node after-fork.js && rm after-fork.* && npm uninstall --silent --save-dev replace-in-file",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -54,6 +55,7 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.4.0",
+    "replace-in-file": "^4.1.3",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "tslint-default": "^1.0.2",

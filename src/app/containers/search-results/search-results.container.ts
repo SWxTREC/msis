@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SearchService } from '../../services/search.service';
 
 @Component({
-    selector: 'app-search-results',
+    selector: 'base-app-search-results',
     templateUrl: './search-results.container.html',
     styleUrls: [ './search-results.container.scss' ]
 })

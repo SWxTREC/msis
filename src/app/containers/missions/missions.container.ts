@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-missions',
+    selector: 'base-app-missions',
     templateUrl: './missions.container.html'
 })
 export class MissionsComponent implements OnInit {
