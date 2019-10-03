@@ -16,7 +16,7 @@ const reader = readline.createInterface({
 });
 
 /**
- * Converts readline's `question` method to use a pormise instead of a callback.
+ * Converts readline's `question` method to use a promise instead of a callback.
  * Takes a question to ask the user via command line and returns a Promise which resolves with the user's answer
  */
 function question( read: readline.ReadLine, q: string ): Promise<string> {
@@ -121,6 +121,9 @@ async function replace( options: any ): Promise<void> {
     const yellowEscSeq = '\x1b[33m'; // causes output text to be yellow
     const resetEscSeq = '\x1b[0m';
     console.log( `${yellowEscSeq}\n${instructions}\n${resetEscSeq}` );
+
+    // self destruct
+    [ 'after-fork.instructions', 'after-fork.ts', 'after-fork.js' ].forEach( file => fs.unlinkSync(file) );
 
     process.exit();
 })();
