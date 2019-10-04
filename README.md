@@ -6,7 +6,10 @@ BaseApp includes some sample pages and graphics, and includes the standard LASP 
 
 ## After you fork
 
-Run `npm run after-fork` and follow the prompts.
+**Do not make any changes to your forked repo until you follow these steps.**
+
+* Run `npm install`
+* Run `npm run after-fork` and follow the prompts.
 
 ## Contacts
 

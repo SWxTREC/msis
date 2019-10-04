@@ -3,6 +3,7 @@
  * This should only be run as part of the "after-fork" npm script.
  */
 
+import * as childProcess from 'child_process';
 import * as fs from 'fs';
 import * as readline from 'readline';
 const replaceInFile = require( 'replace-in-file' );
@@ -21,7 +22,7 @@ const reader = readline.createInterface({
  */
 function question( read: readline.ReadLine, q: string ): Promise<string> {
     return new Promise( resolve => {
-        read.question( q + '\n', answer => resolve(answer) );
+        read.question( q + '\n> ', answer => resolve(answer) );
     });
 }
 
@@ -35,10 +36,11 @@ async function replace( options: any ): Promise<void> {
 
 ( async() => {
     // prompt the user for some answers
-    const projectNamePlain = await question( reader, 'What is the name of your project? (i.e. "MinXSS SDC")' );
-    const projectNameKebab = await question( reader, 'What is the name of your project in kebab-case? (i.e. "minxss-sdc")' );
+    const projectName = await question( reader, `Enter your project's full name (i.e. "Space Weather Portal"):` );
+    const packageName = await question( reader, `Enter a new package package name for your project:` );
+    const prefixName = await question( reader, 'Enter a short prefix in kebab-case (i.e. "swp" or "sw-portal"):' );
     // convert kebab-case to camelCase
-    const projectNameCamel = projectNameKebab.replace( /-[a-z]/g, substr => {
+    const projectNameCamel = prefixName.replace( /-[a-z]/g, substr => {
         // remove the dash and capitalize the letter after the dash
         return substr[1].toUpperCase();
     });
@@ -50,17 +52,24 @@ async function replace( options: any ): Promise<void> {
 
     // replace instances of the generic "base app" name throughout the project
 
+    // replace package name
+    await replace({
+        files: [ 'package.json' ],
+        from: /"name": "base-app"/,
+        to: `"name": "${packageName}"`
+    });
+
     // replace camel-case instances
     await replace({
-        files: [ 'angular.json', 'package.json', 'e2e/**/*', 'src/**/*' ],
+        files: [ 'angular.json', 'e2e/**/*', 'src/**/*' ],
         from: /base-app/g,
-        to: projectNameKebab
+        to: prefixName
     });
 
     // revert some camel-case instances, which are URLs that still need the 'base-app' string in them
     await replace({
         files: [ 'src/**/*' ],
-        from: new RegExp( `lasp.colorado.edu/media/projects/${projectNameKebab}/`, 'g' ),
+        from: new RegExp( `lasp.colorado.edu/media/projects/${prefixName}/`, 'g' ),
         to: 'lasp.colorado.edu/media/projects/base-app/'
     });
 
@@ -75,14 +84,14 @@ async function replace( options: any ): Promise<void> {
     await replace({
         files: [ 'src/**/*' ],
         from: /BaseApp/g,
-        to: projectNamePlain
+        to: projectName
     });
 
     // replace '{{Project-Name}}' in after-fork.README.md
     await replace({
         files: [ 'after-fork.README.md' ],
         from: new RegExp( '{{Project-Name}}', 'g' ),
-        to: projectNamePlain
+        to: projectName
     });
 
     // remove the "after-fork" script from package.json
@@ -111,10 +120,22 @@ async function replace( options: any ): Promise<void> {
     const uniqueChangedFiles = new Set( allChangedFiles );
     console.log( '\nChanged content in ' + uniqueChangedFiles.size + ' files.' );
 
+    // rename image files
+    const imageFiles = fs.readdirSync( 'src/assets/images' ).filter( filename => filename.startsWith('base-app') );
+    imageFiles.forEach( filename => {
+        const newFileName = filename.replace( 'base-app', prefixName );
+        fs.renameSync( `src/assets/images/${filename}`, `src/assets/images/${newFileName}` );
+    });
+    console.log( 'Renamed ' + imageFiles.length + ' image files.' );
+
     // replace README.md
     await fs.unlinkSync( 'README.md' );
     await fs.renameSync( 'after-fork.README.md', 'README.md' );
     console.log( 'Replaced README.md with after-fork.README.md' );
+
+    // uninstall a dependency only used by this script
+    console.log( 'Uninstalling after-fork script dependencies...' );
+    childProcess.execSync( 'npm uninstall --silent --save-dev replace-in-file' );
 
     // show additional instructions
     const instructions = await fs.readFileSync( 'after-fork.instructions' ).toString();

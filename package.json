@@ -2,7 +2,7 @@
   "name": "base-app",
   "version": "0.0.0",
   "scripts": {
-    "after-fork": "npx tsc after-fork.ts --lib es2018,dom && node after-fork.js && npm uninstall --silent --save-dev replace-in-file",
+    "after-fork": "npx tsc after-fork.ts --lib es2018,dom && node after-fork.js",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",

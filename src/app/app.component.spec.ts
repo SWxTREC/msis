@@ -1,6 +1,11 @@
 import { async, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
+import { LaspFooterModule } from 'lasp-footer';
+import { LaspNavModule } from 'lasp-nav';
+
+import { Four04Component } from './containers/four04/four04.component';
+
 import { AppComponent } from './app.component';
 import { routes } from './routes';
 
@@ -8,10 +13,13 @@ describe('AppComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
-                RouterModule.forRoot( routes )
+                RouterModule.forRoot( routes ),
+                LaspFooterModule,
+                LaspNavModule
             ],
             declarations: [
-                AppComponent
+                AppComponent,
+                Four04Component
             ]
         }).compileComponents();
     }));
@@ -22,9 +30,9 @@ describe('AppComponent', () => {
         expect(app).toBeTruthy();
     });
 
-    xit(`should have as title 'BaseApp'`, () => {
+    it(`should have no more than 7 nav items`, () => {
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.debugElement.componentInstance;
-        expect(app.title).toEqual('BaseApp');
+        expect(app.navItems.length).toBeLessThanOrEqual( 7 );
     });
 });
