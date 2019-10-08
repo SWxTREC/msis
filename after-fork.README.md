@@ -28,7 +28,7 @@ If this is part of the webtcad/latis family, a link to the core project is requi
 should put links to other JIRA projects that this project uses. For example, if this were
 Webtcad-maven, links to webtcad-core and latis would be here.
 
-* [{{Project Name}}]({{Link To Project}})
+* [{{JIRA Project Name}}]({{Link To Project}})
 
 ## Production URLs
 

@@ -1,21 +1,25 @@
 import { async, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
+import { LaspFooterModule } from 'lasp-footer';
+import { LaspNavModule } from 'lasp-nav';
+
+import { Four04Component } from './containers/four04/four04.component';
+
 import { AppComponent } from './app.component';
-import {
-    LaspAppModule
- } from './modules';
 import { routes } from './routes';
 
 describe('AppComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
-                LaspAppModule,
-                RouterModule.forRoot( routes )
+                RouterModule.forRoot( routes ),
+                LaspFooterModule,
+                LaspNavModule
             ],
             declarations: [
-                AppComponent
+                AppComponent,
+                Four04Component
             ]
         }).compileComponents();
     }));
@@ -26,16 +30,9 @@ describe('AppComponent', () => {
         expect(app).toBeTruthy();
     });
 
-    xit(`should have as title 'base-app'`, () => {
+    it(`should have no more than 7 nav items`, () => {
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.debugElement.componentInstance;
-        expect(app.title).toEqual('base-app');
-    });
-
-    xit('should render title in a h1 tag', () => {
-        const fixture = TestBed.createComponent(AppComponent);
-        fixture.detectChanges();
-        const compiled = fixture.debugElement.nativeElement;
-        expect(compiled.querySelector('h1').textContent).toContain('Welcome to base-app!');
+        expect(app.navItems.length).toBeLessThanOrEqual( 7 );
     });
 });
