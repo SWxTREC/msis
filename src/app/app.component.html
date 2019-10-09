@@ -1,11 +1,9 @@
 <lasp-nav
     largeLogoSrc="assets/images/base-app-logo.jpg"
-    smallLogoSrc="assets/images/base-app-logo-small.png"
+    [navItems]="navItems"
     orgLogoSrc="https://lasp.colorado.edu/media/projects/base-app/images/header-lasp-logo.png"
     searchPlaceholder="Search Datasets or Missions"
-    largeHeaderBgColor="black"
-    mobileNavBgColor="black"
-    [navItems]="navItems">
+    smallLogoSrc="assets/images/base-app-logo-small.png">
 </lasp-nav>
 
 <div class="page-content">
@@ -14,8 +12,8 @@
 </div>
 
 <lasp-footer
-    [orgLogos]="orgLogos"
     [navItems]="navItems"
-    [socialLinks]="socialLinks"
-    [productVersions]="versions">
+    [orgLogos]="orgLogos"
+    [productVersions]="versions"
+    [socialLinks]="socialLinks">
 </lasp-footer>

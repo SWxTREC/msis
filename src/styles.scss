@@ -2,6 +2,46 @@
 @import 'theme/theme-colors.scss';
 @import 'theme/theme-lasp.scss';
 
+$accent-color: $color-accent;
+$background-color: black;
+$primary-contrast-color: $color-primary-contrast;
+$info-color: $color-info;
+$success-color: $color-success;
+
+// start lasp-libraries code
+    @function getContrastColor($color) {
+        // function adapted from https://codepen.io/davidhalford/pen/wlDxL
+        // determine the color brightness for the color and for white
+        // formula for color brightness: https://www.w3.org/TR/AERT/#color-contrast
+        $color-brightness: round((red($color) * 299) + (green($color) * 587) + (blue($color) * 114) / 1000);
+        $white-brightness: round((red(#ffffff) * 299) + (green(#ffffff) * 587) + (blue(#ffffff) * 114) / 1000);
+        // for greatest contrast, if less than half-way to the brightness of white, use white, otherwise, use black
+        @if abs($color-brightness) < ($white-brightness/2) {
+            @return white;
+        } @else {
+            @return black;
+        }
+    }
+
+    @function toRgba ($color) {
+        @return "rgba(" + red($color) + ", " + green($color) + ", " + blue($color)+ ", 0.5)";
+    }
+
+    $background-contrast: getContrastColor($background-color);
+    $background-contrast-rbga: toRgba($background-contrast);
+
+    // you can add color variables from other libraries/name-spaces here as well
+    :root {
+        --lasp-lib-accent: #{$accent-color};
+        --lasp-lib-background: #{$background-color};
+        --lasp-lib-background-contrast: #{$background-contrast};
+        --lasp-lib-background-contrast-screen: #{$background-contrast-rbga};
+        --lasp-lib-info: #{$info-color};
+        --lasp-lib-primary-contrast: #{$primary-contrast-color};
+        --lasp-lib-success: #{$success-color};
+    }
+// end lasp-libraries code
+
 html {
     background: #f4f4f4;
 }
