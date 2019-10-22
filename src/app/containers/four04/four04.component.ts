@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { shuffle } from 'lodash';
 
 export interface IGallery {
     title: string;
@@ -15,7 +14,7 @@ export interface IGallery {
 
 export class Four04Component implements OnInit {
     gallery: IGallery[];
-    selectedGalleryItem = {};
+    selectedGalleryItem: IGallery;
 
     constructor() {
         this.gallery = [
