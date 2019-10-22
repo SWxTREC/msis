@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { shuffle } from 'lodash';
 
 export interface IGallery {
     title: string;
