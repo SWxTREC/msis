@@ -42,6 +42,105 @@ $success-color: $color-success;
     }
 // end lasp-libraries code
 
+$link-color: mat-color( $accent, 700 );
+$heading-color: mat-color( $primary, 500 );
+
+// start style-guide styles
+
+    h1, h2 {
+        color: $heading-color;
+    }
+
+    *::selection {
+        background: transparentize( $color-accent, 0.8 );
+    }
+
+    p {
+        line-height: 1.3;
+    }
+
+    // links
+
+    .no-external-icon {
+        &::after { display: none !important }
+    }
+
+    .page-content, .cdk-overlay-container {
+        a {
+            color: $link-color;
+            text-decoration-style: dotted;
+
+            &:visited { color: desaturate( darken($link-color, 20%), 20% ) }
+            &:hover { color: inherit }
+
+            &[target=_blank]::after {
+                content: '';
+                background: url('data:image/svg+xml; utf8, <svg height="1024" width="768" xmlns="http://www.w3.org/2000/svg"><path d="M640 768H128V257.90599999999995L256 256V128H0v768h768V576H640V768zM384 128l128 128L320 448l128 128 192-192 128 128V128H384z"/></svg>');
+                background-size: cover;
+                display: inline-block;
+                width: 0.6em;
+                height: 0.75em;
+                position: relative;
+                top: 0.05em;
+                left: 0.2em;
+                margin-right: 0.2em;
+                opacity: .5;
+            }
+
+            &.image-link {
+                @extend .no-external-icon;
+
+                transition: all 0.2s;
+
+                img { display: block }
+                &:hover { @extend .mat-elevation-z8; }
+            }
+        }
+    }
+
+    // align card and dialog buttons
+
+    .mat-dialog-actions {
+        box-sizing: content-box;
+        justify-content: flex-end;
+    }
+
+    .mat-card-actions {
+        text-align: right;
+    }
+
+    .mat-button-wrapper {
+        text-transform: uppercase;
+    }
+
+    // style <pre> and <code> elements
+
+    pre {
+        padding: 0.75em 1em;
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    code {
+        padding: 0.25em 0.4em;
+        font-size: 80%
+    }
+
+    pre,
+    code {
+        background: rgba( 0, 0, 0, 0.1 );
+        font-size: 90%;
+        border-radius: 0.5em;
+    }
+
+    pre code {
+        background: none;
+        padding: 0;
+        border-radius: 0;
+    }
+
+// end style-guide styles
+
 html {
     background: #f4f4f4;
 }
