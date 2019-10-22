@@ -15,7 +15,7 @@ export interface IGallery {
 
 export class Four04Component implements OnInit {
     gallery: IGallery[];
-    selectedGalleryItem = {};
+    selectedGalleryItem: IGallery;
 
     constructor() {
         this.gallery = [
