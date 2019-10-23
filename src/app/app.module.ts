@@ -28,7 +28,7 @@ import { routes } from './routes';
         LaspNavModule,
         HttpClientModule,
         MaterialModule,
-        RouterModule.forRoot( routes )
+        RouterModule.forRoot( routes, { scrollPositionRestoration: 'enabled' } )
     ],
     providers: [],
     bootstrap: [ AppComponent ]
