@@ -11,7 +11,9 @@
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
     "lint:watch": "nodemon --exec \"ng lint\" --ext ts --ignore node_modules/",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "preversion": "ng lint && ng test -- --no-watch --no-progress",
+    "postversion": "git push && git push --tags"
   },
   "private": true,
   "dependencies": {

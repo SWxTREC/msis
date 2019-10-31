@@ -102,9 +102,15 @@ Who needs to be made aware of a release? What limitations/restrictions are there
 release? For example, is there an explicity vetting process, or perhaps certain time windows when a
 release shouldn't be made?
 
-### Process
+### Deploy process
 
-How is the app/server/project deployed? What is the process for making a release? Many projects will
+Run `npm version <major | minor | patch>` on the master branch. This will:
+
+* run the linter and unit tests, and abort if they fail
+* increment the version, commit the change, and create a git tag
+* push the changes and the new tag to the remote repo
+
+What other steps are needed to deploy the app/server/project? What is the process for making a release? Many projects will
 have a simple Hudson job, while others may be much more involved.
 
 ## FAQs and Help
