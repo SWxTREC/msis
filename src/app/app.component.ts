@@ -59,7 +59,7 @@ export class AppComponent {
 
     versions: IVersion[] = [
         {
-            version: 'v0.1.2'
+            version: environment.version
         }, {
             productName: 'LaTiS',
             version: 'v9.87.6-SNAPSHOT',
