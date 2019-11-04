@@ -8,6 +8,10 @@ import {
     IVersion
 } from 'lasp-footer';
 
+import {
+    LaspBaseAppSnippetsService
+} from 'lasp-base-app-snippets';
+
 import { environment } from '../environments/environment';
 
 /** Entry Component */
@@ -72,44 +76,7 @@ export class AppComponent {
         }
     ];
 
-    constructor( private _router: Router ) {
-        // we will load an external script for Google Analytics. The script may not load until after the router has changed one or more
-        // times. We want to keep track of the route changes that happen before we can log the changes to Google Analytics.
-        // Only in rare cases will the route change before the analytics script has loaded.
-        const loadedRoutes: string[] = [];
-
-        // track router changes in google analytics
-        this._router.events.subscribe( event => {
-            if ( event instanceof NavigationEnd ) {
-                // window['gtag'] only exists after the analytics script has loaded. If it hasn't loaded, keep track of the route change.
-                if ( window['gtag'] ) {
-                    this._logToGoogleAnalytics( event.urlAfterRedirects );
-                } else {
-                    loadedRoutes.push( event.urlAfterRedirects );
-                }
-            }
-        });
-
-        // load the analytics script
-        const script: any = document.createElement( 'script' );
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + environment.googleAnalyticsId;
-        script.onload = () => {
-            // some standard gtag code given by google
-            window['dataLayer'] = window['dataLayer'] || [];
-            window['gtag'] = function() {
-                window['dataLayer'].push( arguments );
-            };
-            window['gtag']( 'js', new Date() );
-
-            // now log any route changes that happened before this script loaded
-            loadedRoutes.forEach( route => this._logToGoogleAnalytics(route) );
-        };
-        document.getElementsByTagName( 'head' )[0].appendChild( script );
-    }
-
-    private _logToGoogleAnalytics( path: string ) {
-        window['gtag']( 'config', environment.googleAnalyticsId, {
-            page_path: path
-        });
+    constructor( private _snippets: LaspBaseAppSnippetsService ) {
+        this._snippets.appComponent.all({ googleAnalyticsId: environment.googleAnalyticsId });
     }
 }
