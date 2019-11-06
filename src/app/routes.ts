@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { Four04Component } from './containers/four04/four04.component';
+import { LaspFour04Component } from 'lasp-four04';
 
 export const routes: Routes = [
     {
@@ -20,9 +20,9 @@ export const routes: Routes = [
         loadChildren: () => import( './containers/datasets/datasets.module' ).then( m => m.DatasetsModule )
     }, {
         path: '404',
-        component: Four04Component
+        component: LaspFour04Component
     }, {
         path: '**',
-        component: Four04Component
+        component: LaspFour04Component
     }
 ];
