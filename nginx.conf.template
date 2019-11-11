@@ -1,0 +1,22 @@
+server {
+    server_name _;
+    listen 80 default_server;
+    absolute_redirect off;
+    root /usr/share/nginx/html/;
+
+    location ${NGINX_CONTEXT_ROOT} {
+        alias /usr/share/nginx/html/;
+        index index.html;
+        try_files $uri /index.html;
+        rewrite ^(.*/[^./]+)$ $1/ permanent;
+
+        # Match routes that end with a file extension
+        # This location only matches when the app is not hosted under /
+        #   the server -> root directive matches when hosted under /
+        location ~ ^${NGINX_CONTEXT_ROOT}/(.+\..+)$ {
+            alias /usr/share/nginx/html/$1;
+        }
+
+    }
+
+}
