@@ -7,7 +7,7 @@ To finish setting up your project, do the following as needed:
 * Pare down the list of imports in `src/app/modules/material.module.ts` to only include what you need
 
 If you are building to docker
-* Replace 'Project-name in the Dockerfile:3 with the name of your project
+* Replace 'Project-name' in the Dockerfile:3 with the name of your project
 * Replace 'Project-name' in docker-build.sh:4 with the name of your project
 * Replace 'Project-name' in docker-publish.sh:4 with the name of your project
 * Replace 'Project-name' in docker-run.sh:4 with the name of your project

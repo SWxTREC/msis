@@ -69,7 +69,7 @@ Once you have followed the steps in after-fork.instructions you can run `./docke
 
 ### Running a dev image locally
 
-Once you have built your image using the cmmand above, you can `./docker-run.sh` to start a local development image. This image will be served at `http://localhost:8080/dev`
+Once you have built your image using the command above, you can `./docker-run.sh` to start a local development image. This image will be served at `http://localhost:8080/dev`
 
 ### Pushing an image to the LASP web registry
 
