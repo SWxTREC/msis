@@ -8,4 +8,4 @@ if docker ps -a -f "name=$NAME" --format '{{.Names}}' |  grep $NAME ; then
   docker stop $NAME || true
   docker rm $NAME
 fi
-docker run -p 8080:80 -e NGINX_CONTEXT_ROOT='/dev' -d --name $NAME $NAME:$VERSION
+docker run -p 8080:80 -e NGINX_CONTEXT_ROOT='/dev' -d --name web-registry.lasp.colorado.edu/$NAME $NAME:$VERSION
