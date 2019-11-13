@@ -71,6 +71,10 @@ Once you have followed the steps in after-fork.instructions you can run `./docke
 
 Once you have built your image using the command above, you can `./docker-run.sh` to start a local development image. This image will be served at `http://localhost:8080/dev`
 
+To stop your image run `docker stop {{project-name}}`
+
+Cleaning up old images is also a good idea from time to time. To clean up your unused docker resources run `docker system prune`
+
 ### Pushing an image to the LASP web registry
 
 When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./docker-publish.sh` to publish your image to the server.
