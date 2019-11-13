@@ -59,14 +59,14 @@ async function replace( options: any ): Promise<void> {
         to: `"name": "${packageName}"`
     });
 
-    // replace camel-case instances
+    // replace kebab-case instances
     await replace({
         files: [ 'angular.json', 'e2e/**/*', 'src/**/*' ],
         from: /base-app/g,
         to: prefixName
     });
 
-    // revert some camel-case instances, which are URLs that still need the 'base-app' string in them
+    // revert some kebab-case instances, which are URLs that still need the 'base-app' string in them
     await replace({
         files: [ 'src/**/*' ],
         from: new RegExp( `lasp.colorado.edu/media/projects/${prefixName}/`, 'g' ),
@@ -119,25 +119,13 @@ async function replace( options: any ): Promise<void> {
 
     // update docker related files with project name
     await replace({
-        files: [ 'docker-build.sh' ],
+        files: [ 'docker-build.sh', 'docker-run.sh', 'docker-publish.sh' ],
         from: /base-app/g,
         to: packageName
     });
 
     await replace({
-        files: [ 'docker-run.sh' ],
-        from: /base-app/g,
-        to: packageName
-    });
-
-    await replace({
-        files: [ 'docker-publish.sh' ],
-        from: /base-app/g,
-        to: packageName
-    });
-
-    await replace({
-        files: [ 'docker-publish.sh' ],
+        files: [ 'Dockerfile' ],
         from: /base-app/g,
         to: prefixName
     });
