@@ -66,11 +66,18 @@ async function replace( options: any ): Promise<void> {
         to: prefixName
     });
 
-    // revert some kebab-case instances, which are URLs that still need the 'base-app' string in them
+    // revert some kebab-case instances, which are URLs that still need the 'base-app' string in them,
+    // or mentions of the 'lasp-base-app-snippets' library
     await replace({
-        files: [ 'src/**/*' ],
-        from: new RegExp( `lasp.colorado.edu/media/projects/${prefixName}/`, 'g' ),
-        to: 'lasp.colorado.edu/media/projects/base-app/'
+        files: [ 'angular.json', 'e2e/**/*', 'src/**/*' ],
+        from: [
+            new RegExp( `lasp.colorado.edu/media/projects/${prefixName}/`, 'g' ),
+            new RegExp( `lasp-${prefixName}-snippets`, 'g' )
+        ],
+        to: [
+            'lasp.colorado.edu/media/projects/base-app/',
+            'lasp-base-app-snippets'
+        ]
     });
 
     // replace camelCase instances
@@ -85,6 +92,13 @@ async function replace( options: any ): Promise<void> {
         files: [ 'src/**/*' ],
         from: /BaseApp/g,
         to: projectName
+    });
+
+    // revert some plain-english instances, which are mentions of LaspBaseAppSnippets
+    await replace({
+        files: [ 'src/**/*' ],
+        from: new RegExp( `Lasp${projectName}Snippets`, 'g' ),
+        to: 'LaspBaseAppSnippets'
     });
 
     // replace '{{Project-Name}}' in after-fork.README.md
