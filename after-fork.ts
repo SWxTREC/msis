@@ -117,6 +117,31 @@ async function replace( options: any ): Promise<void> {
         });
     }
 
+    // update docker related files with project name
+    await replace({
+        files: [ 'docker-build.sh' ],
+        from: /base-app/g,
+        to: packageName
+    });
+
+    await replace({
+        files: [ 'docker-run.sh' ],
+        from: /base-app/g,
+        to: packageName
+    });
+
+    await replace({
+        files: [ 'docker-publish.sh' ],
+        from: /base-app/g,
+        to: packageName
+    });
+
+    await replace({
+        files: [ 'docker-publish.sh' ],
+        from: /base-app/g,
+        to: prefixName
+    });
+
     const uniqueChangedFiles = new Set( allChangedFiles );
     console.log( '\nChanged content in ' + uniqueChangedFiles.size + ' files.' );
 
