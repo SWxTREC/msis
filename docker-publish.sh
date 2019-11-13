@@ -1,7 +1,7 @@
 #!/bin/bash -eu
 
 REGISTRY=web-registry.lasp.colorado.edu # Default registry
-NAME=project-name
+NAME=base-app
 # have to check to make sure REFSPEC is bound / not empty for script to run
 if [[ ! -z ${REFSPEC+x} ]] && [ "${REFSPEC}" = "dev" ] ; then
 VERSION=dev

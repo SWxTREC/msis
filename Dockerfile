@@ -1,6 +1,6 @@
 FROM nginx:alpine
 COPY entrypoint.sh /
-COPY dist/Project-name /usr/share/nginx/html/
+COPY dist/base-app /usr/share/nginx/html/
 COPY nginx.conf.template /etc/nginx/
 RUN rm /etc/nginx/conf.d/default.conf
 RUN apk update --no-cache && \
