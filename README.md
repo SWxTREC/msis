@@ -59,6 +59,26 @@ Run `npm test` to execute the unit tests via [Karma](https://karma-runner.github
 
 Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
+## DOCKER
+
+If you are using docker, be sure to follow the instructions in after-fork.instructions.
+
+### Building a docker image
+
+Once you have followed the steps in after-fork.instructions you can run `./docker-build.sh` to build a new image locally
+
+### Running a dev image locally
+
+Once you have built your image using the command above, you can `./docker-run.sh` to start a local development image. This image will be served at `http://localhost:8080/dev`
+
+To stop your image run `docker stop {{project-name}}`
+
+Cleaning up old images is also a good idea from time to time. To clean up your unused docker resources run `docker system prune`
+
+### Pushing an image to the LASP web registry
+
+When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./docker-publish.sh` to publish your image to the server.
+
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).

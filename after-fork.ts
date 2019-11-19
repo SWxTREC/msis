@@ -59,18 +59,25 @@ async function replace( options: any ): Promise<void> {
         to: `"name": "${packageName}"`
     });
 
-    // replace camel-case instances
+    // replace kebab-case instances
     await replace({
         files: [ 'angular.json', 'e2e/**/*', 'src/**/*' ],
         from: /base-app/g,
         to: prefixName
     });
 
-    // revert some camel-case instances, which are URLs that still need the 'base-app' string in them
+    // revert some kebab-case instances, which are URLs that still need the 'base-app' string in them,
+    // or mentions of the 'lasp-base-app-snippets' library
     await replace({
-        files: [ 'src/**/*' ],
-        from: new RegExp( `lasp.colorado.edu/media/projects/${prefixName}/`, 'g' ),
-        to: 'lasp.colorado.edu/media/projects/base-app/'
+        files: [ 'angular.json', 'e2e/**/*', 'src/**/*' ],
+        from: [
+            new RegExp( `lasp.colorado.edu/media/projects/${prefixName}/`, 'g' ),
+            new RegExp( `lasp-${prefixName}-snippets`, 'g' )
+        ],
+        to: [
+            'lasp.colorado.edu/media/projects/base-app/',
+            'lasp-base-app-snippets'
+        ]
     });
 
     // replace camelCase instances
@@ -85,6 +92,13 @@ async function replace( options: any ): Promise<void> {
         files: [ 'src/**/*' ],
         from: /BaseApp/g,
         to: projectName
+    });
+
+    // revert some plain-english instances, which are mentions of LaspBaseAppSnippets
+    await replace({
+        files: [ 'src/**/*' ],
+        from: new RegExp( `Lasp${projectName}Snippets`, 'g' ),
+        to: 'LaspBaseAppSnippets'
     });
 
     // replace '{{Project-Name}}' in after-fork.README.md
@@ -116,6 +130,19 @@ async function replace( options: any ): Promise<void> {
             to: analyticsId
         });
     }
+
+    // update docker related files with project name
+    await replace({
+        files: [ 'docker-build.sh', 'docker-run.sh', 'docker-publish.sh' ],
+        from: /base-app/g,
+        to: packageName
+    });
+
+    await replace({
+        files: [ 'Dockerfile' ],
+        from: /base-app/g,
+        to: prefixName
+    });
 
     const uniqueChangedFiles = new Set( allChangedFiles );
     console.log( '\nChanged content in ' + uniqueChangedFiles.size + ' files.' );
