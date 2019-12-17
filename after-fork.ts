@@ -37,7 +37,7 @@ async function replace( options: any ): Promise<void> {
 ( async() => {
     // prompt the user for some answers
     const projectName = await question( reader, `Enter your project's full name (i.e. "Space Weather Portal"):` );
-    const packageName = await question( reader, `Enter a new package package name for your project:` );
+    const packageName = await question( reader, `Enter a new package name for your project:` );
     const prefixName = await question( reader, 'Enter a short prefix in kebab-case (i.e. "swp" or "sw-portal"):' );
     // convert kebab-case to camelCase
     const projectNameCamel = prefixName.replace( /-[a-z]/g, substr => {
