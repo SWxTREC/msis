@@ -2,7 +2,7 @@
     <form class="form" [formGroup]="modelForm" (ngSubmit)="onSubmit()">
         <div class="form__inputs">
             <div class="form__column"formGroupName="position">
-                Position:
+                <mat-label>Position</mat-label>
                 <mat-form-field >
                     <mat-label>x</mat-label>
                     <input matInput type="number" formControlName="x">
@@ -19,8 +19,9 @@
             </div>
             <div class="form__column">
                 <mat-form-field>
-                    <mat-label>Time</mat-label>
-                    <input matInput type="date" formControlName="time">
+                    <input matInput [matDatepicker]="time" placeholder="time" formControlName="time">
+                    <mat-datepicker-toggle matSuffix [for]="time"></mat-datepicker-toggle>
+                    <mat-datepicker #time></mat-datepicker>
                 </mat-form-field>
             </div>
             <div class="form__column">
@@ -32,22 +33,28 @@
             <div class="form__column">
                 <mat-form-field>
                     <mat-label>Geometry</mat-label>
-                    <input matInput type="text" formControlName="geometry">
+                    <mat-select  formControlName="geometry">
+                        <mat-option *ngFor="let geometry of geometries" [value]="geometry">
+                            {{geometry}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
         </div>
+        <pre>
+            <code>
+                position: {{'{'}}
+                    x: {{ modelForm.value.position.x }},
+                    y: {{ modelForm.value.position.y }},
+                    z: {{ modelForm.value.position.z }}
+                {{'}'}},
+                time: {{ modelForm.value.time }},
+                velocity: {{ modelForm.value.velocity }},
+                geometry: {{ modelForm.value.geometry }}
+            </code>
+        </pre>
         <div class="form__submit">
             <button mat-raised-button color="primary" type="submit">Submit</button>
         </div>
     </form>
-    <code>
-        position: {{'{'}}<br>
-            x: number,<br>
-            y: number,<br>
-            z: number<br>
-        {{'}'}},<br>
-        time: number,<br>
-        velocity: number,<br>
-        geometry: string<br>
-    </code>
 </div>

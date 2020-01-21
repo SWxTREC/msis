@@ -17,6 +17,7 @@ export class ModelComponent {
         velocity: new FormControl(''),
         geometry: new FormControl('')
     });
+    geometries = [ 'geometry option 1', 'geometry option 2', 'geometry option 3', 'geometry option 4', 'geometry option 5' ];
 
     onSubmit(): void {
         console.log(this.modelForm.value);
