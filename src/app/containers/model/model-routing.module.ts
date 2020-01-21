@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { DatasetsComponent } from './datasets.container';
+import { ModelComponent } from './model.container';
 
 
 const routes: Routes = [
     {
         path: '',
-        component: DatasetsComponent
+        component: ModelComponent
     }
 ];
 
@@ -15,4 +15,4 @@ const routes: Routes = [
     imports: [ RouterModule.forChild(routes) ],
     exports: [ RouterModule ]
 })
-export class DatasetsRoutingModule { }
+export class ModelRoutingModule { }
