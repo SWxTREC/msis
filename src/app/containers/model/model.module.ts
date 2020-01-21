@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../../modules';
 
@@ -11,7 +12,8 @@ import { ModelComponent } from './model.container';
     imports: [
         CommonModule,
         MaterialModule,
-        ModelRoutingModule
+        ModelRoutingModule,
+        ReactiveFormsModule
     ],
     declarations: [ ModelComponent ]
 })

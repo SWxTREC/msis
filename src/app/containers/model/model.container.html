@@ -1,3 +1,53 @@
 <div class="model-content">
-    Parameter form goes here
+    <form class="form" [formGroup]="modelForm" (ngSubmit)="onSubmit()">
+        <div class="form__inputs">
+            <div class="form__column"formGroupName="position">
+                Position:
+                <mat-form-field >
+                    <mat-label>x</mat-label>
+                    <input matInput type="number" formControlName="x">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>y</mat-label>
+                    <input matInput type="number" formControlName="y">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>z</mat-label>
+                    <input matInput type="number" formControlName="z">
+                </mat-form-field>
+
+            </div>
+            <div class="form__column">
+                <mat-form-field>
+                    <mat-label>Time</mat-label>
+                    <input matInput type="date" formControlName="time">
+                </mat-form-field>
+            </div>
+            <div class="form__column">
+                <mat-form-field>
+                    <mat-label>Velocity: m/s</mat-label>
+                    <input matInput type="number" formControlName="velocity">
+                </mat-form-field>
+            </div>
+            <div class="form__column">
+                <mat-form-field>
+                    <mat-label>Geometry</mat-label>
+                    <input matInput type="text" formControlName="geometry">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="form__submit">
+            <button mat-raised-button color="primary" type="submit">Submit</button>
+        </div>
+    </form>
+    <code>
+        position: {{'{'}}<br>
+            x: number,<br>
+            y: number,<br>
+            z: number<br>
+        {{'}'}},<br>
+        time: number,<br>
+        velocity: number,<br>
+        geometry: string<br>
+    </code>
 </div>

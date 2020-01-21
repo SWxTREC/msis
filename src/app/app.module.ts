@@ -8,7 +8,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
 import { LaspFooterModule } from 'lasp-footer';
-import { LaspFour04Module } from 'lasp-four04';
 import { LaspNavModule } from 'lasp-nav';
 
 import { AppComponent } from './app.component';
@@ -25,7 +24,6 @@ import { routes } from './routes';
         FormsModule,
         FlexLayoutModule,
         LaspFooterModule,
-        LaspFour04Module,
         LaspNavModule,
         HttpClientModule,
         MaterialModule,
