@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'base-app-home',
+    selector: 'swt-home',
     templateUrl: './home.container.html',
     styleUrls: [ './home.container.scss' ]
 })

@@ -15,7 +15,7 @@ import { environment } from '../environments/environment';
 
 /** Entry Component */
 @Component({
-    selector: 'base-app-root',
+    selector: 'swt-root',
     templateUrl: './app.component.html',
     styleUrls: [ './app.component.scss' ]
 })
