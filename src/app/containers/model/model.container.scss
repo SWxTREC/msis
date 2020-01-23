@@ -1,0 +1,41 @@
+.form {
+    &__column {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        padding: 0.3rem;
+        &--parent {
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: 5px;
+        }
+    }
+    &__control-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    &__field {
+        margin-bottom: 1.2rem;
+        .mat-hint {
+            visibility: hidden;
+        }
+        &:hover {
+            .mat-hint {
+                visibility: visible;
+            }
+        }
+    }
+    &__outer-header {
+        position: relative;
+        left: -2rem;
+    }
+    &__parent-label {
+        align-self: start;
+        color: rgba(0, 0, 0, 0.6);
+        position: relative;
+        background-color: white;
+        padding: 0 0.5rem 0 0.5rem;
+        top: -14px;
+        font-size: small;
+    }
+}

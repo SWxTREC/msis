@@ -1,37 +1,51 @@
-# BaseApp
+# SESAM
 
-This project is a bare-bones Angular website. Fork it to start your LASP website project.
-
-BaseApp includes some sample pages and graphics, and includes the standard LASP header, footer, and search modules.
-
-## After you fork
-
-**Do not make any changes to your forked repo until you follow these steps.**
-
-* Run `npm install`
-* Run `npm run after-fork` and follow the prompts.
+This is a frontend for interacting with the Space Weather Testbed SESAM model by Marcin Pilinski
 
 ## Contacts
 
-BaseApp is collectively owned by the front-end developers in the LASP web team.
-
+* **Product Owner:**
+	Marcin Pilinski, marcin.pilinski@lasp.colorado.edu
 * **Experienced Devs:**
-    * Hunter Leise (<Hunter.Leise@lasp.colorado.edu>)
-    * Jenny Knuth (<Jennifer.Knuth@lasp.colorado.edu>)
-    * Ransom Christofferson (<Ransom.Christofferson@lasp.colorado.edu>)
-    * Ty Traver (<Tyler.Traver@lasp.colorado.edu>)
-
+    Front end: Jennifer Knuth, jennifer.knuth@lasp.colorado.edu
+	Back end: Greg Lucas, greg.lucase@lasp.coloardo.edu
 
 ## Relevant JIRA Project(s)
 
-* [WEBAPP](http://mods-jira.lasp.colorado.edu:8080/projects/WEBAPP/)
+* [SWT](http://mods-jira.lasp.colorado.edu:8080/browse/SWT/): Main project for the
+	Space Weather Testbed codebase.
+* [Incorporate SESAM Model](https://jira.lasp.colorado.edu/browse/SWT-41): Epic for SESAM calculator
 
+## Related Projects
 
-## Development
+NA
 
-Whenever you make changes to BaseApp, keep in mind what a developer may need to do after forking this repo, and make changes to `after-fork.ts` or `after-fork.instructions` if necessary.
+## Production URLs
 
-`after-fork.ts` is a script that automates many tasks, such as replacing 'base-app' with the name of the new project. `after-fork.instructions` is a set of instructions shown to the user which cannot easily be automated.
+When available, add where you can find this project in production.
+
+## Necessary Permissions
+
+TK
+
+## Architecture
+
+This is the frontend code that sets the parameters to run the SESAM model in AWS.
+
+A Flask backend has been set up to create an API that receives a POST request with the model parameters and returns a GET request with the result.
+
+## Running SESAM Locally
+
+See 'Developement server' below.
+
+### Project Dependencies
+
+SESAM backend is needed in production.
+
+### Special DevEnv Issues
+
+Is there anything platform specific being run? Does it need to live inside a VM to reproduce
+behavior? Connected to a VPN/internal network?
 
 ### Development server
 
@@ -40,6 +54,8 @@ Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app 
 ### Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 ### Build
 
@@ -71,7 +87,7 @@ Once you have followed the steps in after-fork.instructions you can run `./docke
 
 Once you have built your image using the command above, you can `./docker-run.sh` to start a local development image. This image will be served at `http://localhost:8080/dev`
 
-To stop your image run `docker stop {{project-name}}`
+To stop your image run `docker stop {{Project-name}}`
 
 Cleaning up old images is also a good idea from time to time. To clean up your unused docker resources run `docker system prune`
 
@@ -79,6 +95,33 @@ Cleaning up old images is also a good idea from time to time. To clean up your u
 
 When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./docker-publish.sh` to publish your image to the server.
 
-## Further help
+## Deploying SESAM
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+### Requirements
+
+Who needs to be made aware of a release? What limitations/restrictions are there before making a
+release? For example, is there an explicit vetting process, or perhaps certain time windows when a
+release shouldn't be made?
+
+### Deploy process
+
+Run `npm version <major | minor | patch>` on the master branch. This will:
+
+* run the linter and unit tests, and abort if they fail
+* increment the version, commit the change, and create a git tag
+* push the changes and the new tag to the remote repo
+
+What other steps are needed to deploy the app/server/project? What is the process for making a release? Many projects will
+have a simple Hudson job, while others may be much more involved.
+
+## FAQs and Help
+
+### SESAM-specific common issues, gotchas
+
+Any kind of project-specific issues that would pop up goes here, as well as any quirks or
+inconsistencies within the project (e.g. hacks, workarounds, "I don't know why this works but....")
+
+## External Resources
+
+Useful documentation that isn't ours (for example, in LaTiS, maybe links to Scala documentation, or
+higher level topics like RDB and Data Model articles/resources)

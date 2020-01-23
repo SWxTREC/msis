@@ -15,7 +15,7 @@ import { environment } from '../environments/environment';
 
 /** Entry Component */
 @Component({
-    selector: 'base-app-root',
+    selector: 'swt-root',
     templateUrl: './app.component.html',
     styleUrls: [ './app.component.scss' ]
 })
@@ -24,26 +24,14 @@ export class AppComponent {
     // please have no more than 7 items in the nav menu
     navItems: INavItem[] = [
         {
-            label: 'Full-width page',
-            link: '/fullwidth'
+            label: 'Single-Point Calculator',
+            link: '/model'
         }, {
-            label: 'External link',
-            link: 'https://google.com'
+            label: 'Documentation',
+            link: '/docs'
         }, {
-            label: 'Data',
-            link: '/data'
-        }, {
-            label: 'Missions',
-            link: '/missions'
-        }, {
-            label: 'Tools',
-            link: '/tools'
-        }, {
-            label: 'Science',
-            link: '/science'
-        }, {
-            label: 'Instruments',
-            link: '/instruments'
+            label: 'About',
+            link: '/about'
         }
     ];
 
@@ -63,15 +51,6 @@ export class AppComponent {
     versions: IVersion[] = [
         {
             version: environment.version
-        }, {
-            productName: 'LaTiS',
-            version: 'v9.87.6-SNAPSHOT',
-            link: 'https://en.wikipedia.org/wiki/Latis'
-        }, {
-            productName: 'foo',
-            version: '3.5.5',
-            link: 'http://bar.com',
-            linkedPart: 'version'
         }
     ];
 

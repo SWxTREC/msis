@@ -1,7 +1,0 @@
-To finish setting up your project, do the following as needed:
-* Edit `README.md` and replace placeholder text with real information
-* Change `src/favicon.ico`
-* Change the site's theme colors in `src/theme/theme-colors.scss`
-* Replace logos in `src/assets/images/`
-* Change header and footer configuration in `src/app.component.ts` and `src/app.component.html`
-* Pare down the list of imports in `src/app/modules/material.module.ts` to only include what you need

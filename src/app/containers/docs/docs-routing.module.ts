@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { SearchResultsComponent } from './search-results.container';
-
+import { DocsComponent } from './docs.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: SearchResultsComponent
+        component: DocsComponent
     }
 ];
 
@@ -15,4 +14,4 @@ const routes: Routes = [
     imports: [ RouterModule.forChild(routes) ],
     exports: [ RouterModule ]
 })
-export class SearchResultsRoutingModule { }
+export class DocsRoutingModule { }
