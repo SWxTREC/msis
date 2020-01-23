@@ -14,6 +14,7 @@ This is a frontend for interacting with the Space Weather Testbed SESAM model by
 
 * [SWT](http://mods-jira.lasp.colorado.edu:8080/browse/SWT/): Main project for the
 	Space Weather Testbed codebase.
+* [Incorporate SESAM Model](https://jira.lasp.colorado.edu/browse/SWT-41): Epic for SESAM calculator
 
 ## Related Projects
 
