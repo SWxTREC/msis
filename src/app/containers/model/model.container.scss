@@ -1,10 +1,41 @@
 .form {
     &__column {
+        position: relative;
         display: flex;
         flex-direction: column;
-        padding: 1rem;
+        padding: 0.38rem;
+        &--parent {
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            border-radius: 5px;
+        }
     }
-    &__inputs {
+    &__control-group {
         display: flex;
+        flex-wrap: wrap;
+    }
+    &__field {
+        margin-bottom: 1.5rem;
+        .mat-hint {
+            visibility: hidden;
+        }
+        &:focus-within {
+            .mat-hint {
+                visibility: visible;
+            }
+        }
+    }
+    &__outer-header {
+        position: relative;
+        left: -2rem;
+    }
+    &__parent-label {
+        align-self: start;
+        color: rgba(0, 0, 0, 0.6);
+        position: relative;
+        background-color: white;
+        padding: 0 0.5rem 0 0.5rem;
+        top: -14px;
+        font-size: small;
+        // width: 90px;
     }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
@@ -6,18 +6,42 @@ import { FormControl, FormGroup } from '@angular/forms';
     templateUrl: './model.container.html',
     styleUrls: [ './model.container.scss' ]
 })
-export class ModelComponent {
+export class ModelComponent implements OnInit {
     modelForm = new FormGroup({
-        position: new FormGroup({
-            x: new FormControl(''),
-            y: new FormControl(''),
-            z: new FormControl('')
+        objectType: new FormControl,
+        diameter: new FormControl,
+        length: new FormControl,
+        area: new FormControl,
+        pitch: new FormControl,
+        sideslip: new FormControl,
+        temperature: new FormControl,
+        speed: new FormControl,
+        composition: new FormGroup({
+            o: new FormControl(''),
+            o2: new FormControl(''),
+            n2: new FormControl(''),
+            he: new FormControl(''),
+            h: new FormControl('')
         }),
-        time: new FormControl(''),
-        velocity: new FormControl(''),
-        geometry: new FormControl('')
+        accomodationModel: new FormControl('')
     });
-    geometries = [ 'geometry option 1', 'geometry option 2', 'geometry option 3', 'geometry option 4', 'geometry option 5' ];
+    objectTypes = [
+        'sphere',
+        'cylinder',
+        'plate',
+        'plate-model'
+    ];
+    models = [
+        'SESAM',
+        'Goodman',
+        'fixed'
+    ];
+
+    ngOnInit() {
+        this.modelForm.valueChanges.subscribe( value => {
+            console.log('form', this.modelForm, value);
+        });
+    }
 
     onSubmit(): void {
         console.log(this.modelForm.value);
