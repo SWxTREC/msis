@@ -5,8 +5,9 @@ import { version } from '../../package.json';
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+    // TODO: replace this with actual url, this is for when running the flask app locally
+    vectorApi: 'http://127.0.0.1:5000/api',
     production: false,
-    googleAnalyticsId: '', // intentionally empty; don't try to track usage during development
     version: version
 };
 

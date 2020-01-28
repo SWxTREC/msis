@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { ModelService } from 'src/app/services';
 
 @Component({
     selector: 'swt-model',
@@ -23,7 +24,9 @@ export class ModelComponent implements OnInit {
             he: new FormControl(''),
             h: new FormControl('')
         }),
-        accomodationModel: new FormControl('')
+        accomodationModel: new FormControl(''),
+        energyAccomodation: new FormControl(''),
+        surfaceMass: new FormControl('')
     });
     objectTypes = [
         'sphere',
@@ -37,6 +40,8 @@ export class ModelComponent implements OnInit {
         'fixed'
     ];
 
+    constructor(private modelService: ModelService) {}
+
     ngOnInit() {
         this.modelForm.valueChanges.subscribe( value => {
             console.log('form', this.modelForm, value);
@@ -44,7 +49,7 @@ export class ModelComponent implements OnInit {
     }
 
     onSubmit(): void {
-        console.log(this.modelForm.value);
+        this.modelService.submitSinglePointRequest(this.modelForm.value);
     }
 
 }
