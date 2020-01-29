@@ -39,6 +39,11 @@ export class ModelComponent implements OnInit {
         'plate',
         'geometry file'
     ];
+    resultTranslator = {
+        dragCoefficient: 'Drag Coefficient',
+        forceCoefficient: 'Force Coefficient',
+        projectedArea: 'Projected Area'
+    };
     results: {};
     showArea: boolean;
     showDiameter: boolean;
@@ -73,11 +78,13 @@ export class ModelComponent implements OnInit {
 
         this.modelForm.valueChanges.subscribe( () => {
             this.setShowHideConditions();
+            this.results = undefined;
         });
     }
 
     onSubmit(): void {
-        // format the model form values to values appropriate for the payload
+        // TODO: make a new form instead of mutating?
+        // format the model form values to values appropriate for the form/payload
         this.modelForm.patchValue({
             diameter: (+this.modelForm.value.diameter).toFixed(3),
             length: (+this.modelForm.value.length).toFixed(3),
@@ -97,9 +104,9 @@ export class ModelComponent implements OnInit {
             surfaceMass: (+this.modelForm.value.surfaceMass).toFixed(1)
         });
         this.modelService.submitSinglePointRequest(this.modelForm.value).subscribe( data => {
-            console.log('data?', data);
+            this.results = data;
         });
-        // format the model form values back to values for the form
+        // format the model form values back to values appropriate for the form
         this.modelForm.patchValue({
             composition: {
                 o: (+this.modelForm.value.composition.o).toPrecision(3),

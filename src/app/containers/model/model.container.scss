@@ -39,4 +39,15 @@
         top: -14px;
         font-size: small;
     }
+    &__result {
+        width: 45%;
+        &--hidden {
+            visibility: hidden;
+        }
+    }
+    &__results {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: space-around;
+    }
 }

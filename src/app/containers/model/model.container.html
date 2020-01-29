@@ -108,12 +108,29 @@
                     <button mat-raised-button color="primary" type="submit">Submit</button>
                 </div>
             </form>
-            <pre>
-                {{ modelForm.value | json }}
-            </pre>
+            <div class="form__results">
+                <div class="form__result">
+                    <mat-card-title>
+                        Submission Values
+                    </mat-card-title>
+                    <pre>
+                        {{ modelForm.value | json }}
+                    </pre>
+                </div>
+                <div class="form__result" [class.form__result--hidden]="!results">
+                    <mat-card-title>
+                        Results
+                    </mat-card-title>
+                    <div *ngFor="let result of results | keyvalue">
+                        <p><strong>{{ resultTranslator[result.key] }}</strong>: {{ result.value }}</p>
+                    </div>
+                </div>
+            </div>
         </mat-tab>
         <mat-tab label="Multi Point">
-            Multi point file upload here.
+            <div class="form">
+                Multi point file upload here.
+            </div>
         </mat-tab>
     </mat-tab-group>
 </mat-card>

@@ -11,7 +11,6 @@ export class ModelService {
     constructor(private http: HttpClient) { }
 
     submitSinglePointRequest( payload: any ) {
-        console.log('payload', payload);
         return this.http.post<any>( environment.vectorApi + '/singlepoint', payload);
     }
 
