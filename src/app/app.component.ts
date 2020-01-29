@@ -24,14 +24,14 @@ export class AppComponent {
     // please have no more than 7 items in the nav menu
     navItems: INavItem[] = [
         {
+            label: 'About',
+            link: '/about'
+        }, {
             label: 'Calculator',
             link: '/model'
         }, {
             label: 'Documentation',
             link: '/docs'
-        }, {
-            label: 'About',
-            link: '/about'
         }
     ];
 
