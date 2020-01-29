@@ -24,14 +24,14 @@ export class AppComponent {
     // please have no more than 7 items in the nav menu
     navItems: INavItem[] = [
         {
-            label: 'Single-Point Calculator',
+            label: 'About',
+            link: '/about'
+        }, {
+            label: 'Calculator',
             link: '/model'
         }, {
             label: 'Documentation',
             link: '/docs'
-        }, {
-            label: 'About',
-            link: '/about'
         }
     ];
 
@@ -55,6 +55,6 @@ export class AppComponent {
     ];
 
     constructor( private _snippets: LaspBaseAppSnippetsService ) {
-        this._snippets.appComponent.all({ googleAnalyticsId: environment.googleAnalyticsId });
+        this._snippets.appComponent.allExcept([ this._snippets.appComponent.setupGoogleAnalytics ]);
     }
 }

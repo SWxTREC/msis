@@ -1,4 +1,5 @@
 .form {
+    margin: 1rem;
     &__column {
         position: relative;
         display: flex;
@@ -37,5 +38,16 @@
         padding: 0 0.5rem 0 0.5rem;
         top: -14px;
         font-size: small;
+    }
+    &__result {
+        width: 45%;
+        &--hidden {
+            visibility: hidden;
+        }
+    }
+    &__results {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: space-around;
     }
 }

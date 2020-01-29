@@ -1,119 +1,136 @@
 <mat-card class="model-content">
-    <h1>Single Point Calculator</h1>
-    <form class="form" [formGroup]="modelForm" (ngSubmit)="onSubmit()">
-        <div class="form__control-group">
-            <div class="form__column">
-                <mat-form-field floatLabel="always" class="form__field">
-                    <mat-label>Object Type</mat-label>
-                    <mat-select formControlName="objectType">
-                      <mat-option *ngFor="let type of objectTypes" [value]="type">
-                            {{type}}
-                        </mat-option>
-                    </mat-select>
-                    <mat-hint>shape of the object</mat-hint>
-                </mat-form-field>
-                <mat-form-field floatLabel="always" class="form__field">
-                    <mat-label>Diameter (m)</mat-label>
-                    <input matInput type="number" formControlName="diameter">
-                    <mat-hint>diameter of the object in meters</mat-hint>
-                </mat-form-field>
-                <mat-form-field floatLabel="always" class="form__field">
-                    <mat-label>Length (m)</mat-label>
-                    <input matInput type="number" formControlName="length">
-                    <mat-hint>length of the object in meters</mat-hint>
-                </mat-form-field>
-                <mat-form-field floatLabel="always" class="form__field">
-                    <mat-label>Area (m<sup>2</sup>)</mat-label>
-                    <input matInput type="number" formControlName="area">
-                    <mat-hint>area of object in meters<sup>2</sup></mat-hint>
-                </mat-form-field>
-            </div>
-            <div class="form__column">
-                <mat-form-field floatLabel="always" class="form__field">
-                    <mat-label>Pitch (deg)</mat-label>
-                    <input matInput type="number" formControlName="pitch">
-                    <mat-hint>pitch angle of the object in degrees</mat-hint>
-                </mat-form-field>
-                <mat-form-field floatLabel="always" class="form__field">
-                    <mat-label>Sideslip (deg)</mat-label>
-                    <input matInput type="number" formControlName="sideslip">
-                    <mat-hint>sideslip angle of the object in degrees</mat-hint>
-                </mat-form-field>
-                <mat-form-field floatLabel="always" class="form__field">
-                    <mat-label>Temperature (K)</mat-label>
-                    <input matInput type="number" formControlName="temperature">
-                    <mat-hint>temperature in Kelvin</mat-hint>
-                </mat-form-field>
-                <mat-form-field floatLabel="always" class="form__field">
-                    <mat-label>Speed (m/s)</mat-label>
-                    <input matInput type="number" formControlName="speed">
-                    <mat-hint>speed in meters/second</mat-hint>
-                </mat-form-field>
-            </div>
-            <div class="form__column"formGroupName="composition">
-                <div class="form__column form__column--parent">
-                    <div class="form__parent-label">Composition</div>
-                    <mat-form-field floatLabel="always" class="form__field">
-                        <mat-label>O/m<sup>3</sup></mat-label>
-                        <input matInput type="number" formControlName="o">
-                        <mat-hint>monoatomic oxygen/m<sup>3</sup></mat-hint>
-                    </mat-form-field>
-                    <mat-form-field floatLabel="always" class="form__field">
-                        <mat-label>O<sub>2</sub>/m<sup>3</sup></mat-label>
-                        <input matInput type="number" formControlName="o2">
-                        <mat-hint>diatomic oxygen/m<sup>3</sup></mat-hint>
-                    </mat-form-field>
-                    <mat-form-field floatLabel="always" class="form__field">
-                        <mat-label>N<sub>2</sub>/m<sup>3</sup></mat-label>
-                        <input matInput type="number" formControlName="n2">
-                        <mat-hint>nitrogen/m<sup>3</sup></mat-hint>
-                    </mat-form-field>
-                    <mat-form-field floatLabel="always" class="form__field">
-                        <mat-label>He/m<sup>3</sup></mat-label>
-                        <input matInput type="number" formControlName="he">
-                        <mat-hint>helium/m<sup>3</sup></mat-hint>
-                    </mat-form-field>
-                    <mat-form-field floatLabel="always" class="form__field">
-                        <mat-label>H/m<sup>3</sup></mat-label>
-                        <input matInput type="number" formControlName="h">
-                        <mat-hint>hydrogen/m<sup>3</sup></mat-hint>
-                    </mat-form-field>
+    <mat-tab-group backgroundColor="primary">
+        <mat-tab label="Single Point">
+            <form class="form" [formGroup]="modelForm" (ngSubmit)="onSubmit()">
+                <div class="form__control-group">
+                    <div class="form__column">
+                        <mat-card-title>Satellite</mat-card-title>
+                        <mat-form-field floatLabel="always" class="form__field">
+                            <mat-label>Object Type</mat-label>
+                            <mat-select formControlName="objectType">
+                              <mat-option *ngFor="let type of objectTypes" [value]="type">
+                                    {{type}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint>select satellite shape</mat-hint>
+                        </mat-form-field>
+                        <mat-form-field *ngIf="showDiameter" floatLabel="always" class="form__field">
+                            <mat-label>Diameter (m)</mat-label>
+                            <input matInput type="number" formControlName="diameter">
+                            <mat-hint>diameter of satellite in meters</mat-hint>
+                        </mat-form-field>
+                        <mat-form-field  *ngIf="showLength" floatLabel="always" class="form__field">
+                            <mat-label>Length (m)</mat-label>
+                            <input matInput type="number" formControlName="length">
+                            <mat-hint>length of satellite in meters</mat-hint>
+                        </mat-form-field>
+                        <mat-form-field *ngIf="showArea" floatLabel="always" class="form__field">
+                            <mat-label>Area (m<sup>2</sup>)</mat-label>
+                            <input matInput type="number" formControlName="area">
+                            <mat-hint>flat plate area in meters<sup>2</sup></mat-hint>
+                        </mat-form-field>
+                        <mat-form-field *ngIf="showPitch" floatLabel="always" class="form__field">
+                            <mat-label>Pitch (deg)</mat-label>
+                            <input matInput type="number" formControlName="pitch">
+                            <mat-hint>pitch angle of satellite in degrees</mat-hint>
+                        </mat-form-field>
+                        <mat-form-field  *ngIf="showSideslip" floatLabel="always" class="form__field">
+                            <mat-label>Sideslip (deg)</mat-label>
+                            <input matInput type="number" formControlName="sideslip">
+                            <mat-hint>sideslip angle of satellite in degrees</mat-hint>
+                        </mat-form-field>
+                    </div>
+                    <div class="form__column">
+                        <mat-card-title>Ambient Conditions</mat-card-title>
+                        <mat-form-field floatLabel="always" class="form__field">
+                            <mat-label>Temperature (&deg;K)</mat-label>
+                            <input matInput type="number" formControlName="temperature">
+                            <mat-hint>temperature in Kelvin</mat-hint>
+                        </mat-form-field>
+                        <mat-form-field floatLabel="always" class="form__field">
+                            <mat-label>Speed (m/s)</mat-label>
+                            <input matInput  type="number" formControlName="speed">
+                            <mat-hint>speed in meters/second</mat-hint>
+                        </mat-form-field>
+                        <div class="form__column form__column--parent" formGroupName="composition">
+                            <div class="form__parent-label">Composition</div>
+                            <mat-form-field floatLabel="always" class="form__field">
+                                <mat-label>O/m<sup>3</sup></mat-label>
+                                <input matInput type="number" formControlName="o">
+                                <mat-hint>atomic oxygen number density per cubic meter</mat-hint>
+                            </mat-form-field>
+                            <mat-form-field floatLabel="always" class="form__field">
+                                <mat-label>O<sub>2</sub>/m<sup>3</sup></mat-label>
+                                <input matInput type="number" formControlName="o2">
+                                <mat-hint>molecular oxygen number density per cubic meter</mat-hint>
+                            </mat-form-field>
+                            <mat-form-field floatLabel="always" class="form__field">
+                                <mat-label>N<sub>2</sub>/m<sup>3</sup></mat-label>
+                                <input matInput type="number" formControlName="n2">
+                                <mat-hint>molecular nitrogen number density per cubic meter</mat-hint>
+                            </mat-form-field>
+                            <mat-form-field floatLabel="always" class="form__field">
+                                <mat-label>He/m<sup>3</sup></mat-label>
+                                <input matInput type="number" formControlName="he">
+                                <mat-hint>helium number density per cubic meter</mat-hint>
+                            </mat-form-field>
+                            <mat-form-field floatLabel="always" class="form__field">
+                                <mat-label>H/m<sup>3</sup></mat-label>
+                                <input matInput type="number" formControlName="h">
+                                <mat-hint>hydrogen number density per cubic meter</mat-hint>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form__column">
+                        <mat-card-title>Surface Conditions</mat-card-title>
+                        <mat-form-field floatLabel="always" class="form__field">
+                            <mat-label>Energy accommodation Model</mat-label>
+                            <mat-select  formControlName="accommodationModel">
+                                <mat-option *ngFor="let model of models" [value]="model">
+                                    {{model}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-hint>model to use for energy accommodation value</mat-hint>
+                        </mat-form-field>
+                        <mat-form-field *ngIf="showEnergyAccommodation" floatLabel="always" class="form__field">
+                            <mat-label>Energy accommodation (amu)</mat-label>
+                            <input matInput formControlName="energyAccommodation">
+                            <mat-hint>alpha</mat-hint>
+                        </mat-form-field>
+                        <mat-form-field  *ngIf="showSurfaceMass" floatLabel="always" class="form__field">
+                            <mat-label>Surface Mass</mat-label>
+                            <input matInput type="number" formControlName="surfaceMass">
+                            <mat-hint>m_s in amu</mat-hint>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="form__submit">
+                    <button mat-raised-button color="primary" type="submit">Submit</button>
+                </div>
+            </form>
+            <div class="form__results">
+                <div class="form__result">
+                    <mat-card-title>
+                        Submission Values
+                    </mat-card-title>
+                    <pre>
+                        {{ modelForm.value | json }}
+                    </pre>
+                </div>
+                <div class="form__result" [class.form__result--hidden]="!results">
+                    <mat-card-title>
+                        Results
+                    </mat-card-title>
+                    <div *ngFor="let result of results | keyvalue">
+                        <p><strong>{{ resultTranslator[result.key] }}</strong>: {{ result.value }}</p>
+                    </div>
                 </div>
             </div>
-            <div class="form__column">
-                <mat-form-field floatLabel="always" class="form__field">
-                    <mat-label>Accomodation Model</mat-label>
-                    <mat-select  formControlName="accomodationModel">
-                        <mat-option *ngFor="let model of models" [value]="model">
-                            {{model}}
-                        </mat-option>
-                    </mat-select>
-                    <mat-hint>model to use for energy accomodation value</mat-hint>
-                </mat-form-field>
+        </mat-tab>
+        <mat-tab label="Multi Point">
+            <div class="form">
+                Multi point file upload here.
             </div>
-        </div>
-        <div class="form__submit">
-            <button mat-raised-button color="primary" type="submit">Submit</button>
-        </div>
-    </form>
-    <pre>
-        <code>
-            objectType: {{ modelForm.value.objectType }}
-            diameter: {{ modelForm.value.diameter }},
-            length: {{ modelForm.value.length }},
-            area: {{ modelForm.value.area }},
-            pitch: {{ modelForm.value.pitch }},
-            sideslip: {{ modelForm.value.sideslip }},
-            temperature: {{ modelForm.value.temperature }},
-            speed: {{ modelForm.value.speed }},
-            composition: {{'{'}}
-            o: {{ modelForm.value.composition.o }},
-            o2: {{ modelForm.value.composition.o2 }},
-            n2: {{ modelForm.value.composition.n2 }},
-            he: {{ modelForm.value.composition.he }},
-            h: {{ modelForm.value.composition.h }}
-            {{'}'}},
-            accomodationModel: {{ modelForm.value.accomodationModel }}
-        </code>
-    </pre>
+        </mat-tab>
+    </mat-tab-group>
 </mat-card>
