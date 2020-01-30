@@ -84,7 +84,7 @@
                     <div class="form__column">
                         <mat-card-title>Surface Conditions</mat-card-title>
                         <mat-form-field floatLabel="always" class="form__field">
-                            <mat-label>Energy accommodation Model</mat-label>
+                            <mat-label>Energy Accommodation Model</mat-label>
                             <mat-select  formControlName="accommodationModel">
                                 <mat-option *ngFor="let model of models" [value]="model">
                                     {{model}}
@@ -93,7 +93,7 @@
                             <mat-hint>model to use for energy accommodation value</mat-hint>
                         </mat-form-field>
                         <mat-form-field *ngIf="showEnergyAccommodation" floatLabel="always" class="form__field">
-                            <mat-label>Energy accommodation (amu)</mat-label>
+                            <mat-label>Energy Accommodation (amu)</mat-label>
                             <input matInput formControlName="energyAccommodation">
                             <mat-hint>alpha</mat-hint>
                         </mat-form-field>
