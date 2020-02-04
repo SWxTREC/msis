@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { IModelParameters } from 'src/app/models';
 import { ModelService } from 'src/app/services';
 
 @Component({
@@ -39,6 +40,7 @@ export class ModelComponent implements OnInit {
         'plate',
         'geometry file'
     ];
+    payload: IModelParameters;
     resultTranslator = {
         dragCoefficient: 'Drag Coefficient',
         forceCoefficient: 'Force Coefficient',
@@ -56,47 +58,39 @@ export class ModelComponent implements OnInit {
     constructor(private modelService: ModelService) {}
 
     ngOnInit() {
+        this.payload = this.createPayload(this.modelForm.value);
         this.setShowHideConditions();
 
         this.modelForm.valueChanges.subscribe( () => {
+            this.payload = this.createPayload(this.modelForm.value);
             this.setShowHideConditions();
             this.results = undefined;
         });
     }
 
     onSubmit(): void {
-        // TODO: make a new form instead of mutating?
-        // format the model form values to values appropriate for the form/payload
-        this.modelForm.patchValue({
-            diameter: (+this.modelForm.value.diameter).toFixed(3),
-            length: (+this.modelForm.value.length).toFixed(3),
-            area: (+this.modelForm.value.area).toFixed(3),
-            pitch: (+this.modelForm.value.pitch).toFixed(1),
-            sideslip: (+this.modelForm.value.sideslip).toFixed(1),
-            temperature: (+this.modelForm.value.temperature).toFixed(1),
-            speed: (+this.modelForm.value.speed).toFixed(2),
-            composition: {
-                o: Number(this.modelForm.value.composition.o),
-                o2: Number(this.modelForm.value.composition.o2),
-                n2: Number(this.modelForm.value.composition.n2),
-                he: Number(this.modelForm.value.composition.he),
-                h: Number(this.modelForm.value.composition.h)
-            },
-            energyAccommodation: (+this.modelForm.value.energyAccommodation).toFixed(3),
-            surfaceMass: (+this.modelForm.value.surfaceMass).toFixed(1)
-        });
-        this.modelService.submitSinglePointRequest(this.modelForm.value).subscribe( data => {
+
+        this.modelService.submitSinglePointRequest(this.payload).subscribe( data => {
             this.results = data;
         });
         // format the model form values back to values appropriate for the form
         this.modelForm.patchValue({
+            diameter: this.payload.diameter,
+            length: this.payload.length,
+            area: this.payload.area,
+            pitch: this.payload.pitch,
+            sideslip: this.payload.sideslip,
+            temperature: this.payload.temperature,
+            speed: this.payload.speed,
             composition: {
-                o: (+this.modelForm.value.composition.o).toPrecision(3),
-                o2: (+this.modelForm.value.composition.o2).toPrecision(3),
-                n2: (+this.modelForm.value.composition.n2).toPrecision(3),
-                he: (+this.modelForm.value.composition.he).toPrecision(3),
-                h: (+this.modelForm.value.composition.h).toPrecision(3)
-            }
+                o: (+this.payload.composition.o).toPrecision(3),
+                o2: (+this.payload.composition.o2).toPrecision(3),
+                n2: (+this.payload.composition.n2).toPrecision(3),
+                he: (+this.payload.composition.he).toPrecision(3),
+                h: (+this.payload.composition.h).toPrecision(3)
+            },
+            energyAccommodation: this.payload.energyAccommodation,
+            surfaceMass: this.payload.surfaceMass
         });
     }
 
@@ -112,6 +106,31 @@ export class ModelComponent implements OnInit {
         this.showSideslip = this.modelForm.value.objectType === 'geometry file';
         this.showEnergyAccommodation = this.modelForm.value.accommodationModel === 'Fixed';
         this.showSurfaceMass = this.modelForm.value.accommodationModel === 'Goodman';
+    }
+
+    // format the model form values to values appropriate for the payload
+    createPayload( modelObject: IModelParameters ) {
+        const submitFormat: IModelParameters = {
+            objectType: modelObject.objectType,
+            diameter: Number((+modelObject.diameter).toFixed(3)),
+            length: Number((+modelObject.length).toFixed(3)),
+            area: Number((+modelObject.area).toFixed(3)),
+            pitch: Number((+modelObject.pitch).toFixed(1)),
+            sideslip: Number((+modelObject.sideslip).toFixed(1)),
+            temperature: Number((+modelObject.temperature).toFixed(1)),
+            speed: Number((+modelObject.speed).toFixed(2)),
+            composition: {
+                o: Number(modelObject.composition.o),
+                o2: Number(modelObject.composition.o2),
+                n2: Number(modelObject.composition.n2),
+                he: Number(modelObject.composition.he),
+                h: Number(modelObject.composition.h)
+            },
+            accommodationModel: modelObject.accommodationModel,
+            energyAccommodation: Number((+modelObject.energyAccommodation).toFixed(3)),
+            surfaceMass: Number((+modelObject.surfaceMass).toFixed(1))
+        };
+        return submitFormat;
     }
 
 }
