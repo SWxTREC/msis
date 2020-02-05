@@ -43,6 +43,7 @@ export class ModelComponent implements OnInit {
     payload: IModelParameters;
     resultTranslator = {
         dragCoefficient: 'Drag Coefficient',
+        energyAccomodation: 'Energy Accommodation',
         forceCoefficient: 'Force Coefficient',
         projectedArea: 'Projected Area'
     };
@@ -83,11 +84,11 @@ export class ModelComponent implements OnInit {
             temperature: this.payload.temperature,
             speed: this.payload.speed,
             composition: {
-                o: (+this.payload.composition.o).toPrecision(3),
-                o2: (+this.payload.composition.o2).toPrecision(3),
-                n2: (+this.payload.composition.n2).toPrecision(3),
-                he: (+this.payload.composition.he).toPrecision(3),
-                h: (+this.payload.composition.h).toPrecision(3)
+                o: (+this.payload.composition.o).toPrecision(4),
+                o2: (+this.payload.composition.o2).toPrecision(4),
+                n2: (+this.payload.composition.n2).toPrecision(4),
+                he: (+this.payload.composition.he).toPrecision(4),
+                h: (+this.payload.composition.h).toPrecision(4)
             },
             energyAccommodation: this.payload.energyAccommodation,
             surfaceMass: this.payload.surfaceMass
@@ -112,13 +113,13 @@ export class ModelComponent implements OnInit {
     createPayload( modelObject: IModelParameters ) {
         const submitFormat: IModelParameters = {
             objectType: modelObject.objectType,
-            diameter: Number((+modelObject.diameter).toFixed(3)),
-            length: Number((+modelObject.length).toFixed(3)),
-            area: Number((+modelObject.area).toFixed(3)),
-            pitch: Number((+modelObject.pitch).toFixed(1)),
-            sideslip: Number((+modelObject.sideslip).toFixed(1)),
-            temperature: Number((+modelObject.temperature).toFixed(1)),
-            speed: Number((+modelObject.speed).toFixed(2)),
+            diameter: Number(modelObject.diameter),
+            length: Number(modelObject.length),
+            area: Number(modelObject.area),
+            pitch: Number(modelObject.pitch),
+            sideslip: Number(modelObject.sideslip),
+            temperature: Number(modelObject.temperature),
+            speed: Number(modelObject.speed),
             composition: {
                 o: Number(modelObject.composition.o),
                 o2: Number(modelObject.composition.o2),
@@ -127,8 +128,8 @@ export class ModelComponent implements OnInit {
                 h: Number(modelObject.composition.h)
             },
             accommodationModel: modelObject.accommodationModel,
-            energyAccommodation: Number((+modelObject.energyAccommodation).toFixed(3)),
-            surfaceMass: Number((+modelObject.surfaceMass).toFixed(1))
+            energyAccommodation: Number(modelObject.energyAccommodation),
+            surfaceMass: Number(modelObject.surfaceMass)
         };
         return submitFormat;
     }
