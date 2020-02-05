@@ -43,7 +43,7 @@
                     <div class="form__column">
                         <mat-card-title>Ambient Conditions</mat-card-title>
                         <mat-form-field floatLabel="always" class="form__field">
-                            <mat-label>Temperature (&deg;K)</mat-label>
+                            <mat-label>Temperature (K)</mat-label>
                             <input matInput type="number" formControlName="temperature">
                             <mat-hint>temperature in Kelvin</mat-hint>
                         </mat-form-field>
@@ -55,27 +55,27 @@
                         <div class="form__column form__column--parent" formGroupName="composition">
                             <div class="form__parent-label">Composition</div>
                             <mat-form-field floatLabel="always" class="form__field">
-                                <mat-label>O/m<sup>3</sup></mat-label>
+                                <mat-label>O (m<sup>-3</sup>)</mat-label>
                                 <input matInput type="number" formControlName="o">
                                 <mat-hint>atomic oxygen number density per cubic meter</mat-hint>
                             </mat-form-field>
                             <mat-form-field floatLabel="always" class="form__field">
-                                <mat-label>O<sub>2</sub>/m<sup>3</sup></mat-label>
+                                <mat-label>O<sub>2</sub> (m<sup>-3</sup>)</mat-label>
                                 <input matInput type="number" formControlName="o2">
                                 <mat-hint>molecular oxygen number density per cubic meter</mat-hint>
                             </mat-form-field>
                             <mat-form-field floatLabel="always" class="form__field">
-                                <mat-label>N<sub>2</sub>/m<sup>3</sup></mat-label>
+                                <mat-label>N<sub>2</sub> (m<sup>-3</sup>)</mat-label>
                                 <input matInput type="number" formControlName="n2">
                                 <mat-hint>molecular nitrogen number density per cubic meter</mat-hint>
                             </mat-form-field>
                             <mat-form-field floatLabel="always" class="form__field">
-                                <mat-label>He/m<sup>3</sup></mat-label>
+                                <mat-label>He (m<sup>-3</sup>)</mat-label>
                                 <input matInput type="number" formControlName="he">
                                 <mat-hint>helium number density per cubic meter</mat-hint>
                             </mat-form-field>
                             <mat-form-field floatLabel="always" class="form__field">
-                                <mat-label>H/m<sup>3</sup></mat-label>
+                                <mat-label>H (m<sup>-3</sup>)</mat-label>
                                 <input matInput type="number" formControlName="h">
                                 <mat-hint>hydrogen number density per cubic meter</mat-hint>
                             </mat-form-field>
@@ -93,12 +93,12 @@
                             <mat-hint>model to use for energy accommodation value</mat-hint>
                         </mat-form-field>
                         <mat-form-field *ngIf="showEnergyAccommodation" floatLabel="always" class="form__field">
-                            <mat-label>Energy Accommodation (amu)</mat-label>
+                            <mat-label>Energy Accommodation</mat-label>
                             <input matInput formControlName="energyAccommodation">
                             <mat-hint>alpha</mat-hint>
                         </mat-form-field>
                         <mat-form-field  *ngIf="showSurfaceMass" floatLabel="always" class="form__field">
-                            <mat-label>Surface Mass</mat-label>
+                            <mat-label>Surface Mass (amu)</mat-label>
                             <input matInput type="number" formControlName="surfaceMass">
                             <mat-hint>m_s in amu</mat-hint>
                         </mat-form-field>
