@@ -102,7 +102,7 @@ Run `npm run lint` to make sure your project passes linting.
 
 Run `npm test` to make sure your tests are passing.
 
-Then, run `npm run build:deploy` to create the `/docs` directory that will be deployed.
+Then, run `npm run build:prod` to create the `/docs` directory that will be deployed.
 
 Make a copy of `docs/index.html` and name it `docs/404.html`. Why? I'm not sure, but maybe with this package instead, you can skip this step: https://github.com/angular-schule/angular-cli-ghpages
 
