@@ -1,6 +1,6 @@
 # SESAM
 
-Deployed site: https://swxtrec.github.io/VECTOR-UI
+Deployed site: https://swxtrec.github.io/vector
 
 This is a frontend for interacting with the Space Weather Testbed SESAM model by Marcin Pilinski.
 
@@ -24,7 +24,7 @@ NA
 
 ## Production URLs
 
-https://swxtrec.github.io/VECTOR-UI
+https://swxtrec.github.io/vector
 
 ## Necessary Permissions
 
@@ -108,7 +108,7 @@ Make a copy of `docs/index.html` and name it `docs/404.html`. Why? I'm not sure,
 
 ### Deploy to GitHub pages
 
-Run `npm run deploy` and your current build from your current branch will be pushed up to the remote `gh-pages` branch and deployed to the site hosted by GitHub at https://swxtrec.github.io/VECTOR-UI.
+Run `npm run deploy` and your current build from your current branch will be pushed up to the remote `gh-pages` branch and deployed to the site hosted by GitHub at https://swxtrec.github.io/vector.
 
 ### Requirements
 
