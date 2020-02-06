@@ -43,7 +43,7 @@ export class ModelComponent implements OnInit {
     payload: IModelParameters;
     resultTranslator = {
         dragCoefficient: 'Drag Coefficient',
-        energyAccomodation: 'Energy Accommodation',
+        energyAccommodation: 'Energy Accommodation',
         forceCoefficient: 'Force Coefficient',
         projectedArea: 'Projected Area'
     };
