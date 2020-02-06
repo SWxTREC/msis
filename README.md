@@ -109,6 +109,7 @@ Make a copy of `docs/index.html` and name it `docs/404.html`. Why? I'm not sure,
 ### Deploy to GitHub pages
 
 Run `npm run deploy` and your current build from your current branch will be pushed up to the remote `gh-pages` branch and deployed to the site hosted by GitHub at https://swxtrec.github.io/vector.
+For some reason the angular instructions say to make a copy of `docs/index.html` and name it `docs/404.html`, so I added a bit to the deploy script to do that first.
 
 ### Requirements
 
