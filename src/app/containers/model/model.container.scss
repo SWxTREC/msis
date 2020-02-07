@@ -5,20 +5,21 @@
         display: flex;
         flex-direction: column;
         padding: 0.3rem;
-        &--parent {
-            border: 1px solid rgba(0, 0, 0, 0.12);
-            border-radius: 5px;
-        }
     }
     &__control-group {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
+        flex-direction: column;
     }
     &__field {
-        margin-bottom: 1.2rem;
+        margin-right: 1rem;
+        margin-bottom: 0.33rem;
         .mat-hint {
             visibility: hidden;
+        }
+        ::ng-deep {
+            .mat-form-field-subscript-wrapper {
+                margin-top: 0.2em;
+            }
         }
         &:hover {
             .mat-hint {
@@ -30,13 +31,20 @@
         position: relative;
         left: -2rem;
     }
+    &__parent {
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 5px;
+        padding: 0.5rem;
+        padding-top: 0.75rem;
+    }
     &__parent-label {
         align-self: start;
         color: rgba(0, 0, 0, 0.6);
         position: relative;
         background-color: white;
-        padding: 0 0.5rem 0 0.5rem;
-        top: -14px;
+        padding: 0 0.25rem 0 0.25rem;
+        left: 8px;
+        top: 8px;
         font-size: small;
     }
     &__result {
@@ -49,6 +57,11 @@
         margin-top: 1rem;
         display: flex;
         justify-content: space-around;
+    }
+    &__row {
+        display: flex;
+        // justify-content: space-between;
+        flex-wrap: wrap;
     }
     &__submit {
         text-align: right;

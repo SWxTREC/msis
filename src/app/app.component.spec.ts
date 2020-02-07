@@ -4,8 +4,6 @@ import { RouterModule } from '@angular/router';
 import { LaspFooterModule } from 'lasp-footer';
 import { LaspNavModule } from 'lasp-nav';
 
-import { Four04Component } from './containers/four04/four04.component';
-
 import { AppComponent } from './app.component';
 import { routes } from './routes';
 
@@ -18,8 +16,7 @@ describe('AppComponent', () => {
                 LaspNavModule
             ],
             declarations: [
-                AppComponent,
-                Four04Component
+                AppComponent
             ]
         }).compileComponents();
     }));

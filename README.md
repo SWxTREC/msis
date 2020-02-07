@@ -1,6 +1,8 @@
 # SESAM
 
-This is a frontend for interacting with the Space Weather Testbed SESAM model by Marcin Pilinski
+Deployed site: https://swxtrec.github.io/VECTOR-UI
+
+This is a frontend for interacting with the Space Weather Testbed SESAM model by Marcin Pilinski.
 
 ## Contacts
 
@@ -22,7 +24,7 @@ NA
 
 ## Production URLs
 
-When available, add where you can find this project in production.
+https://swxtrec.github.io/VECTOR-UI
 
 ## Necessary Permissions
 
@@ -42,11 +44,6 @@ See 'Developement server' below.
 
 SESAM backend is needed in production.
 
-### Special DevEnv Issues
-
-Is there anything platform specific being run? Does it need to live inside a VM to reproduce
-behavior? Connected to a VPN/internal network?
-
 ### Development server
 
 Run `npm start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -57,9 +54,9 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-### Build
+### Local build
 
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Run `npm run build:prod`  for a production build.
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Run `npm run build:prod` for a production build.
 
 ### Linting
 
@@ -96,6 +93,22 @@ Cleaning up old images is also a good idea from time to time. To clean up your u
 When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./docker-publish.sh` to publish your image to the server.
 
 ## Deploying SESAM
+
+### Deployment build
+
+Make sure you are in the master branch and all your code is linted, tested, reviewed, and committed.
+
+Run `npm run lint` to make sure your project passes linting.
+
+Run `npm test` to make sure your tests are passing.
+
+Then, run `npm run build:prod` to create the `/docs` directory that will be deployed.
+
+Make a copy of `docs/index.html` and name it `docs/404.html`. Why? I'm not sure, but maybe with this package instead, you can skip this step: https://github.com/angular-schule/angular-cli-ghpages
+
+### Deploy to GitHub pages
+
+Run `npm run deploy` and your current build from your current branch will be pushed up to the remote `gh-pages` branch and deployed to the site hosted by GitHub at https://swxtrec.github.io/VECTOR-UI.
 
 ### Requirements
 

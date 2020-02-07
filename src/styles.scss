@@ -11,7 +11,7 @@
     'success-color': $color-success,
     'background-color': black,
 
-    'link-color': mat-color( $accent, 700 ),
+    'link-color': mat-color( $primary, 200 ),
     'heading-color': mat-color( $primary, 500 )
 ));
 
@@ -24,4 +24,8 @@
 
 .header__logo--lasp {
     height: 100px !important;
+}
+
+.mat-card-title {
+    color: $color-primary;
 }
