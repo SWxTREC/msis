@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:prod": "ng build --prod --output-path docs --base-href /vector/",
+    "build:prod": "ng build --prod --output-path docs --base-href=/vector/",
     "deploy": "cp docs/index.html docs/404.html && gh-pages -d docs",
     "test": "ng test",
     "lint": "ng lint",
