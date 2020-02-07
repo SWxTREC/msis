@@ -1,8 +1,8 @@
-# SESAM
+# VECTOR
 
 Deployed site: https://swxtrec.github.io/vector
 
-This is a frontend for interacting with the Space Weather Testbed SESAM model by Marcin Pilinski.
+This is a frontend for interacting with the Space Weather Testbed VECTOR/SESAM model by Marcin Pilinski.
 
 ## Contacts
 
@@ -16,7 +16,7 @@ This is a frontend for interacting with the Space Weather Testbed SESAM model by
 
 * [SWT](http://mods-jira.lasp.colorado.edu:8080/browse/SWT/): Main project for the
 	Space Weather Testbed codebase.
-* [Incorporate SESAM Model](https://jira.lasp.colorado.edu/browse/SWT-41): Epic for SESAM calculator
+* [Incorporate SESAM Model](https://jira.lasp.colorado.edu/browse/SWT-41): Epic for VECTOR calculator
 
 ## Related Projects
 
@@ -32,17 +32,17 @@ TK
 
 ## Architecture
 
-This is the frontend code that sets the parameters to run the SESAM model in AWS.
+This is the frontend code that sets the parameters to run the VECTOR model in AWS.
 
 A Flask backend has been set up to create an API that receives a POST request with the model parameters and returns a GET request with the result.
 
-## Running SESAM Locally
+## Running VECTOR Locally
 
 See 'Developement server' below.
 
 ### Project Dependencies
 
-SESAM backend is needed in production.
+VECTOR backend is needed in production.
 
 ### Development server
 
@@ -92,7 +92,7 @@ Cleaning up old images is also a good idea from time to time. To clean up your u
 
 When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./docker-publish.sh` to publish your image to the server.
 
-## Deploying SESAM
+## Deploying VECTOR
 
 ### Deployment build
 
@@ -130,7 +130,7 @@ have a simple Hudson job, while others may be much more involved.
 
 ## FAQs and Help
 
-### SESAM-specific common issues, gotchas
+### VECTOR-specific common issues, gotchas
 
 Any kind of project-specific issues that would pop up goes here, as well as any quirks or
 inconsistencies within the project (e.g. hacks, workarounds, "I don't know why this works but....")
