@@ -32,4 +32,11 @@ describe('ModelComponent', () => {
     it('should create', () => {
         expect(component).toBeTruthy();
     });
+
+    it('should round numbers to 4 decimal places', () => {
+        const longNumber = 9.99999999999999999999999999;
+        const longNumberBig = 1233999.123399999999999999999999999;
+        expect(component.round(longNumber, 4)).toEqual('10.0000');
+        expect(component.round(longNumberBig, 4)).toEqual('1233999.1234');
+    });
 });
