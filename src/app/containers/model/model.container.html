@@ -9,7 +9,7 @@
                             <mat-form-field floatLabel="always" class="form__field">
                                 <mat-label>Object Type</mat-label>
                                 <mat-select formControlName="objectType">
-                                    <mat-option *ngFor="let type of objectTypes" [value]="type">
+                                    <mat-option *ngFor="let type of objectTypes" [value]="type" [disabled]=" type === 'plate' || type === 'geometry file'">
                                         {{type}}
                                     </mat-option>
                                 </mat-select>
