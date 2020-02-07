@@ -72,7 +72,10 @@ export class ModelComponent implements OnInit {
     onSubmit(): void {
 
         this.modelService.submitSinglePointRequest(this.payload).subscribe( data => {
-            this.results = data;
+            // this will only work for shallow objects
+            const results = Object.assign({}, data);
+            Object.keys(data).forEach( key => results[key] = this.round(data[key], 4));
+            this.results = results;
         });
         // format the model form values back to values appropriate for the form
         this.modelForm.patchValue({
@@ -132,6 +135,11 @@ export class ModelComponent implements OnInit {
             surfaceMass: Number(modelObject.surfaceMass)
         };
         return submitFormat;
+    }
+
+    round(value: number, decimals: number): string {
+        const roundedNumber: number = Number(Math.round(+(value + 'e' + decimals)) + 'e-' + decimals);
+        return roundedNumber.toFixed(4);
     }
 
 }

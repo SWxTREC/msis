@@ -104,8 +104,6 @@ Run `npm test` to make sure your tests are passing.
 
 Then, run `npm run build:prod` to create the `/docs` directory that will be deployed.
 
-Make a copy of `docs/index.html` and name it `docs/404.html`. Why? I'm not sure, but maybe with this package instead, you can skip this step: https://github.com/angular-schule/angular-cli-ghpages
-
 ### Deploy to GitHub pages
 
 Run `npm run deploy` and your current build from your current branch will be pushed up to the remote `gh-pages` branch and deployed to the site hosted by GitHub at https://swxtrec.github.io/vector.
