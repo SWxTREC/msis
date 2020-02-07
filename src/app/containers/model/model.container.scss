@@ -11,20 +11,28 @@
         flex-direction: column;
     }
     &__field {
+        width: 140px;
         margin-right: 1rem;
         margin-bottom: 0.33rem;
         .mat-hint {
             visibility: hidden;
+            font-size: 8pt;
         }
         ::ng-deep {
             .mat-form-field-subscript-wrapper {
                 margin-top: 0.2em;
+            }
+            .mat-form-field-infix {
+                padding: 0.7rem 0;
             }
         }
         &:hover {
             .mat-hint {
                 visibility: visible;
             }
+        }
+        &--wide {
+            width: 190px;
         }
     }
     &__outer-header {
@@ -34,8 +42,7 @@
     &__parent {
         border: 1px solid rgba(0, 0, 0, 0.12);
         border-radius: 5px;
-        padding: 0.5rem;
-        padding-top: 0.75rem;
+        padding: 0.75rem 0.5rem;
     }
     &__parent-label {
         align-self: start;

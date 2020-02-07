@@ -15,8 +15,6 @@
                                 </mat-select>
                                 <mat-hint>select satellite shape</mat-hint>
                             </mat-form-field>
-                        </div>
-                        <div class="form__row">
                             <mat-form-field *ngIf="showDiameter" floatLabel="always" class="form__field">
                                 <mat-label>Diameter (m)</mat-label>
                                 <input matInput type="number" formControlName="diameter">
@@ -30,7 +28,7 @@
                             <mat-form-field *ngIf="showArea" floatLabel="always" class="form__field">
                                 <mat-label>Area (m<sup>2</sup>)</mat-label>
                                 <input matInput type="number" formControlName="area">
-                                <mat-hint>flat plate area in meters<sup>2</sup></mat-hint>
+                                <mat-hint>flat plate area in meters squared</mat-hint>
                             </mat-form-field>
                             <mat-form-field *ngIf="showPitch" floatLabel="always" class="form__field">
                                 <mat-label>Pitch (deg)</mat-label>
@@ -50,7 +48,7 @@
                             <mat-form-field floatLabel="always" class="form__field">
                                 <mat-label>Temperature (K)</mat-label>
                                 <input matInput type="number" formControlName="temperature">
-                                <mat-hint>temperature in Kelvin</mat-hint>
+                                <mat-hint>atmospheric temperature in Kelvin</mat-hint>
                             </mat-form-field>
                             <mat-form-field floatLabel="always" class="form__field">
                                 <mat-label>Speed (m/s)</mat-label>
@@ -92,7 +90,7 @@
                     <div class="form__column">
                         <mat-card-title>Surface Conditions</mat-card-title>
                         <div class="form__row">
-                            <mat-form-field floatLabel="always" class="form__field">
+                            <mat-form-field floatLabel="always" class="form__field form__field--wide">
                                 <mat-label>Energy Accommodation Model</mat-label>
                                 <mat-select  formControlName="accommodationModel">
                                     <mat-option *ngFor="let model of models" [value]="model">
@@ -101,7 +99,7 @@
                                 </mat-select>
                                 <mat-hint>model to use for energy accommodation value</mat-hint>
                             </mat-form-field>
-                            <mat-form-field *ngIf="showEnergyAccommodation" floatLabel="always" class="form__field">
+                            <mat-form-field *ngIf="showEnergyAccommodation" floatLabel="always" class="form__field form__field--wide">
                                 <mat-label>Energy Accommodation</mat-label>
                                 <input matInput formControlName="energyAccommodation">
                                 <mat-hint>alpha</mat-hint>
@@ -132,7 +130,10 @@
                         Results
                     </mat-card-title>
                     <div *ngFor="let result of results | keyvalue">
-                        <p><strong>{{ resultTranslator[result.key] }}</strong>: {{ result.value }}</p>
+                        <p>
+                            <strong *ngIf="resultTranslator[result.key]">{{ resultTranslator[result.key] }}</strong>
+                            <strong *ngIf="!resultTranslator[result.key]">{{ result.key }}</strong>: {{ result.value }}
+                        </p>
                     </div>
                 </div>
             </div>

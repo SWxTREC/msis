@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
     {
-        path: 'about',
+        path: '',
         loadChildren: () => import( './containers/about/about.module').then( m => m.AboutModule )
     }, {
         path: 'docs',

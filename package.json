@@ -1,12 +1,12 @@
 {
-  "name": "sesam",
+  "name": "vector",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:prod": "ng build --prod --output-path docs --base-href /VECTOR-UI/",
-    "deploy": "gh-pages -d docs",
+    "build:prod": "ng build --prod --output-path docs --base-href=/vector/",
+    "deploy": "cp docs/index.html docs/404.html && gh-pages -d docs",
     "test": "ng test",
     "lint": "ng lint",
     "lint:fix": "ng lint --fix",
