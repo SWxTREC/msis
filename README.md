@@ -109,7 +109,7 @@ This will:
 
 ### Deploy to GitHub pages
 
-Run `npm run deploy`
+From the master branch, run `npm run deploy`
 
 This will:
 
@@ -118,6 +118,8 @@ This will:
 * Take the current build of `/docs` from the current branch and push it up to the remote `gh-pages` branch were it will be served
 
 After a few minutes, you will see the changes at the GitHub-hosted site https://swxtrec.github.io/vector.
+
+You can run this script from any branch, but the site should reflect the content of the current master branch.
 
 ## FAQs and Help
 
