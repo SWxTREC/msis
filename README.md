@@ -92,39 +92,34 @@ Cleaning up old images is also a good idea from time to time. To clean up your u
 
 When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./docker-publish.sh` to publish your image to the server.
 
-## Deploying VECTOR
-
-### Deployment build
-
-Make sure you are in the master branch and all your code is linted, tested, reviewed, and committed.
-
-Run `npm run lint` to make sure your project passes linting.
-
-Run `npm test` to make sure your tests are passing.
-
-Then, run `npm run build:prod` to create the `/docs` directory that will be deployed.
-
-### Deploy to GitHub pages
-
-Run `npm run deploy` and your current build from your current branch will be pushed up to the remote `gh-pages` branch and deployed to the site hosted by GitHub at https://swxtrec.github.io/vector.
-For some reason the angular instructions say to make a copy of `docs/index.html` and name it `docs/404.html`, so I added a bit to the deploy script to do that first.
-
-### Requirements
-
+## Deploy VECTOR
 Who needs to be made aware of a release? What limitations/restrictions are there before making a
 release? For example, is there an explicit vetting process, or perhaps certain time windows when a
 release shouldn't be made?
 
-### Deploy process
+### Bump the version
 
-Run `npm version <major | minor | patch>` on the master branch. This will:
+From the master branch, run `npm version <major | minor | patch>` where major indicates a breaking change, minor is noticeable but non-breaking interface change, and patch is a non-breaking, under-the-hood refinement.
+
+This will:
 
 * run the linter and unit tests, and abort if they fail
 * increment the version, commit the change, and create a git tag
 * push the changes and the new tag to the remote repo
 
-What other steps are needed to deploy the app/server/project? What is the process for making a release? Many projects will
-have a simple Hudson job, while others may be much more involved.
+### Deploy to GitHub pages
+
+From the master branch, run `npm run deploy`
+
+This will:
+
+* Run `npm run build:pages` to create the `/docs` directory that will be deployed
+* Make a copy of `docs/index.html` and name it `docs/404.html` (for some reason the angular instructions say to do this)
+* Take the current build of `/docs` from the current branch and push it up to the remote `gh-pages` branch were it will be served
+
+After a few minutes, you will see the changes at the GitHub-hosted site https://swxtrec.github.io/vector.
+
+You can run this script from any branch, but the site should reflect the content of the current master branch.
 
 ## FAQs and Help
 
