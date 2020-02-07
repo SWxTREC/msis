@@ -55,7 +55,7 @@
         font-size: small;
     }
     &__result {
-        width: 45%;
+        flex: 1;
         &--hidden {
             visibility: hidden;
         }
@@ -64,10 +64,10 @@
         margin-top: 1rem;
         display: flex;
         justify-content: space-around;
+        flex-wrap: wrap;
     }
     &__row {
         display: flex;
-        // justify-content: space-between;
         flex-wrap: wrap;
     }
     &__submit {

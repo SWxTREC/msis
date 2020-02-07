@@ -1,4 +1,7 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MarkdownModule } from 'ngx-markdown';
+import { MaterialModule } from 'src/app/modules';
 
 import { AboutComponent } from './about.component';
 
@@ -8,7 +11,12 @@ describe('AboutComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ AboutComponent ]
+            declarations: [ AboutComponent ],
+            imports: [
+                HttpClientModule,
+                MarkdownModule.forRoot({ loader: HttpClient }),
+                MaterialModule
+            ]
         })
     .compileComponents();
     }));
