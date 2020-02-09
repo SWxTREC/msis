@@ -6,11 +6,11 @@
                     <div class="form__column">
                         <mat-card-title>Satellite</mat-card-title>
                         <div class="form__row">
-                            <mat-form-field floatLabel="always" class="form__field">
+                            <mat-form-field floatLabel="always" class="form__field form__field--wide">
                                 <mat-label>Object Type</mat-label>
                                 <mat-select formControlName="objectType">
                                     <mat-option *ngFor="let type of objectTypes" [value]="type" [disabled]="type === 'geometry file'">
-                                        {{type}}
+                                        {{type === 'plate' ? 'plate (one sided)' : type}}
                                     </mat-option>
                                 </mat-select>
                                 <mat-hint>select satellite shape</mat-hint>
