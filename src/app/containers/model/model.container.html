@@ -129,10 +129,14 @@
                     <mat-card-title>
                         Results
                     </mat-card-title>
-                    <div *ngFor="let result of results | keyvalue">
+                    <div class="form__result-item" *ngFor="let result of results | keyvalue">
                         <p>
-                            <strong *ngIf="resultTranslator[result.key]">{{ resultTranslator[result.key] }}</strong>
-                            <strong *ngIf="!resultTranslator[result.key]">{{ result.key }}</strong>: {{ result.value }}
+                            <span>
+                                <strong *ngIf="resultTranslator[result.key].title">{{ resultTranslator[result.key].title }}</strong>
+                                <strong *ngIf="!resultTranslator[result.key].title">{{ result.key }}</strong>:
+                                {{ result.value }}
+                            </span>
+                            <span class="form__result-units" [innerHtml]="resultTranslator[result.key].units"></span>
                         </p>
                     </div>
                 </div>

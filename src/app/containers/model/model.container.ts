@@ -42,10 +42,22 @@ export class ModelComponent implements OnInit {
     ];
     payload: IModelParameters;
     resultTranslator = {
-        dragCoefficient: 'Drag Coefficient',
-        energyAccommodation: 'Energy Accommodation',
-        forceCoefficient: 'Force Coefficient',
-        projectedArea: 'Projected Area'
+        dragCoefficient: {
+            title: 'Drag Coefficient',
+            units: 'm<sup>2</sup>'
+        },
+        energyAccommodation: {
+            title: 'Energy Accommodation',
+            units: ''
+        },
+        forceCoefficient: {
+            title: 'Force Coefficient',
+            units: 'm<sup>2</sup>'
+        },
+        projectedArea: {
+            title: 'Projected Area',
+            units: 'm<sup>2</sup>'
+        }
     };
     results: {};
     showArea: boolean;
