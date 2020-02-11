@@ -56,10 +56,23 @@
     }
     &__result {
         flex: 1;
-        padding: 1rem;
+        padding: 0.5rem;
+        min-width: 295px;
         &--hidden {
             visibility: hidden;
         }
+    }
+    &__result-item {
+        text-align: right;
+        @media (min-width: 810px) {
+            width: 80%;
+        }
+    }
+    &__result-units {
+        display: inline-block;
+        font-size: smaller;
+        text-align: left;
+        width: 2rem;
     }
     &__results {
         margin-top: 1rem;
