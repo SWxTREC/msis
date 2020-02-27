@@ -1,3 +1,4 @@
+@import 'src/theme/theme-colors.scss';
 .form {
     margin: 1rem;
     &__column {
@@ -34,6 +35,9 @@
         &--wide {
             width: 190px;
         }
+    }
+    &__invalid {
+        color: $color-warn;
     }
     &__outer-header {
         position: relative;
