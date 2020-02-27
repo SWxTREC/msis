@@ -44,7 +44,7 @@ export class ModelComponent implements OnInit {
     resultTranslator = {
         dragCoefficient: {
             title: 'Drag Coefficient',
-            units: 'm<sup>2</sup>'
+            units: ''
         },
         energyAccommodation: {
             title: 'Energy Accommodation',
