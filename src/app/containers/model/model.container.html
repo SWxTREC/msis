@@ -129,13 +129,13 @@
                     </div>
                 </div>
                 <div class="form__submit">
-                    <button mat-raised-button [disabled]="!modelForm.valid" color="primary" type="submit">Submit</button>
+                    <button mat-raised-button [disabled]="modelForm.invalid" color="primary" type="submit">Submit</button>
                 </div>
             </form>
             <div class="form__results">
                 <div class="form__result">
                     <mat-card-title>
-                        Submission Values <span class="form__invalid" *ngIf="!modelForm.valid">(invalid)</span>
+                        Submission Values <span class="form__invalid" *ngIf="modelForm.invalid">(invalid)</span>
                     </mat-card-title>
                     <pre>
                         {{ payload | json }}
