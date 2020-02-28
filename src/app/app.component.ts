@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import {
     IImageLink,
     INavItem,
-    ISocialLinks,
+    ISocialLink,
     IVersion
 } from 'lasp-footer';
 
@@ -42,11 +42,12 @@ export class AppComponent {
         }
     ];
 
-    socialLinks: ISocialLinks = {
-        facebook: 'https://www.facebook.com/LASPatCU/',
-        twitter: 'https://twitter.com/LASPatCU',
-        youtube: 'https://www.youtube.com/user/LASPatCUBoulder'
-    };
+    socialLinks: ISocialLink[] = [
+        {
+            name: 'github',
+            href: 'https://github.com/SWxTREC/vector-code'
+        }
+    ];
 
     versions: IVersion[] = [
         {
