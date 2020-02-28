@@ -1,3 +1,6 @@
+@import 'src/theme/theme-colors.scss';
+$helper-font-size: 8pt;
+
 .form {
     margin: 1rem;
     &__column {
@@ -16,7 +19,7 @@
         margin-bottom: 0.33rem;
         .mat-hint {
             visibility: hidden;
-            font-size: 8pt;
+            font-size: $helper-font-size;
         }
         ::ng-deep {
             .mat-form-field-subscript-wrapper {
@@ -34,6 +37,9 @@
         &--wide {
             width: 190px;
         }
+    }
+    &__invalid {
+        color: $color-warn;
     }
     &__outer-header {
         position: relative;
@@ -87,4 +93,8 @@
     &__submit {
         text-align: right;
     }
+    .mat-error {
+        font-size: $helper-font-size;
+    }
+
 }
