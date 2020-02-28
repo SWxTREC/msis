@@ -9,6 +9,7 @@ import { ModelService } from 'src/app/services';
     styleUrls: [ './model.container.scss' ]
 })
 export class ModelComponent implements OnInit {
+    invalidFieldMessage: string;
     invalidFields: string[];
     modelForm = new FormGroup({
         objectType: new FormControl('sphere', [ Validators.required ]),
@@ -20,11 +21,11 @@ export class ModelComponent implements OnInit {
         temperature: new FormControl(1200.5.toFixed(1), [ Validators.min(0) ]),
         speed: new FormControl(7800.45.toFixed(2), [ Validators.min(0) ]),
         composition: new FormGroup({
-            o: new FormControl(100000000000.0.toPrecision(3)),
-            o2: new FormControl(1000000.0.toPrecision(3)),
-            n2: new FormControl(1000000.0.toPrecision(3)),
-            he: new FormControl(1000000.0.toPrecision(3)),
-            h: new FormControl(10000.0.toPrecision(3))
+            o: new FormControl(100000000000.0.toPrecision(3), [ Validators.min(0) ]),
+            o2: new FormControl(1000000.0.toPrecision(3), [ Validators.min(0) ]),
+            n2: new FormControl(1000000.0.toPrecision(3), [ Validators.min(0) ]),
+            he: new FormControl(1000000.0.toPrecision(3), [ Validators.min(0) ]),
+            h: new FormControl(10000.0.toPrecision(3), [ Validators.min(0) ])
         }),
         accommodationModel: new FormControl('SESAM', [ Validators.required ]),
         energyAccommodation: new FormControl(0.930.toFixed(3), [ Validators.min(0), Validators.max(1) ]),
@@ -82,7 +83,7 @@ export class ModelComponent implements OnInit {
         });
     }
 
-    getErrorMessage( control: string ) {
+    getErrorMessage( control: string, subcontrol?: string ) {
         switch (control) {
         case 'objectType':
             if ( this.modelForm.controls.objectType.hasError('required') ) {
@@ -124,6 +125,13 @@ export class ModelComponent implements OnInit {
                 return 'speed must be positive';
             }
             break;
+        case 'composition':
+            if (
+                this.modelForm.controls.composition.invalid && this.modelForm.controls.composition['controls'][subcontrol].hasError('min')
+            ) {
+                return 'value must be positive';
+            }
+            break;
         case 'accommodationModel':
             if ( this.modelForm.controls.accommodationModel.hasError('required') ) {
                 return 'you must select a model';
@@ -146,7 +154,7 @@ export class ModelComponent implements OnInit {
     onSubmit(): void {
         if ( this.modelForm.valid ) {
             this.modelService.submitSinglePointRequest(this.payload).subscribe( data => {
-                // this will only work for shallow objects
+                // this will only work for shallow objects from the api
                 const results = Object.assign({}, data);
                 Object.keys(data).forEach( key => results[key] = this.round(data[key], 4));
                 this.results = results;
@@ -189,7 +197,18 @@ export class ModelComponent implements OnInit {
 
     // format the model form values to values appropriate for the payload
     createPayload( modelObject: IModelParameters ) {
-        this.invalidFields = Object.keys(this.modelForm.controls).filter( control => !this.modelForm.controls[control].valid );
+        // create and format invalid field error message
+        this.invalidFields = Object.keys(this.modelForm.controls).filter( control => this.modelForm.controls[control].invalid );
+        const invalidFieldsInComposition: string[] =
+            Object.keys(this.modelForm.controls.composition['controls'])
+                .filter( control => this.modelForm.controls.composition['controls'][control].invalid );
+        if ( this.invalidFields.length ) {
+            const speciesString = invalidFieldsInComposition.join(', ');
+            const compositionString = 'composition (' + speciesString + ')';
+            const compositionIndex = this.invalidFields.indexOf('composition');
+            this.invalidFields[compositionIndex] = compositionString;
+        }
+        this.invalidFieldMessage = 'invalid fields: ' + this.invalidFields.join(', ');
         const submitFormat: IModelParameters = {
             objectType: modelObject.objectType,
             diameter: Number(modelObject.diameter),
