@@ -9,9 +9,23 @@
                             <mat-form-field floatLabel="always" class="form__field form__field--wide">
                                 <mat-label>Object Type</mat-label>
                                 <mat-select formControlName="objectType">
-                                    <mat-option *ngFor="let type of objectTypes" [value]="type" [disabled]="type === 'geometry file'">
-                                        {{type === 'plate' ? 'plate (one sided)' : type}}
-                                    </mat-option>
+                                    <ng-container *ngFor="let type of objectTypes">
+                                        <mat-option *ngIf="type !== 'geometry file'" [value]="type" >
+                                            {{type === 'plate' ? 'plate (one sided)' : type}}
+                                        </mat-option>
+                                    </ng-container>
+                                    <mat-optgroup label="custom geometry file:">
+                                        <mat-option *ngFor="let name of geometryFiles" [value]="name">
+                                            <span *ngIf="name!=='custom'">{{ name }}</span>
+                                            <input *ngIf="name === 'custom'"
+                                                type="file"
+                                                formControlName="geometryFile"
+                                                (change)="fileUpload()"
+                                            >
+                                            <span *ngIf="name === 'custom'">{{ uploadedFileName }}</span>
+                                        </mat-option>
+                                    </mat-optgroup>
+
                                 </mat-select>
                                 <mat-hint>select satellite shape</mat-hint>
                                 <mat-error *ngIf="modelForm.controls.objectType.invalid">{{getErrorMessage('objectType')}}</mat-error>
@@ -46,6 +60,12 @@
                                 <mat-hint>sideslip angle of satellite in degrees</mat-hint>
                                 <mat-error *ngIf="modelForm.controls.sideslip.invalid">{{getErrorMessage('sideslip')}}</mat-error>
                             </mat-form-field>
+                            <img
+                            *ngIf="results"
+                            [src]="vrmlImageSrc"
+                            alt="image from vrml file"
+                            width="300"
+                            >
                         </div>
                     </div>
                     <div class="form__column">

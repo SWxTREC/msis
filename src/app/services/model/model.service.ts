@@ -14,4 +14,10 @@ export class ModelService {
         return this.http.post<any>( environment.vectorApi + '/singlepoint', payload);
     }
 
+    submitGeometryFile( file: any ) {
+        const formData = new FormData();
+        formData.append('geometryFile', file);
+        return this.http.post<any>( environment.vectorApi + '/image', formData, { responseType: 'blob' as 'json' } );
+    }
+
 }

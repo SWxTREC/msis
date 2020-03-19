@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { IModelParameters } from 'src/app/models';
 import { ModelService } from 'src/app/services';
 
@@ -9,10 +10,12 @@ import { ModelService } from 'src/app/services';
     styleUrls: [ './model.container.scss' ]
 })
 export class ModelComponent implements OnInit {
+    @ViewChild('vrml', { static: true }) vrml: ElementRef;
     invalidFieldMessage: string;
     invalidFields: string[];
     modelForm = new FormGroup({
         objectType: new FormControl('sphere', [ Validators.required ]),
+        geometryFile: new FormControl(),
         diameter: new FormControl(1.212.toFixed(3), [ Validators.min(0) ]),
         length: new FormControl(2.010.toFixed(3), [ Validators.min(0) ]),
         area: new FormControl(3.400.toFixed(3), [ Validators.min(0) ]),
@@ -42,6 +45,12 @@ export class ModelComponent implements OnInit {
         'plate',
         'geometry file'
     ];
+    geometryFiles = [
+        'GRACE',
+        'SOURCE',
+        'cube sat',
+        'custom'
+    ];
     payload: IModelParameters;
     resultTranslator = {
         dragCoefficient: {
@@ -69,8 +78,13 @@ export class ModelComponent implements OnInit {
     showPitch: boolean;
     showSideslip: boolean;
     showSurfaceMass: boolean;
+    uploadedFileName: string;
+    vrmlImageSrc: SafeUrl;
 
-    constructor(private modelService: ModelService) {}
+    constructor(
+        private modelService: ModelService,
+        private sanitizer: DomSanitizer
+    ) {}
 
     ngOnInit() {
         this.payload = this.createPayload(this.modelForm.value);
@@ -151,6 +165,16 @@ export class ModelComponent implements OnInit {
         }
     }
 
+    fileUpload(): void {
+        if (this.modelForm.controls.geometryFile.value) {
+            this.uploadedFileName = this.modelForm.controls.geometryFile.value.replace('C:\\fakepath\\', '');
+            this.modelService.submitGeometryFile(this.modelForm.controls.geometryFile.value).subscribe(blob => {
+                const objectURL = URL.createObjectURL(blob);
+                this.vrmlImageSrc = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+            });
+        }
+    }
+
     onSubmit(): void {
         if ( this.modelForm.valid ) {
             this.modelService.submitSinglePointRequest(this.payload).subscribe( data => {
@@ -189,8 +213,8 @@ export class ModelComponent implements OnInit {
         this.showPitch =
             this.modelForm.value.objectType === 'cylinder' ||
             this.modelForm.value.objectType === 'plate' ||
-            this.modelForm.value.objectType === 'geometry file';
-        this.showSideslip = this.modelForm.value.objectType === 'geometry file';
+            (this.geometryFiles.includes(this.modelForm.value.objectType) || this.modelForm.controls.geometryFile.value);
+        this.showSideslip = this.geometryFiles.includes(this.modelForm.value.objectType) || this.modelForm.controls.geometryFile.value;
         this.showEnergyAccommodation = this.modelForm.value.accommodationModel === 'Fixed';
         this.showSurfaceMass = this.modelForm.value.accommodationModel === 'Goodman';
     }
