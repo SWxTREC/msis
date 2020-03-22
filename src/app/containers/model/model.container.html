@@ -61,7 +61,7 @@
                                 <mat-error *ngIf="modelForm.controls.sideslip.invalid">{{getErrorMessage('sideslip')}}</mat-error>
                             </mat-form-field>
                             <img
-                            *ngIf="results"
+                            *ngIf="modelForm.controls.geometryFile.value"
                             [src]="vrmlImageSrc"
                             alt="image from vrml file"
                             width="300"

@@ -47,7 +47,7 @@ export class ModelComponent implements OnInit {
     ];
     geometryFiles = [
         'GRACE',
-        'SOURCE',
+        'SORCE',
         'cube sat',
         'custom'
     ];
