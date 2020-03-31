@@ -46,10 +46,22 @@ export class ModelComponent implements OnInit {
         'geometry file'
     ];
     geometryFiles = [
-        'GRACE',
-        'SORCE',
-        'cube sat',
-        'custom'
+        {
+            label: 'SORCE',
+            identifier: 'sorce'
+        },
+        {
+            label: 'CubeSat, 1U',
+            identifier: 'cubesat1u'
+        },
+        {
+            label: 'CubeSat, 3U with Panels',
+            identifier: 'deployable3u'
+        },
+        {
+            label: 'custom',
+            identifier: ''
+        }
     ];
     payload: IModelParameters;
     resultTranslator = {

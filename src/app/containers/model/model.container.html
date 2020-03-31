@@ -15,14 +15,14 @@
                                         </mat-option>
                                     </ng-container>
                                     <mat-optgroup label="custom geometry file:">
-                                        <mat-option *ngFor="let name of geometryFiles" [value]="name">
-                                            <span *ngIf="name!=='custom'">{{ name }}</span>
-                                            <input *ngIf="name === 'custom'"
+                                        <mat-option *ngFor="let geometry of geometryFiles" [value]="geometry.identifier || 'custom' ">
+                                            <span *ngIf="geometry.identifier">{{ geometry.label }}</span>
+                                            <input *ngIf="!geometry.identifier"
                                                 type="file"
                                                 formControlName="geometryFile"
                                                 (change)="fileUpload()"
                                             >
-                                            <span *ngIf="name === 'custom'">{{ uploadedFileName }}</span>
+                                            <span *ngIf="geometry.label === 'custom'">{{ uploadedFileName }}</span>
                                         </mat-option>
                                     </mat-optgroup>
 
