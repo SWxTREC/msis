@@ -15,7 +15,6 @@ export class ModelComponent implements OnInit {
     invalidFields: string[];
     modelForm = new FormGroup({
         objectType: new FormControl('sphere', [ Validators.required ]),
-        geometryFile: new FormControl(),
         diameter: new FormControl(1.212.toFixed(3), [ Validators.min(0) ]),
         length: new FormControl(2.010.toFixed(3), [ Validators.min(0) ]),
         area: new FormControl(3.400.toFixed(3), [ Validators.min(0) ]),
@@ -63,6 +62,7 @@ export class ModelComponent implements OnInit {
             identifier: ''
         }
     ];
+    imageFileId: string;
     payload: IModelParameters;
     resultTranslator = {
         dragCoefficient: {
@@ -107,6 +107,13 @@ export class ModelComponent implements OnInit {
             this.setShowHideConditions();
             this.results = undefined;
         });
+        // remove image if pitch or sildeslip changes
+        this.modelForm.controls.pitch.valueChanges
+          .subscribe( () => this.vrmlImageSrc = null );
+        this.modelForm.controls.sideslip.valueChanges
+          .subscribe( () => this.vrmlImageSrc = null );
+        this.modelForm.controls.objectType.valueChanges
+          .subscribe( () => this.vrmlImageSrc = null );
     }
 
     getErrorMessage( control: string, subcontrol?: string ) {
@@ -177,23 +184,42 @@ export class ModelComponent implements OnInit {
         }
     }
 
-    fileUpload(): void {
-        if (this.modelForm.controls.geometryFile.value) {
-            this.uploadedFileName = this.modelForm.controls.geometryFile.value.replace('C:\\fakepath\\', '');
-            this.modelService.submitGeometryFile(this.modelForm.controls.geometryFile.value).subscribe(blob => {
-                const objectURL = URL.createObjectURL(blob);
-                this.vrmlImageSrc = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+    // only triggered when file upload is chosen
+    fileUpload(files: FileList): void {
+        const file: File = files[0];
+        this.vrmlImageSrc = null;
+        this.uploadedFileName = file.name;
+        this.modelService.submitGeometryFile( this.modelForm.controls.objectType.value, file )
+            .subscribe( result => {
+                this.imageFileId = result.userId;
+            });
+        // }
+    }
+
+    // triggered when a geometry file is chosen
+    getFileId( name: string ): void {
+        this.vrmlImageSrc = null;
+        if ( name ) {
+            this.modelService.submitGeometryFile( name )
+            .subscribe( result => {
+                this.imageFileId = result.userId;
             });
         }
     }
 
     onSubmit(): void {
         if ( this.modelForm.valid ) {
-            this.modelService.submitSinglePointRequest(this.payload).subscribe( data => {
+            this.modelService.submitSinglePointRequest( this.payload, this.imageFileId ).subscribe( data => {
                 // this will only work for shallow objects from the api
                 const results = Object.assign({}, data);
-                Object.keys(data).forEach( key => results[key] = this.round(data[key], 4));
+                Object.keys( data ).forEach( key => results[key] = this.round( data[key], 4 ));
                 this.results = results;
+                if ( this.imageFileId ) {
+                    this.modelService.getImage( this.imageFileId ).subscribe( blob => {
+                        const objectUrl = URL.createObjectURL( blob );
+                        this.vrmlImageSrc = this.sanitizer.bypassSecurityTrustUrl( objectUrl );
+                    });
+                }
             });
             // format the model form values back to values appropriate for the form
             this.modelForm.patchValue({
@@ -225,8 +251,8 @@ export class ModelComponent implements OnInit {
         this.showPitch =
             this.modelForm.value.objectType === 'cylinder' ||
             this.modelForm.value.objectType === 'plate' ||
-            (this.geometryFiles.includes(this.modelForm.value.objectType) || this.modelForm.controls.geometryFile.value);
-        this.showSideslip = this.geometryFiles.includes(this.modelForm.value.objectType) || this.modelForm.controls.geometryFile.value;
+            this.modelForm.value.objectType === 'custom';
+        this.showSideslip = this.modelForm.value.objectType === 'custom';
         this.showEnergyAccommodation = this.modelForm.value.accommodationModel === 'Fixed';
         this.showSurfaceMass = this.modelForm.value.accommodationModel === 'Goodman';
     }

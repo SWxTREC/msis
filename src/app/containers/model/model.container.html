@@ -14,13 +14,12 @@
                                             {{type === 'plate' ? 'plate (one sided)' : type}}
                                         </mat-option>
                                     </ng-container>
-                                    <mat-optgroup label="custom geometry file:">
-                                        <mat-option *ngFor="let geometry of geometryFiles" [value]="geometry.identifier || 'custom' ">
+                                    <mat-optgroup label="geometry files:">
+                                        <mat-option *ngFor="let geometry of geometryFiles" [value]="'custom'" (click)="getFileId(geometry.identifier)">
                                             <span *ngIf="geometry.identifier">{{ geometry.label }}</span>
                                             <input *ngIf="!geometry.identifier"
                                                 type="file"
-                                                formControlName="geometryFile"
-                                                (change)="fileUpload()"
+                                                (change)="fileUpload($event.target.files)"
                                             >
                                             <span *ngIf="geometry.label === 'custom'">{{ uploadedFileName }}</span>
                                         </mat-option>
@@ -61,7 +60,7 @@
                                 <mat-error *ngIf="modelForm.controls.sideslip.invalid">{{getErrorMessage('sideslip')}}</mat-error>
                             </mat-form-field>
                             <img
-                            *ngIf="modelForm.controls.geometryFile.value"
+                            *ngIf="vrmlImageSrc"
                             [src]="vrmlImageSrc"
                             alt="image from vrml file"
                             width="300"

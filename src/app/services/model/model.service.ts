@@ -10,14 +10,22 @@ export class ModelService {
 
     constructor(private http: HttpClient) { }
 
-    submitSinglePointRequest( payload: any ) {
-        return this.http.post<any>( environment.vectorApi + '/singlepoint', payload);
+    submitSinglePointRequest( payload: any, id?: string ) {
+        const url = id ? '/singlepoint/' + id : '/singlepoint';
+        return this.http.post<any>( environment.vectorApi + url , payload);
     }
 
-    submitGeometryFile( file: any ) {
-        const formData = new FormData();
-        formData.append('geometryFile', file);
-        return this.http.post<any>( environment.vectorApi + '/image', formData, { responseType: 'blob' as 'json' } );
+    submitGeometryFile( name: string, file?: any ) {
+        if ( file ) {
+            const formData = new FormData();
+            formData.append('file', file);
+            return this.http.post<any>( environment.vectorApi + '/geometry', formData );
+        } else {
+            return this.http.post<any>( environment.vectorApi + '/geometry/' + name, {});
+        }
     }
 
+    getImage( id: string ) {
+        return this.http.get<any>( environment.vectorApi + '/image/' + id, { responseType: 'blob' as 'json' } );
+    }
 }
