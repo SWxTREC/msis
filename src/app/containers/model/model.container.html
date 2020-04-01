@@ -15,49 +15,49 @@
                                         </mat-option>
                                     </ng-container>
                                     <mat-optgroup label="geometry files:">
-                                        <mat-option *ngFor="let geometry of geometryFiles" [value]="'custom'" (click)="getFileId(geometry.identifier)">
+                                        <mat-option *ngFor="let geometry of geometryFiles" value="custom" (click)="getFileId(geometry.identifier)">
                                             <span *ngIf="geometry.identifier">{{ geometry.label }}</span>
                                             <input *ngIf="!geometry.identifier"
                                                 type="file"
-                                                (change)="fileUpload($event.target.files)"
+                                                (change)="fileUpload($event.target.files[0])"
                                             >
-                                            <span *ngIf="geometry.label === 'custom'">{{ uploadedFileName }}</span>
+                                            <span *ngIf="geometry.label === 'upload'">{{ uploadedFileName }}</span>
                                         </mat-option>
                                     </mat-optgroup>
 
                                 </mat-select>
                                 <mat-hint>select satellite shape</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.objectType.invalid">{{getErrorMessage('objectType')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.objectType.invalid">{{getValidationMessage('objectType')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field *ngIf="showDiameter" floatLabel="always" class="form__field">
                                 <mat-label>Diameter (m)</mat-label>
                                 <input matInput type="number" formControlName="diameter">
                                 <mat-hint>diameter of satellite in meters</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.diameter.invalid">{{getErrorMessage('diameter')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.diameter.invalid">{{getValidationMessage('diameter')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field  *ngIf="showLength" floatLabel="always" class="form__field">
                                 <mat-label>Length (m)</mat-label>
                                 <input matInput type="number" formControlName="length">
                                 <mat-hint>length of satellite in meters</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.length.invalid">{{getErrorMessage('length')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.length.invalid">{{getValidationMessage('length')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field *ngIf="showArea" floatLabel="always" class="form__field">
                                 <mat-label>Area (m<sup>2</sup>)</mat-label>
                                 <input matInput type="number" formControlName="area">
                                 <mat-hint>flat plate area in meters squared</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.area.invalid">{{getErrorMessage('area')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.area.invalid">{{getValidationMessage('area')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field *ngIf="showPitch" floatLabel="always" class="form__field">
                                 <mat-label>Pitch (deg)</mat-label>
                                 <input matInput type="number" formControlName="pitch">
                                 <mat-hint>pitch angle of satellite in degrees</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.pitch.invalid">{{getErrorMessage('pitch')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.pitch.invalid">{{getValidationMessage('pitch')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field  *ngIf="showSideslip" floatLabel="always" class="form__field">
                                 <mat-label>Sideslip (deg)</mat-label>
                                 <input matInput type="number" formControlName="sideslip">
                                 <mat-hint>sideslip angle of satellite in degrees</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.sideslip.invalid">{{getErrorMessage('sideslip')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.sideslip.invalid">{{getValidationMessage('sideslip')}}</mat-error>
                             </mat-form-field>
                             <img
                                 *ngIf="vrmlImageSrc"
@@ -74,13 +74,13 @@
                                 <mat-label>Temperature (K)</mat-label>
                                 <input matInput type="number" formControlName="temperature">
                                 <mat-hint>atmospheric temperature in Kelvin</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.temperature.invalid">{{getErrorMessage('temperature')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.temperature.invalid">{{getValidationMessage('temperature')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field floatLabel="always" class="form__field">
                                 <mat-label>Speed (m/s)</mat-label>
                                 <input matInput  type="number" formControlName="speed">
                                 <mat-hint>speed in meters/second</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.speed.invalid">{{getErrorMessage('speed')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.speed.invalid">{{getValidationMessage('speed')}}</mat-error>
                             </mat-form-field>
                         </div>
                         <div class="form__parent-label">Composition</div>
@@ -90,31 +90,31 @@
                                     <mat-label>O (m<sup>-3</sup>)</mat-label>
                                     <input matInput type="number" formControlName="o">
                                     <mat-hint>atomic oxygen number density per cubic meter</mat-hint>
-                                    <mat-error *ngIf="modelForm.controls.composition.invalid">{{getErrorMessage('composition', 'o')}}</mat-error>
+                                    <mat-error *ngIf="modelForm.controls.composition.invalid">{{getValidationMessage('composition', 'o')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field floatLabel="always" class="form__field">
                                     <mat-label>O<sub>2</sub> (m<sup>-3</sup>)</mat-label>
                                     <input matInput type="number" formControlName="o2">
                                     <mat-hint>molecular oxygen number density per cubic meter</mat-hint>
-                                    <mat-error *ngIf="modelForm.controls.composition.invalid">{{getErrorMessage('composition', 'o2')}}</mat-error>
+                                    <mat-error *ngIf="modelForm.controls.composition.invalid">{{getValidationMessage('composition', 'o2')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field floatLabel="always" class="form__field">
                                     <mat-label>N<sub>2</sub> (m<sup>-3</sup>)</mat-label>
                                     <input matInput type="number" formControlName="n2">
                                     <mat-hint>molecular nitrogen number density per cubic meter</mat-hint>
-                                    <mat-error *ngIf="modelForm.controls.composition.invalid">{{getErrorMessage('composition', 'n2')}}</mat-error>
+                                    <mat-error *ngIf="modelForm.controls.composition.invalid">{{getValidationMessage('composition', 'n2')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field floatLabel="always" class="form__field">
                                     <mat-label>He (m<sup>-3</sup>)</mat-label>
                                     <input matInput type="number" formControlName="he">
                                     <mat-hint>helium number density per cubic meter</mat-hint>
-                                    <mat-error *ngIf="modelForm.controls.composition.invalid">{{getErrorMessage('composition', 'he')}}</mat-error>
+                                    <mat-error *ngIf="modelForm.controls.composition.invalid">{{getValidationMessage('composition', 'he')}}</mat-error>
                                 </mat-form-field>
                                 <mat-form-field floatLabel="always" class="form__field">
                                     <mat-label>H (m<sup>-3</sup>)</mat-label>
                                     <input matInput type="number" formControlName="h">
                                     <mat-hint>hydrogen number density per cubic meter</mat-hint>
-                                    <mat-error *ngIf="modelForm.controls.composition.invalid">{{getErrorMessage('composition', 'h')}}</mat-error>
+                                    <mat-error *ngIf="modelForm.controls.composition.invalid">{{getValidationMessage('composition', 'h')}}</mat-error>
                                 </mat-form-field>
                             </div>
                         </div>
@@ -130,19 +130,19 @@
                                     </mat-option>
                                 </mat-select>
                                 <mat-hint>model to use for energy accommodation value</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.accommodationModel.invalid">{{getErrorMessage('accommodationModel')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.accommodationModel.invalid">{{getValidationMessage('accommodationModel')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field *ngIf="showEnergyAccommodation" floatLabel="always" class="form__field form__field--wide">
                                 <mat-label>Energy Accommodation</mat-label>
                                 <input matInput formControlName="energyAccommodation">
                                 <mat-hint>alpha</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.energyAccommodation.invalid">{{getErrorMessage('energyAccommodation')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.energyAccommodation.invalid">{{getValidationMessage('energyAccommodation')}}</mat-error>
                             </mat-form-field>
                             <mat-form-field  *ngIf="showSurfaceMass" floatLabel="always" class="form__field">
                                 <mat-label>Surface Mass (amu)</mat-label>
                                 <input matInput type="number" formControlName="surfaceMass">
                                 <mat-hint>surface mass in amu</mat-hint>
-                                <mat-error *ngIf="modelForm.controls.surfaceMass.invalid">{{getErrorMessage('surfaceMass')}}</mat-error>
+                                <mat-error *ngIf="modelForm.controls.surfaceMass.invalid">{{getValidationMessage('surfaceMass')}}</mat-error>
                             </mat-form-field>
                         </div>
                     </div>

@@ -58,7 +58,7 @@ export class ModelComponent implements OnInit {
             identifier: 'deployable3u'
         },
         {
-            label: 'custom',
+            label: 'upload',
             identifier: ''
         }
     ];
@@ -116,7 +116,7 @@ export class ModelComponent implements OnInit {
           .subscribe( () => this.vrmlImageSrc = null );
     }
 
-    getErrorMessage( control: string, subcontrol?: string ) {
+    getValidationMessage( control: string, subcontrol?: string ) {
         switch (control) {
         case 'objectType':
             if ( this.modelForm.controls.objectType.hasError('required') ) {
@@ -185,15 +185,13 @@ export class ModelComponent implements OnInit {
     }
 
     // only triggered when file upload is chosen
-    fileUpload(files: FileList): void {
-        const file: File = files[0];
+    fileUpload(file: File): void {
         this.vrmlImageSrc = null;
         this.uploadedFileName = file.name;
-        this.modelService.submitGeometryFile( this.modelForm.controls.objectType.value, file )
+        this.modelService.submitGeometryFile( 'custom', file )
             .subscribe( result => {
                 this.imageFileId = result.userId;
             });
-        // }
     }
 
     // triggered when a geometry file is chosen
