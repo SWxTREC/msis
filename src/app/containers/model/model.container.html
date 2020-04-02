@@ -14,11 +14,12 @@
                                             {{type === 'plate' ? 'plate (one sided)' : type}}
                                         </mat-option>
                                     </ng-container>
-                                    <mat-optgroup label="geometry files:">
+                                    <mat-optgroup label="geometry files (.wrl format):">
                                         <mat-option *ngFor="let geometry of geometryFiles" value="custom" (click)="getFileId(geometry.identifier)">
                                             <span *ngIf="geometry.identifier">{{ geometry.label }}</span>
                                             <input *ngIf="!geometry.identifier"
                                                 type="file"
+                                                accept=".wrl"
                                                 (change)="fileUpload($event.target.files[0])"
                                             >
                                             <span *ngIf="geometry.label === 'upload'">{{ uploadedFileName }}</span>
