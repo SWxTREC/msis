@@ -8,7 +8,7 @@
                         <div class="form__row">
                             <mat-form-field floatLabel="always" class="form__field form__field--wide">
                                 <mat-label>Object Type</mat-label>
-                                <mat-select formControlName="objectType">
+                                <mat-select formControlName="objectType" panelClass="form__select">
                                     <ng-container *ngFor="let type of objectTypes">
                                         <mat-option *ngIf="type !== 'geometry file'" [value]="type" >
                                             {{type === 'plate' ? 'plate (one sided)' : type}}

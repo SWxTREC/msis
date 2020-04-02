@@ -98,3 +98,7 @@ $helper-font-size: 8pt;
     }
 
 }
+
+::ng-deep .mat-select-panel.form__select {
+  max-height: 60vh;
+}
