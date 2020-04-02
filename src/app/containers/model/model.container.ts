@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { IModelParameters } from 'src/app/models';
@@ -10,7 +10,6 @@ import { ModelService } from 'src/app/services';
     styleUrls: [ './model.container.scss' ]
 })
 export class ModelComponent implements OnInit {
-    @ViewChild('vrml', { static: true }) vrml: ElementRef;
     invalidFieldMessage: string;
     invalidFields: string[];
     modelForm = new FormGroup({
