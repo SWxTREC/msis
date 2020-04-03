@@ -62,6 +62,8 @@ export class ModelComponent implements OnInit {
         }
     ];
     imageFileId: string;
+    imageOutOfDate = false;
+    fileNotChosen: string;
     payload: IModelParameters;
     resultTranslator = {
         dragCoefficient: {
@@ -90,6 +92,7 @@ export class ModelComponent implements OnInit {
     showSideslip: boolean;
     showSurfaceMass: boolean;
     uploadedFileName: string;
+    uploadSelected = false;
     vrmlImageSrc: SafeUrl;
 
     constructor(
@@ -102,17 +105,63 @@ export class ModelComponent implements OnInit {
         this.setShowHideConditions();
 
         this.modelForm.valueChanges.subscribe( () => {
-            this.payload = this.createPayload(this.modelForm.value);
+            this.validateFields();
             this.setShowHideConditions();
+            this.payload = this.createPayload(this.modelForm.value);
             this.results = undefined;
         });
-        // remove image if pitch or sildeslip changes
+
+        // reset image if pitch, sildeslip, or objectType changes
+        // there is a bug where for number inputs, valueChanges is called twice
+        // but that doesn't matter here, just FYI https://github.com/angular/angular/issues/12540
         this.modelForm.controls.pitch.valueChanges
-          .subscribe( () => this.vrmlImageSrc = null );
+            .subscribe( () => this.resetImage() );
         this.modelForm.controls.sideslip.valueChanges
-          .subscribe( () => this.vrmlImageSrc = null );
+            .subscribe( () => this.resetImage() );
         this.modelForm.controls.objectType.valueChanges
-          .subscribe( () => this.vrmlImageSrc = null );
+            .subscribe( () => {
+                this.uploadSelected = false;
+                this.fileNotChosen = undefined;
+                this.resetImage();
+            });
+    }
+
+    // format the model form values to values appropriate for the payload (numbers)
+    createPayload( modelObject: IModelParameters ) {
+        const submitFormat: IModelParameters = {
+            objectType: modelObject.objectType,
+            diameter: Number(modelObject.diameter),
+            length: Number(modelObject.length),
+            area: Number(modelObject.area),
+            pitch: Number(modelObject.pitch),
+            sideslip: Number(modelObject.sideslip),
+            temperature: Number(modelObject.temperature),
+            speed: Number(modelObject.speed),
+            composition: {
+                o: Number(modelObject.composition.o),
+                o2: Number(modelObject.composition.o2),
+                n2: Number(modelObject.composition.n2),
+                he: Number(modelObject.composition.he),
+                h: Number(modelObject.composition.h)
+            },
+            accommodationModel: modelObject.accommodationModel,
+            energyAccommodation: Number(modelObject.energyAccommodation),
+            surfaceMass: Number(modelObject.surfaceMass)
+        };
+        return submitFormat;
+    }
+
+    // triggered only when a file is uploaded
+    fileUpload(file: File): void {
+        this.fileNotChosen = undefined;
+        this.uploadedFileName = file ? file.name : undefined;
+        this.validateFileUpload();
+        if ( file ) {
+            this.modelService.submitGeometryFile( 'custom', file )
+                .subscribe( result => {
+                    this.imageFileId = result.userId;
+                });
+        }
     }
 
     getValidationMessage( control: string, subcontrol?: string ) {
@@ -138,12 +187,12 @@ export class ModelComponent implements OnInit {
             }
             break;
         case 'pitch':
-            if ( this.modelForm.controls.pitch.hasError('min') || this.modelForm.controls.pitch.hasError('min') ) {
+            if ( this.modelForm.controls.pitch.hasError('min') || this.modelForm.controls.pitch.hasError('max') ) {
                 return 'pitch angle must be between -90 and 90';
             }
             break;
         case 'sideslip':
-            if ( this.modelForm.controls.sideslip.hasError('min') || this.modelForm.controls.sideslip.hasError('min') ) {
+            if ( this.modelForm.controls.sideslip.hasError('min') || this.modelForm.controls.sideslip.hasError('max') ) {
                 return 'sideslip angle must be between -180 and 180';
             }
             break;
@@ -183,24 +232,19 @@ export class ModelComponent implements OnInit {
         }
     }
 
-    // only triggered when file upload is chosen
-    fileUpload(file: File): void {
-        this.vrmlImageSrc = null;
-        this.uploadedFileName = file.name;
-        this.modelService.submitGeometryFile( 'custom', file )
-            .subscribe( result => {
-                this.imageFileId = result.userId;
-            });
-    }
-
-    // triggered when a geometry file is chosen
-    getFileId( name: string ): void {
-        this.vrmlImageSrc = null;
-        if ( name ) {
-            this.modelService.submitGeometryFile( name )
-            .subscribe( result => {
-                this.imageFileId = result.userId;
-            });
+    // triggered when any geometry file is chosen
+    getFileId( identifier: string ): void {
+        this.imageFileId = undefined;
+        // preloaded file with an identifier
+        if ( identifier ) {
+            this.modelService.submitGeometryFile( identifier )
+                .subscribe( result => {
+                    this.imageFileId = result.userId;
+                });
+        } else {
+            // invalid until a file is chosen
+            this.uploadSelected = true;
+            this.validateFileUpload();
         }
     }
 
@@ -211,7 +255,8 @@ export class ModelComponent implements OnInit {
                 const results = Object.assign({}, data);
                 Object.keys( data ).forEach( key => results[key] = this.round( data[key], 4 ));
                 this.results = results;
-                if ( this.imageFileId ) {
+                if ( this.imageFileId && this.imageOutOfDate ) {
+                    this.imageOutOfDate = false;
                     this.modelService.getImage( this.imageFileId ).subscribe( blob => {
                         const objectUrl = URL.createObjectURL( blob );
                         this.vrmlImageSrc = this.sanitizer.bypassSecurityTrustUrl( objectUrl );
@@ -236,8 +281,18 @@ export class ModelComponent implements OnInit {
                 },
                 energyAccommodation: this.payload.energyAccommodation,
                 surfaceMass: this.payload.surfaceMass
-            });
+            }, { emitEvent: false, onlySelf: true });
         }
+    }
+
+    resetImage() {
+        this.vrmlImageSrc = undefined;
+        this.imageOutOfDate = true;
+    }
+
+    round(value: number, decimals: number): string {
+        const roundedNumber: number = Number(Math.round(+(value + 'e' + decimals)) + 'e-' + decimals);
+        return roundedNumber.toFixed(4);
     }
 
     setShowHideConditions(): void {
@@ -254,10 +309,10 @@ export class ModelComponent implements OnInit {
         this.showSurfaceMass = this.modelForm.value.accommodationModel === 'Goodman';
     }
 
-    // format the model form values to values appropriate for the payload
-    createPayload( modelObject: IModelParameters ) {
+    validateFields() {
         // create and format invalid field error message
-        this.invalidFields = Object.keys(this.modelForm.controls).filter( control => this.modelForm.controls[control].invalid );
+        const invalidModelFormFields = Object.keys(this.modelForm.controls).filter( control => this.modelForm.controls[control].invalid );
+        this.invalidFields = invalidModelFormFields;
         const invalidFieldsInComposition: string[] =
             Object.keys(this.modelForm.controls.composition['controls'])
                 .filter( control => this.modelForm.controls.composition['controls'][control].invalid );
@@ -268,32 +323,13 @@ export class ModelComponent implements OnInit {
             this.invalidFields[compositionIndex] = compositionString;
         }
         this.invalidFieldMessage = 'invalid fields: ' + this.invalidFields.join(', ');
-        const submitFormat: IModelParameters = {
-            objectType: modelObject.objectType,
-            diameter: Number(modelObject.diameter),
-            length: Number(modelObject.length),
-            area: Number(modelObject.area),
-            pitch: Number(modelObject.pitch),
-            sideslip: Number(modelObject.sideslip),
-            temperature: Number(modelObject.temperature),
-            speed: Number(modelObject.speed),
-            composition: {
-                o: Number(modelObject.composition.o),
-                o2: Number(modelObject.composition.o2),
-                n2: Number(modelObject.composition.n2),
-                he: Number(modelObject.composition.he),
-                h: Number(modelObject.composition.h)
-            },
-            accommodationModel: modelObject.accommodationModel,
-            energyAccommodation: Number(modelObject.energyAccommodation),
-            surfaceMass: Number(modelObject.surfaceMass)
-        };
-        return submitFormat;
     }
 
-    round(value: number, decimals: number): string {
-        const roundedNumber: number = Number(Math.round(+(value + 'e' + decimals)) + 'e-' + decimals);
-        return roundedNumber.toFixed(4);
+    validateFileUpload() {
+        const fileNotChosen = this.uploadSelected && !this.uploadedFileName;
+        if ( fileNotChosen ) {
+            this.fileNotChosen = 'choose .wrl file';
+        }
     }
 
 }
