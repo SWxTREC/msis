@@ -93,8 +93,18 @@ $helper-font-size: 8pt;
     &__submit {
         text-align: right;
     }
+    &__warning {
+        font-size: $helper-font-size;
+        position: relative;
+        top: -18px;
+        left: 12px;
+    }
     .mat-error {
         font-size: $helper-font-size;
     }
 
+}
+
+::ng-deep .mat-select-panel.form__select {
+    max-height: 60vh;
 }
