@@ -43,6 +43,7 @@ export class ModelComponent implements OnInit {
         'plate',
         'geometry file'
     ];
+    geometryFileName: string;
     geometryFiles = [
         {
             label: 'SORCE',
@@ -122,6 +123,7 @@ export class ModelComponent implements OnInit {
             .subscribe( () => {
                 this.uploadSelected = false;
                 this.fileNotChosen = undefined;
+                this.geometryFileName = undefined;
                 this.resetImage();
             });
     }
@@ -233,11 +235,12 @@ export class ModelComponent implements OnInit {
     }
 
     // triggered when any geometry file is chosen
-    getFileId( identifier: string ): void {
+    getFileId( geometry: { identifier: string, label: string} ): void {
         this.imageFileId = undefined;
         // preloaded file with an identifier
-        if ( identifier ) {
-            this.modelService.submitGeometryFile( identifier )
+        if ( geometry.identifier ) {
+            this.geometryFileName = geometry.label;
+            this.modelService.submitGeometryFile( geometry.identifier )
                 .subscribe( result => {
                     this.imageFileId = result.userId;
                 });
@@ -255,7 +258,7 @@ export class ModelComponent implements OnInit {
                 const results = Object.assign({}, data);
                 Object.keys( data ).forEach( key => results[key] = this.round( data[key], 4 ));
                 this.results = results;
-                if ( this.imageFileId && this.imageOutOfDate ) {
+                if ( this.imageFileId && this.imageOutOfDate && ( this.uploadSelected || this.geometryFileName )) {
                     this.imageOutOfDate = false;
                     this.modelService.getImage( this.imageFileId ).subscribe( blob => {
                         const objectUrl = URL.createObjectURL( blob );

@@ -16,7 +16,7 @@
                                             </mat-option>
                                         </ng-container>
                                         <mat-optgroup label="geometry files (.wrl format):">
-                                            <mat-option *ngFor="let geometry of geometryFiles" value="custom" (click)="getFileId(geometry.identifier)">
+                                            <mat-option *ngFor="let geometry of geometryFiles" value="custom" (click)="getFileId(geometry)">
                                                 <span *ngIf="geometry.identifier">{{ geometry.label }}</span>
                                                 <input *ngIf="!geometry.identifier"
                                                 type="file"
@@ -62,12 +62,6 @@
                                 <mat-hint>sideslip angle of satellite in degrees</mat-hint>
                                 <mat-error *ngIf="modelForm.controls.sideslip.invalid">{{getValidationMessage('sideslip')}}</mat-error>
                             </mat-form-field>
-                            <img
-                                *ngIf="vrmlImageSrc"
-                                [src]="vrmlImageSrc"
-                                alt="image from vrml file"
-                                width="300"
-                            >
                         </div>
                     </div>
                     <div class="form__column">
@@ -166,20 +160,39 @@
                         {{ invalidFieldMessage }}
                     </div>
                 </div>
+                <div class="form__result" [class.form__result--hidden]="!vrmlImageSrc">
+                    <ng-container *ngIf="vrmlImageSrc">
+                        <mat-card-title>
+                            Geometry
+                        </mat-card-title>
+                        <div>
+                            {{ uploadedFileName || geometryFileName }}
+                        </div>
+                        <img
+                        class="form__result"
+                        [src]="vrmlImageSrc"
+                        alt="image from vrml file"
+                        width="200"
+                        >
+                    </ng-container>
+                </div>
+
                 <div class="form__result" [class.form__result--hidden]="!results">
                     <mat-card-title>
                         Results
                     </mat-card-title>
-                    <div class="form__result-item" *ngFor="let result of results | keyvalue">
-                        <p>
-                            <span>
-                                <strong *ngIf="resultTranslator[result.key].title">{{ resultTranslator[result.key].title }}</strong>
-                                <strong *ngIf="!resultTranslator[result.key].title">{{ result.key }}</strong>:
-                                {{ result.value }}
-                            </span>
-                            <span class="form__result-units" [innerHtml]="resultTranslator[result.key].units"></span>
-                        </p>
-                    </div>
+                    <mat-card>
+                        <div class="form__result-item" *ngFor="let result of results | keyvalue">
+                            <p>
+                                <span>
+                                    <strong *ngIf="resultTranslator[result.key].title">{{ resultTranslator[result.key].title }}</strong>
+                                    <strong *ngIf="!resultTranslator[result.key].title">{{ result.key }}</strong>:
+                                    {{ result.value }}
+                                </span>
+                                <span class="form__result-units" [innerHtml]="resultTranslator[result.key].units"></span>
+                            </p>
+                        </div>
+                    </mat-card>
                 </div>
             </div>
         </mat-tab>
