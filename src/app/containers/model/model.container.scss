@@ -61,18 +61,16 @@ $helper-font-size: 8pt;
         font-size: small;
     }
     &__result {
+        font-size: 12px;
         flex: 1;
         padding: 0.5rem;
-        min-width: 295px;
+        width: 295px;
         &--hidden {
             visibility: hidden;
         }
     }
     &__result-item {
         text-align: right;
-        @media (min-width: 810px) {
-            width: 80%;
-        }
     }
     &__result-units {
         display: inline-block;
@@ -84,7 +82,13 @@ $helper-font-size: 8pt;
         margin-top: 1rem;
         display: flex;
         justify-content: space-around;
+        align-items: center;
         flex-wrap: wrap;
+        flex-direction: column;
+        @media (min-width: 960px) {
+            flex-direction: row;
+            align-items: flex-start;
+        }
     }
     &__row {
         display: flex;

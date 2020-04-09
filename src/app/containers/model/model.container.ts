@@ -43,6 +43,7 @@ export class ModelComponent implements OnInit {
         'plate',
         'geometry file'
     ];
+    geometryFileName: string;
     geometryFiles = [
         {
             label: 'SORCE',
@@ -233,11 +234,12 @@ export class ModelComponent implements OnInit {
     }
 
     // triggered when any geometry file is chosen
-    getFileId( identifier: string ): void {
+    getFileId( geometry: { identifier: string, label: string} ): void {
         this.imageFileId = undefined;
         // preloaded file with an identifier
-        if ( identifier ) {
-            this.modelService.submitGeometryFile( identifier )
+        if ( geometry.identifier ) {
+            this.geometryFileName = geometry.label;
+            this.modelService.submitGeometryFile( geometry.identifier )
                 .subscribe( result => {
                     this.imageFileId = result.userId;
                 });
