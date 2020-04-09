@@ -123,6 +123,7 @@ export class ModelComponent implements OnInit {
             .subscribe( () => {
                 this.uploadSelected = false;
                 this.fileNotChosen = undefined;
+                this.geometryFileName = undefined;
                 this.resetImage();
             });
     }
@@ -257,7 +258,7 @@ export class ModelComponent implements OnInit {
                 const results = Object.assign({}, data);
                 Object.keys( data ).forEach( key => results[key] = this.round( data[key], 4 ));
                 this.results = results;
-                if ( this.imageFileId && this.imageOutOfDate ) {
+                if ( this.imageFileId && this.imageOutOfDate && ( this.uploadSelected || this.geometryFileName )) {
                     this.imageOutOfDate = false;
                     this.modelService.getImage( this.imageFileId ).subscribe( blob => {
                         const objectUrl = URL.createObjectURL( blob );
