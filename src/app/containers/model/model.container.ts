@@ -156,9 +156,7 @@ export class ModelComponent implements OnInit {
     // triggered only when a file is uploaded
     fileUpload(file: File): void {
         this.fileNotChosen = undefined;
-        if ( file.name !== this.uploadedFileName ) {
-            this.resetImage();
-        }
+        this.resetImage();
         this.uploadedFileName = file ? file.name : undefined;
         this.validateFileUpload();
         if ( file ) {
