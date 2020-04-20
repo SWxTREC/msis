@@ -156,6 +156,7 @@ export class ModelComponent implements OnInit {
     // triggered only when a file is uploaded
     fileUpload(file: File): void {
         this.fileNotChosen = undefined;
+        this.resetImage();
         this.uploadedFileName = file ? file.name : undefined;
         this.validateFileUpload();
         if ( file ) {
@@ -289,6 +290,7 @@ export class ModelComponent implements OnInit {
     }
 
     resetImage() {
+        this.uploadedFileName = undefined;
         this.vrmlImageSrc = undefined;
         this.imageOutOfDate = true;
     }

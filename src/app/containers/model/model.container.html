@@ -148,19 +148,19 @@
                     <button mat-raised-button [disabled]="modelForm.invalid || fileNotChosen" color="primary" type="submit">Submit</button>
                 </div>
             </form>
-            <div class="form__results">
-                <div class="form__result">
+            <div class="results">
+                <div class="results__item">
                     <mat-card-title>
-                        Submission Values <span class="form__invalid" *ngIf="modelForm.invalid">(invalid)</span>
+                        Submission Values <span class="results__invalid" *ngIf="modelForm.invalid">(invalid)</span>
                     </mat-card-title>
                     <pre>
                         {{ payload | json }}
                     </pre>
-                    <div *ngIf="invalidFields?.length" class="form__invalid">
+                    <div *ngIf="invalidFields?.length" class="results__invalid">
                         {{ invalidFieldMessage }}
                     </div>
                 </div>
-                <div class="form__result" [class.form__result--hidden]="!vrmlImageSrc">
+                <div class="results__item" [class.results__item--hidden]="!vrmlImageSrc">
                     <ng-container *ngIf="vrmlImageSrc">
                         <mat-card-title>
                             Geometry
@@ -169,27 +169,27 @@
                             {{ uploadedFileName || geometryFileName }}
                         </div>
                         <img
-                        class="form__result"
                         [src]="vrmlImageSrc"
                         alt="image from vrml file"
-                        width="200"
+                        width="275"
                         >
+                        <div class="results__caption">Direction of velocity is towards the viewer.</div>
                     </ng-container>
                 </div>
 
-                <div class="form__result" [class.form__result--hidden]="!results">
+                <div class="results__item" [class.results__item--hidden]="!results">
                     <mat-card-title>
                         Results
                     </mat-card-title>
                     <mat-card>
-                        <div class="form__result-item" *ngFor="let result of results | keyvalue">
+                        <div class="results__key-value" *ngFor="let result of results | keyvalue">
                             <p>
                                 <span>
                                     <strong *ngIf="resultTranslator[result.key].title">{{ resultTranslator[result.key].title }}</strong>
                                     <strong *ngIf="!resultTranslator[result.key].title">{{ result.key }}</strong>:
                                     {{ result.value }}
                                 </span>
-                                <span class="form__result-units" [innerHtml]="resultTranslator[result.key].units"></span>
+                                <span class="results__units" [innerHtml]="resultTranslator[result.key].units"></span>
                             </p>
                         </div>
                     </mat-card>

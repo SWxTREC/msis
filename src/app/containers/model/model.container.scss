@@ -38,9 +38,6 @@ $helper-font-size: 8pt;
             width: 190px;
         }
     }
-    &__invalid {
-        color: $color-warn;
-    }
     &__outer-header {
         position: relative;
         left: -2rem;
@@ -60,36 +57,6 @@ $helper-font-size: 8pt;
         top: 8px;
         font-size: small;
     }
-    &__result {
-        font-size: 12px;
-        flex: 1;
-        padding: 0.5rem;
-        width: 295px;
-        &--hidden {
-            visibility: hidden;
-        }
-    }
-    &__result-item {
-        text-align: right;
-    }
-    &__result-units {
-        display: inline-block;
-        font-size: smaller;
-        text-align: left;
-        width: 2rem;
-    }
-    &__results {
-        margin-top: 1rem;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        flex-wrap: wrap;
-        flex-direction: column;
-        @media (min-width: 960px) {
-            flex-direction: row;
-            align-items: flex-start;
-        }
-    }
     &__row {
         display: flex;
         flex-wrap: wrap;
@@ -106,7 +73,46 @@ $helper-font-size: 8pt;
     .mat-error {
         font-size: $helper-font-size;
     }
+}
 
+.results {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    @media (min-width: 960px) {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    &__caption {
+        text-align: center;
+        font-size: smaller;
+    }
+    &__invalid {
+        color: $color-warn;
+    }
+    &__item {
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+        flex: 1;
+        padding: 0.5rem;
+        width: 295px;
+        &--hidden {
+            visibility: hidden;
+        }
+    }
+    &__key-value {
+        text-align: right;
+    }
+    &__units {
+        display: inline-block;
+        font-size: smaller;
+        text-align: left;
+        width: 2rem;
+    }
 }
 
 ::ng-deep .mat-select-panel.form__select {
