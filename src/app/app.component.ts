@@ -28,7 +28,7 @@ export class AppComponent {
             link: '/about'
         }, {
             label: 'Calculator',
-            link: '/model'
+            link: '/calculator'
         }, {
             label: 'Documentation',
             link: '/docs'

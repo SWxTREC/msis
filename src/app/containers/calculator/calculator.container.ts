@@ -5,11 +5,11 @@ import { IModelParameters } from 'src/app/models';
 import { ModelService } from 'src/app/services';
 
 @Component({
-    selector: 'swt-model',
-    templateUrl: './model.container.html',
-    styleUrls: [ './model.container.scss' ]
+    selector: 'swt-calculator',
+    templateUrl: './calculator.container.html',
+    styleUrls: [ './calculator.container.scss' ]
 })
-export class ModelComponent implements OnInit {
+export class CalculatorComponent implements OnInit {
     invalidFieldMessage: string;
     invalidFields: string[];
     modelForm = new FormGroup({

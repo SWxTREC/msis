@@ -4,17 +4,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../../modules';
 
-import { ModelRoutingModule } from './model-routing.module';
-import { ModelComponent } from './model.container';
+import { CalculatorRoutingModule } from './calculator-routing.module';
+import { CalculatorComponent } from './calculator.container';
 
 
 @NgModule({
     imports: [
         CommonModule,
         MaterialModule,
-        ModelRoutingModule,
+        CalculatorRoutingModule,
         ReactiveFormsModule
     ],
-    declarations: [ ModelComponent ]
+    declarations: [ CalculatorComponent ]
 })
-export class ModelModule { }
+export class CalculatorModule { }
