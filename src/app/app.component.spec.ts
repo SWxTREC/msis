@@ -2,7 +2,7 @@ import { async, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
 import { LaspFooterModule } from 'lasp-footer';
-import { LaspNavModule } from 'lasp-nav';
+import { LaspNavModule, LaspNavService } from 'lasp-nav';
 
 import { AppComponent } from './app.component';
 import { routes } from './routes';
@@ -17,6 +17,9 @@ describe('AppComponent', () => {
             ],
             declarations: [
                 AppComponent
+            ],
+            providers: [
+                LaspNavService
             ]
         }).compileComponents();
     }));
