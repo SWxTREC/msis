@@ -45,7 +45,7 @@ export class AppComponent {
     socialLinks: ISocialLink[] = [
         {
             name: 'github',
-            href: 'https://github.com/SWxTREC/vector-code'
+            href: 'https://github.com/SWxTREC'
         }
     ];
 

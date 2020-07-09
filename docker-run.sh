@@ -1,7 +1,7 @@
 #!/bin/bash -eu
 
 # Example script to run a contianer locally for dev
-NAME="${NAME:-vector}"
+NAME="${NAME:-msis}"
 VERSION="${VERSION:-$(npm version | head -n 1 | awk '{print $3;}' | tr -d "',")}"
 
 if docker ps -a -f "name=$NAME" --format '{{.Names}}' |  grep $NAME ; then

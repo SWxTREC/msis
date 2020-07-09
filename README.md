@@ -1,48 +1,48 @@
-# VECTOR
+# MSIS
 
-Deployed site: https://swxtrec.github.io/vector
+Deployed site: https://swxtrec.github.io/msis
 
-This is a frontend for interacting with the Space Weather Testbed VECTOR/SESAM model by Marcin Pilinski.
+This is a frontend for interacting with the MSIS model.
 
 ## Contacts
 
 * **Product Owner:**
-	Marcin Pilinski, marcin.pilinski@lasp.colorado.edu
+	Greg Lucas, greg.lucas@lasp.colorado.edu
 * **Experienced Devs:**
     Front end: Jennifer Knuth, jennifer.knuth@lasp.colorado.edu
-	Back end: Greg Lucas, greg.lucase@lasp.coloardo.edu
+	Back end: Greg Lucas, greg.lucas@lasp.coloardo.edu
 
 ## Relevant JIRA Project(s)
 
 * [SWT](http://mods-jira.lasp.colorado.edu:8080/browse/SWT/): Main project for the
 	Space Weather Testbed codebase.
-* [Incorporate SESAM Model](https://jira.lasp.colorado.edu/browse/SWT-41): Epic for VECTOR calculator
+* [MSIS Website](https://jira.lasp.colorado.edu/browse/SWT-65): Epic for MSIS calculator
 
 ## Related Projects
 
-NA
+[VECTOR](https://swxtrec.github.io/vector) and the SWx TREC Model Staging Platform.
 
 ## Production URLs
 
-https://swxtrec.github.io/vector
+https://swxtrec.github.io/msis
 
-## Necessary Permissions
+<!-- ## Necessary Permissions
 
-TK
+TK -->
 
 ## Architecture
 
-This is the frontend code that sets the parameters to run the VECTOR model in AWS.
+This is the frontend code that sets the parameters to run the MSIS model in AWS.
 
-A Flask backend has been set up to create an API that receives a POST request with the model parameters and returns a GET request with the result.
+A Flask backend has been set up to create an API that receives GET requests with the model parameters and returns a GET request with the result.
 
-## Running VECTOR Locally
+## Running MSIS Locally
 
-See 'Developement server' below.
+See 'Development server' below.
 
 ### Project Dependencies
 
-VECTOR backend is needed in production.
+MSIS backend is needed in production.
 
 ### Development server
 
@@ -74,11 +74,13 @@ Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.pr
 
 ## DOCKER
 
-If you are using docker, be sure to follow the instructions in after-fork.instructions.
+<!-- If you are using docker, be sure to follow the instructions in after-fork.instructions. -->
 
 ### Building a docker image
 
-Once you have followed the steps in after-fork.instructions you can run `./docker-build.sh` to build a new image locally
+<!-- Once you have followed the steps in after-fork.instructions  -->
+
+You can run `./docker-build.sh` to build a new image locally
 
 ### Running a dev image locally
 
@@ -88,14 +90,16 @@ To stop your image run `docker stop {{Project-name}}`
 
 Cleaning up old images is also a good idea from time to time. To clean up your unused docker resources run `docker system prune`
 
-### Pushing an image to the LASP web registry
+<!-- ### Pushing an image to the LASP web registry
 
-When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./docker-publish.sh` to publish your image to the server.
+When you are ready to push your image, contact the web team infrastructure group for credentials and instructions on how to log in. Once this is complete you can run `./docker-publish.sh` to publish your image to the server. -->
 
-## Deploy VECTOR
-Who needs to be made aware of a release? What limitations/restrictions are there before making a
+## Deploy MSIS
+
+MSIS is publicly hosted by GitHub in the SWxTREC organization.
+<!-- Who needs to be made aware of a release? What limitations/restrictions are there before making a
 release? For example, is there an explicit vetting process, or perhaps certain time windows when a
-release shouldn't be made?
+release shouldn't be made? -->
 
 ### Bump the version
 
@@ -117,13 +121,13 @@ This will:
 * Make a copy of `docs/index.html` and name it `docs/404.html` (for some reason the angular instructions say to do this)
 * Take the current build of `/docs` from the current branch and push it up to the remote `gh-pages` branch were it will be served
 
-After a few minutes, you will see the changes at the GitHub-hosted site https://swxtrec.github.io/vector.
+After a few minutes, you will see the changes at the GitHub-hosted site https://swxtrec.github.io/msis.
 
 You can run this script from any branch, but the site should reflect the content of the current master branch.
 
-## FAQs and Help
+<!-- ## FAQs and Help
 
-### VECTOR-specific common issues, gotchas
+### MSIS-specific common issues, gotchas
 
 Any kind of project-specific issues that would pop up goes here, as well as any quirks or
 inconsistencies within the project (e.g. hacks, workarounds, "I don't know why this works but....")
@@ -131,4 +135,4 @@ inconsistencies within the project (e.g. hacks, workarounds, "I don't know why t
 ## External Resources
 
 Useful documentation that isn't ours (for example, in LaTiS, maybe links to Scala documentation, or
-higher level topics like RDB and Data Model articles/resources)
+higher level topics like RDB and Data Model articles/resources) -->

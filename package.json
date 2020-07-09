@@ -1,11 +1,11 @@
 {
-  "name": "vector",
+  "name": "msis",
   "version": "0.4.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:pages": "ng build --prod --output-path docs --base-href=/vector/",
+    "build:pages": "ng build --prod --output-path docs --base-href=/msis/",
     "build:prod": "ng build --prod",
     "deploy": "npm run build:pages && cp docs/index.html docs/404.html && gh-pages -d docs",
     "test": "ng test",
