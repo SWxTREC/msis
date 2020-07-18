@@ -34,7 +34,7 @@ TK -->
 
 This is the frontend code that sets the parameters to run the MSIS model in AWS.
 
-A Flask backend has been set up to create an API that receives GET requests with the model parameters and returns a GET request with the result.
+A serverless backend has been set up to create an API that receives POST requests with the model parameters and returns a POST response with the results.
 
 ## Running MSIS Locally
 
