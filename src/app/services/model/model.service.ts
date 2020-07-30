@@ -10,22 +10,8 @@ export class ModelService {
 
     constructor(private http: HttpClient) { }
 
-    submitSinglePointRequest( payload: any, id?: string ) {
-        const url = id ? '/singlepoint/' + id : '/singlepoint';
-        return this.http.post<any>( environment.msisApi + url , payload);
+    submitRequest( payload: any, id?: string ) {
+        return this.http.post<any>( environment.msisApi , payload);
     }
 
-    submitGeometryFile( name: string, file?: any ) {
-        if ( file ) {
-            const formData = new FormData();
-            formData.append('file', file);
-            return this.http.post<any>( environment.msisApi + '/geometry', formData );
-        } else {
-            return this.http.post<any>( environment.msisApi + '/geometry/' + name, {});
-        }
-    }
-
-    getImage( id: string ) {
-        return this.http.get<any>( environment.msisApi + '/image/' + id, { responseType: 'blob' as 'json' } );
-    }
 }
