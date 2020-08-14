@@ -8,8 +8,8 @@ export const routes: Routes = [
         path: 'docs',
         loadChildren: () => import( './containers/docs/docs.module').then( m => m.DocsModule )
     }, {
-        path: 'calculator',
-        loadChildren: () => import( './containers/calculator/calculator.module').then( m => m.CalculatorModule )
+        path: 'visualizer',
+        loadChildren: () => import( './containers/visualizer/visualizer.module').then( m => m.VisualizerModule )
     }, {
         path: '**',
         redirectTo: ''
