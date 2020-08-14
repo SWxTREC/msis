@@ -30,13 +30,13 @@ export class VisualizerComponent implements OnInit {
     invalidFieldMessage: string;
     invalidFields: string[];
     modelForm = new FormGroup({
-        date: new FormControl((new Date()).toISOString(), [ Validators.required ]),
-        F107: new FormControl(0, [ Validators.required ]),
-        F107a: new FormControl(0, [ Validators.required ]),
-        ap: new FormControl(0, [ Validators.required ])
+        date: new FormControl((new Date()).toISOString(), [ Validators.required, Validators.min(0) ]),
+        F107: new FormControl(0, [ Validators.required, Validators.min(0) ]),
+        F107a: new FormControl(0, [ Validators.required, Validators.min(0) ]),
+        ap: new FormControl(0, [ Validators.required, Validators.min(0) ])
     });
     surfaceForm = new FormGroup({
-        altitude: new FormControl(200, [ Validators.min(0), Validators.max(500) ])
+        altitude: new FormControl(200, [ Validators.min(0), Validators.max(1000) ])
     });
     altitudeForm = new FormGroup({
         latitude: new FormControl(0, [ Validators.min(-90), Validators.max(90) ]),
