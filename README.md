@@ -16,7 +16,7 @@ This is a frontend for interacting with the MSIS model.
 
 * [SWT](http://mods-jira.lasp.colorado.edu:8080/browse/SWT/): Main project for the
 	Space Weather Testbed codebase.
-* [MSIS Website](https://jira.lasp.colorado.edu/browse/SWT-65): Epic for MSIS calculator
+* [MSIS Website](https://jira.lasp.colorado.edu/browse/SWT-65): Epic for MSIS visualizer
 
 ## Related Projects
 

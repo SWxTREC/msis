@@ -4,17 +4,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MaterialModule } from '../../modules';
 
-import { CalculatorRoutingModule } from './calculator-routing.module';
-import { CalculatorComponent } from './calculator.container';
+import { VisualizerRoutingModule } from './visualizer-routing.module';
+import { VisualizerComponent } from './visualizer.container';
 
 
 @NgModule({
     imports: [
         CommonModule,
         MaterialModule,
-        CalculatorRoutingModule,
+        VisualizerRoutingModule,
         ReactiveFormsModule
     ],
-    declarations: [ CalculatorComponent ]
+    declarations: [ VisualizerComponent ]
 })
-export class CalculatorModule { }
+export class VisualizerModule { }

@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CalculatorComponent } from './calculator.container';
+import { VisualizerComponent } from './visualizer.container';
 
 
 const routes: Routes = [
     {
         path: '',
-        component: CalculatorComponent
+        component: VisualizerComponent
     }
 ];
 
@@ -15,4 +15,4 @@ const routes: Routes = [
     imports: [ RouterModule.forChild(routes) ],
     exports: [ RouterModule ]
 })
-export class CalculatorRoutingModule { }
+export class VisualizerRoutingModule { }

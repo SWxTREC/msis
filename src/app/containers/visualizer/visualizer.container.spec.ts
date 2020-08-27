@@ -4,15 +4,15 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from 'src/app/modules';
 
-import { CalculatorComponent } from './calculator.container';
+import { VisualizerComponent } from './visualizer.container';
 
-describe('CalculatorComponent', () => {
-    let component: CalculatorComponent;
-    let fixture: ComponentFixture<CalculatorComponent>;
+describe('VisualizerComponent', () => {
+    let component: VisualizerComponent;
+    let fixture: ComponentFixture<VisualizerComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ CalculatorComponent ],
+            declarations: [ VisualizerComponent ],
             imports: [
                 BrowserAnimationsModule,
                 HttpClientModule,
@@ -24,7 +24,7 @@ describe('CalculatorComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(CalculatorComponent);
+        fixture = TestBed.createComponent(VisualizerComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
