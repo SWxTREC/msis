@@ -5,7 +5,6 @@ import { version } from '../../package.json';
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    // TODO: replace this with actual url, this is for when running the flask app locally
     msisApi: 'https://uqw5ak3cjh.execute-api.us-east-1.amazonaws.com/Prod/msis2',
     production: false,
     version: version
