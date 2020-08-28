@@ -68,6 +68,13 @@ export class VisualizerComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+            this.surfaceData = cloneDeep(results);
+        });
+        this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+            this.altitudeData = cloneDeep(results);
+        });
+
         this.modelForm.valueChanges.pipe(
             debounceTime(300)
         ).subscribe( () => {
