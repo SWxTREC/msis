@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { _getOptionScrollPosition } from '@angular/material/core';
 import { IAltitudeParameters, ISurfaceParameters } from 'src/app/models';
 import { environment } from 'src/environments/environment';
 
