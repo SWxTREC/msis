@@ -1,17 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { IAltitudeParameters, ISurfaceParameters } from 'src/app/models';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ModelService {
-    data: {};
-
     constructor(private http: HttpClient) { }
 
-    submitRequest( payload: any, id?: string ) {
-        return this.http.post<any>( environment.msisApi , payload);
+    submitSurfaceRequest( params: ISurfaceParameters ) {
+        return this.http.get(environment.msisApi + '/surface', { params: <any>params } );
     }
 
+    submitAltitudeRequest( params: IAltitudeParameters ) {
+        return this.http.get<any>(environment.msisApi + '/altitude', { params: <any>params });
+    }
 }
