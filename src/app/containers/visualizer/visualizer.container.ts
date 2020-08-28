@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
-import { IModelParameters } from 'src/app/models';
+import { cloneDeep } from 'lodash';
+import * as moment from 'moment';
+import { debounceTime } from 'rxjs/operators';
+import { IAltitudeData, IAltitudeParameters, ISurfaceData, ISurfaceParameters } from 'src/app/models';
 import { ModelService } from 'src/app/services';
 
 export const DATEPICKER_FORMAT = {
@@ -30,10 +33,12 @@ export class VisualizerComponent implements OnInit {
     invalidFieldMessage: string;
     invalidFields: string[];
     modelForm = new FormGroup({
-        date: new FormControl((new Date()).toISOString(), [ Validators.required, Validators.min(0) ]),
-        F107: new FormControl(0, [ Validators.required, Validators.min(0) ]),
-        F107a: new FormControl(0, [ Validators.required, Validators.min(0) ]),
-        ap: new FormControl(0, [ Validators.required, Validators.min(0) ])
+        date: new FormControl(moment.utc(), [ Validators.required, Validators.min(0) ]),
+        // default to penticton around 100.1 for now
+        f107: new FormControl(100.1, [ Validators.required, Validators.min(0) ]),
+        f107a: new FormControl(99.8, [ Validators.required, Validators.min(0) ]),
+        // default to ap of 48 for now
+        ap: new FormControl(48, [ Validators.required, Validators.min(0) ])
     });
     surfaceForm = new FormGroup({
         altitude: new FormControl(200, [ Validators.min(0), Validators.max(1000) ])
@@ -42,38 +47,75 @@ export class VisualizerComponent implements OnInit {
         latitude: new FormControl(0, [ Validators.min(-90), Validators.max(90) ]),
         longitude: new FormControl(0, [ Validators.min(-180), Validators.max(360) ])
     });
+    surfaceData: ISurfaceData;
+    altitudeData: IAltitudeData;
     variables = [
-        'Mass',
-        'He',
-        'O',
-        'N2',
-        '02',
+        'AnomO',
         'Ar',
         'H',
+        'He',
+        'Mass',
         'N',
-        'Oanom',
-        'Temp'
+        'N2',
+        'N0',
+        'O',
+        'O2',
+        'Temperature'
     ];
-    payload: IModelParameters;
-    results: {};
 
     constructor(
         private modelService: ModelService
     ) {}
 
     ngOnInit() {
-        this.modelForm.valueChanges.subscribe( () => {
-            console.log('modelForm', this.modelForm);
+        this.modelForm.valueChanges.pipe(
+            debounceTime(300)
+        ).subscribe( () => {
+            this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+                this.surfaceData = cloneDeep(results);
+            });
+            this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+                this.altitudeData = cloneDeep(results);
+            });
         });
-        this.surfaceForm.valueChanges.subscribe( () => {
-            console.log('surfaceForm', this.surfaceForm);
+        this.surfaceForm.valueChanges.pipe(
+            debounceTime(300)
+        ).subscribe( () => {
+            this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+                this.surfaceData = cloneDeep(results);
+            });
         });
-        this.altitudeForm.valueChanges.subscribe( () => {
-            console.log('altitudeForm', this.altitudeForm);
+        this.altitudeForm.valueChanges.pipe(
+            debounceTime(300)
+        ).subscribe( () => {
+            this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+                this.altitudeData = cloneDeep(results);
+            });
         });
     }
 
-    getValidationMessage( control: string ) {
+    getAltitudeParams(): IAltitudeParameters {
+        return {
+            ap: this.modelForm.value.ap,
+            date: this.modelForm.value.date.format('YYYY-MM-DDTHH:mm'),
+            f107: this.modelForm.value.f107,
+            f107a: this.modelForm.value.f107a,
+            latitude: this.altitudeForm.value.latitude,
+            longitude: this.altitudeForm.value.longitude
+        };
+    }
+
+    getSurfaceParams(): ISurfaceParameters {
+        return {
+            altitude: this.surfaceForm.value.altitude,
+            ap: this.modelForm.value.ap,
+            date: this.modelForm.value.date.format('YYYY-MM-DDTHH:mm'),
+            f107: this.modelForm.value.f107,
+            f107a: this.modelForm.value.f107a
+        };
+    }
+
+    getValidationMessage( control: string ): string {
         console.log('control', control);
         switch (control) {
         case 'date':
@@ -96,18 +138,6 @@ export class VisualizerComponent implements OnInit {
                 return 'must be between -180 and 360';
             }
             break;
-        }
-    }
-
-    onSubmit(): void {
-        if ( this.modelForm.valid ) {
-            // create url for request
-            const url = '';
-            this.modelService.submitRequest( url ).subscribe( data => {
-                // this will only work for shallow objects from the api
-                const results = Object.assign({}, data);
-                this.results = results;
-            });
         }
     }
 }
