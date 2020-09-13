@@ -35,9 +35,7 @@
             </mat-form-field>
         </div>
         <div class="viz__graphic">
-            <div *ngFor="let item of surfaceData | keyvalue">
-                <small>{{ item.key }}: [{{ item.value[0] }}...] ({{ item.value.length }})</small>
-            </div>
+            <div id="surface"></div>
         </div>
         <mat-toolbar color="primary">
             <mat-toolbar-row  class="viz__variables">
@@ -64,9 +62,7 @@
             </mat-form-field>
         </div>
         <div class="viz__graphic">
-            <div *ngFor="let item of altitudeData | keyvalue">
-                <small>{{ item.key }}: [{{ item.value[0] }}...] ({{ item.value.length }})</small>
-            </div>
+            <div id="altitude"></div>
         </div>
         <div class="viz__header">
             <mat-slide-toggle
