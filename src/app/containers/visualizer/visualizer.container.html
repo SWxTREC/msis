@@ -35,6 +35,7 @@
             </mat-form-field>
         </div>
         <div class="viz__graphic">
+            <lasp-swt-surface-plot *ngIf="surfacePoints" [data]="surfacePoints" [variable]="variable"></lasp-swt-surface-plot>
             <div id="surface"></div>
         </div>
         <mat-toolbar color="primary">
@@ -62,6 +63,7 @@
             </mat-form-field>
         </div>
         <div class="viz__graphic">
+            <lasp-swt-altitude-plot></lasp-swt-altitude-plot>
             <div id="altitude"></div>
         </div>
         <div class="viz__header">
