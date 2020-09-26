@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { IAltitudeData } from 'src/app/models';
 
 @Component({
     selector: 'lasp-swt-altitude-plot',
@@ -7,148 +8,163 @@ import * as d3 from 'd3';
     styleUrls: [ './swt-altitude-plot.component.scss' ]
 })
 export class SwtAltitudePlotComponent implements OnInit {
+    @Input() altitude: number;
+    @Input() data: IAltitudeData;
+    @Input() variable: string;
+    @Input() variables: string[] = [];
 
     altitudeXscale: d3.ScaleLogarithmic<number, number> | d3.AxisScale<d3.AxisDomain>;
     altitudeYscale: d3.ScaleLinear<number, number> | d3.AxisScale<d3.AxisDomain>;
-    margin = 10;
-    height = 525 - (this.margin * 2);
-    width = 270 - (this.margin * 2);
-    hostElement; // Native element hosting the SVG container
-    svg; // Top level SVG element
-    g; // SVG Group element
-
+    colorArray: string[];
+    filteredVariables: string[];
+    g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
+    hostElement: HTMLElement; // Native element hosting the SVG container
+    margin: { top: number, right: number, bottom: number, left: number} = {
+        top: 20,
+        right: 0,
+        bottom: 35,
+        left: 35
+    };
+    height = 525 - (this.margin.top + this.margin.bottom);
+    width = 270 - (this.margin.left + this.margin.right);
+    svg: d3.Selection<SVGElement, {}, HTMLElement, any>; // Top level SVG element
+    xDomain: [number, number] = [ 1e-10, 1e20 ];
+    xScale: d3.ScaleLogarithmic<number, number>;
+    yScale: d3.ScaleLinear<number, number>;
 
     constructor( private elRef: ElementRef ) {
         this.hostElement = this.elRef.nativeElement;
     }
 
     ngOnInit(): void {
+        this.filteredVariables = [ ...this.variables ];
         this.createAltitudeSvg();
     }
 
     addGraphicsElement() {
         this.g = this.svg.append('g')
-            .attr('transform', 'translate( ' + this.margin + ',' + this.margin + ')');
-        this.g.append('rect')
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr('width', this.width )
-                .attr('height', this.height )
-                .attr('fill', 'none')
-                .attr('stroke', 'teal');
+            .attr('transform', 'translate( ' + this.margin.left + ',' + this.margin.top + ')');
     }
 
     createAltitudeSvg(): void {
         this.removeExistingChartFromParent();
         this.setChartDimensions();
+        this.setColors();
         this.addGraphicsElement();
-        //
-        //
-        // // Create the surface SVG first
-        // const svg = d3.select('#altitude')
-        // .append('svg')
-        //     .attr('width', this.width + 2 * this.margin)
-        //     .attr('height', this.height + 2 * this.margin);
-        //
-        // // Set up the axes
-        this.altitudeXscale = d3.scaleLog()
-        .domain([ 1e6, 1e17 ])
-        .range([ this.margin, this.width ]);
-
-        this.altitudeYscale = d3.scaleLinear()
-        .domain([ 0, 1000 ])
-        .range([ this.height, this.margin ]);
-
-        // // const xAxis = g => g
-        // //     .attr('transform', `translate(0,${this.height})`)
-        // //     .call(d3.axisBottom(this.altitudeXscale).ticks(this.width / 80).tickSizeOuter(0))
-        // //     .call(g => g.select('.tick:last-of-type text').clone()
-        // //         .attr('y', 20)
-        // //         .attr('x', -10)
-        // //         .attr('text-anchor', 'start')
-        // //         .attr('font-weight', 'bold')
-        // //         .text('Density (N/m3)'));
-        //
-        // // const yAxis = g => g
-        // //     .attr('transform', `translate(${this.margin},0)`)
-        // //     .call(d3.axisLeft(this.altitudeYscale))
-        // //     .call(g => g.select('.tick:last-of-type text').clone()
-        // //         .attr('x', -30)
-        // //         .attr('y', -15)
-        // //         .attr('text-anchor', 'start')
-        // //         .attr('font-weight', 'bold')
-        // //         .text('Altitude (km)'));
-        //
-        // // svg.append('g')
-        // //     .call(xAxis);
-        // // svg.append('g')
-        // //     .call(yAxis);
-        //
-        // // save the object for later use
-        // // this.altitudeSvg = svg;
+        this.setXDomain(this.filteredVariables);
+        this.drawXAxis();
+        this.drawYAxis();
+        this.drawSurfaceLine();
+        this.drawAltitude();
+        this.drawLegend();
     }
 
-    drawAltitude(data: any) {
-        // // 10 distinct colors
-        // const altitudeColor = d3.scaleOrdinal(d3.schemeCategory10);
-        //
-        // // Set up the axes
-        // const xScale = this.altitudeXscale;
-        // const yScale = this.altitudeYscale;
-        //
-        // const line = d3.line()
-        //     .x(function(d) {
-        //         return xScale(d);
-        //     })
-        //     .y(function(d, i) {
-        //         return yScale(data['Altitude'][i]);
-        //     } );
-        //
-        // const svg = this.altitudeSvg;
-        // // make a horizontal surface line
-        // // hard coding the xScale values for now
-        // const surfaceHeight = this.surfaceForm.value.altitude;
-        // svg.append('line')
-        // .attr('class', 'surface-line')
-        // .attr('stroke', 'black')
-        // .attr('stroke-width', 2.5)
-        // .attr('x1', xScale(1e6))
-        // .attr('y1', yScale(surfaceHeight))
-        // .attr('x2', xScale(1e17))
-        // .attr('y2', yScale(surfaceHeight));
-        //
-        // // Temperature doesn't work well here. May need to make shared x-axes to handle
-        // // that and Mass variables since they are on totally different scales
-        // const variables = [ 'Mass', 'N2', 'O2', 'O', 'He', 'H', 'Ar', 'N', 'AnomO', 'NO' ];
-        // const variable = this.surfaceVariable;
-        // variables.forEach((d, i) => {
-        //     svg.append('path')
-        //         .datum(d)
-        //         .attr('id', d)
-        //         .attr('fill', 'none')
-        //         .attr('stroke-linejoin', 'round')
-        //         .attr('stroke-linecap', 'round')
-        //         .attr('stroke-width', d === variable ? 3 : 1) // thicker line for surface var
-        //         .style('stroke', altitudeColor(d)) // dynamic variable coloring
-        //         .attr('d', line(data[d]));
-        //
-        //     // Add the Legend
-        //     const space = 20;
-        //     svg.append('text')
-        //         .attr('y', (space * 2) + i * space) // spacing
-        //         .attr('x', 200)
-        //         .attr('class', 'legend')    // style the legend
-        //         .style('fill', altitudeColor(d)) // dynamic variable coloring
-        //         .on('click', function() {
-        //             // Update whether or not the elements are active
-        //             // d.active = d.active ? true : false;
-        //             // Determine if current line is visible
-        //             // Hide or show the elements
-        //             // d3.select('#' + d).style('opacity', d.active ? 1 : 0);
-        //             // d.active = d.active ? 0 : 1;
-        //         })
-        //         .text(d);
-        // });
+    drawAltitude() {
+        const getLine = d3.line()
+            .x((d) => {
+                return this.xScale(d as unknown as number);
+            })
+            .y((_d, i) => this.yScale(this.data['Altitude'][i]));
+        this.filteredVariables.forEach( d => {
+            if ( this.data[d] ) {
+                const color = this.colorArray[this.variables.indexOf(d)];
+                this.g.append('path')
+                .datum(d)
+                .attr('id', d)
+                .attr('fill', 'none')
+                .attr('stroke-linejoin', 'round')
+                .attr('stroke-linecap', 'round')
+                .attr('stroke-width', d === this.variable ? 3 : 1) // thicker line for surface var
+                .style('stroke', color) // dynamic variable coloring
+                .attr('d', getLine(this.data[d]));
+            }
+        });
+    }
+
+    drawLegend() {
+        // Add the Legend
+        const space = this.margin.top / 2;
+        this.g.append('rect')
+            .attr('x', this.width - 55)
+            .attr('y', -this.margin.top - 2)
+            // .attr('rx', 7)
+            .attr('width', 57)
+            .attr('height', (space) + this.variables.length * space * 1.5 )
+            .style('opacity', 0.8)
+            .style('stroke', 'silver')
+            .style('fill', 'white');
+
+        this.variables.forEach( (d, i) => {
+            const activeVariable: boolean = this.filteredVariables.includes(d);
+            this.g.append('text')
+                .attr('x', this.width - (space / 2))
+                .attr('y', i * space * 1.5 - (space / 2)) // spacing
+                .attr('text-anchor', 'end')
+                .attr('class', d === this.variable ? 'altitude__legend--active' : 'altitude__legend')    // style the legend
+                .style('fill', activeVariable ? this.colorArray[i] : 'silver' ) // dynamic variable coloring
+                .text(d === 'Temperature' ? 'Temp' : d)
+                .on('click', () => {
+                    console.log('click!', d);
+                    let newVariables: string[];
+                    const setVariables: Set<any> = new Set(this.filteredVariables);
+                    if ( setVariables.has(d) ) {
+                        setVariables.delete(d);
+                        newVariables = Array.from(setVariables);
+                    } else {
+                        setVariables.add(d);
+                        newVariables = Array.from(setVariables);
+                    }
+                    this.setXDomain(newVariables);
+                    console.log(newVariables, this.xDomain);
+                    this.filteredVariables = newVariables;
+                    this.createAltitudeSvg();
+                })
+                .append('svg:title')
+                    .text(`toggle`);
+        });
+
+    }
+
+    drawSurfaceLine() {
+        // make a horizontal surface line
+        this.g.append('line')
+            .attr('class', 'surface-line')
+            .attr('stroke', '#8987C5')
+            .attr('stroke-width', '3')
+            .style('stroke-dasharray', ('8,3'))
+            .attr('x1', this.xScale(this.xDomain[0]))
+            .attr('y1', this.yScale(this.altitude))
+            .attr('x2', this.xScale(this.xDomain[1]))
+            .attr('y2', this.yScale(this.altitude));
+    }
+
+    drawXAxis() {
+        this.xScale = d3.scaleLog()
+            .domain(this.xDomain)
+            .range([ 0, this.width ]);
+        this.g.append('g')
+            .attr('transform', `translate(0,${this.height})`)
+            .call(d3.axisBottom(this.xScale).ticks(this.width / 80).tickSizeOuter(0))
+            .call(g => g.select('.tick:last-of-type text').clone()
+                .attr('y', 20)
+                .attr('x', -10)
+                .attr('text-anchor', 'start')
+                .attr('font-weight', 'bold')
+                .text('Density (N/m3)'));
+    }
+
+    drawYAxis() {
+        this.yScale = d3.scaleLinear()
+            .domain([ 100, 1000 ])
+            .range([ this.height, 0 ]);
+        this.g.append('g')
+            .call(d3.axisLeft(this.yScale))
+            .call(g => g.select('.tick:last-of-type text').clone()
+                .attr('x', -30)
+                .attr('y', -15)
+                .attr('text-anchor', 'start')
+                .attr('font-weight', 'bold')
+                .text('Altitude (km)'));
     }
 
     removeExistingChartFromParent() {
@@ -160,19 +176,24 @@ export class SwtAltitudePlotComponent implements OnInit {
     }
 
     setChartDimensions() {
-        const viewBoxHeight = this.height + ( this.margin * 2 ) ;
-        const viewBoxWidth = this.width + ( this.margin * 2 );
+        const viewBoxHeight = this.height + ( this.margin.bottom + this.margin.top ) ;
+        const viewBoxWidth = this.width + ( this.margin.left + this.margin.right );
         this.svg = d3.select(this.hostElement).append('svg')
             .attr('width', '100%')
             .attr('height', '100%')
             .attr('viewBox', '0 0 ' + viewBoxWidth + ' ' + viewBoxHeight);
-        this.svg.append('rect')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', '100%')
-            .attr('height', '100%')
-            .attr('fill', 'none')
-            .attr('stroke', 'hotpink');
     }
 
+    setColors() {
+        // 10 distinct colors
+        const altitudeColor = d3.scaleOrdinal(d3.schemeCategory10);
+        this.colorArray = this.variables.map( d => altitudeColor(d) );
+    }
+
+    setXDomain( variables: string[] ) {
+        // make one long array of all the variable values
+        const allValues = variables.reduce( (aggregator: number[], variable: string) => aggregator.concat(this.data[variable]), []);
+        this.xDomain[0] = d3.min(allValues);
+        this.xDomain[1] = d3.max(allValues);
+    }
 }

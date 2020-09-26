@@ -58,7 +58,7 @@ export class VisualizerComponent implements OnInit {
         'Mass',
         'N',
         'N2',
-        'N0',
+        'NO',
         'O',
         'O2',
         'Temperature'
