@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges } from '@angular/core';
 import * as d3 from 'd3';
 import { IAltitudeData } from 'src/app/models';
 
@@ -7,7 +7,7 @@ import { IAltitudeData } from 'src/app/models';
     templateUrl: './swt-altitude-plot.component.html',
     styleUrls: [ './swt-altitude-plot.component.scss' ]
 })
-export class SwtAltitudePlotComponent implements OnInit {
+export class SwtAltitudePlotComponent implements OnChanges {
     @Input() altitude: number;
     @Input() data: IAltitudeData;
     @Input() variable: string;
@@ -36,12 +36,13 @@ export class SwtAltitudePlotComponent implements OnInit {
         this.hostElement = this.elRef.nativeElement;
     }
 
-    ngOnInit(): void {
+    ngOnChanges(): void {
         this.filteredVariables = [ ...this.variables ];
         this.createAltitudeSvg();
+
     }
 
-    addGraphicsElement() {
+    addGraphicsElement(): void {
         this.g = this.svg.append('g')
             .attr('transform', 'translate( ' + this.margin.left + ',' + this.margin.top + ')');
     }
@@ -59,7 +60,7 @@ export class SwtAltitudePlotComponent implements OnInit {
         this.drawLegend();
     }
 
-    drawAltitude() {
+    drawAltitude(): void {
         const getLine = d3.line()
             .x((d) => {
                 return this.xScale(d as unknown as number);
@@ -81,7 +82,7 @@ export class SwtAltitudePlotComponent implements OnInit {
         });
     }
 
-    drawLegend() {
+    drawLegend(): void {
         // Add the Legend
         const space = this.margin.top / 2;
         this.g.append('rect')
@@ -125,7 +126,7 @@ export class SwtAltitudePlotComponent implements OnInit {
 
     }
 
-    drawSurfaceLine() {
+    drawSurfaceLine(): void {
         // make a horizontal surface line
         this.g.append('line')
             .attr('class', 'surface-line')

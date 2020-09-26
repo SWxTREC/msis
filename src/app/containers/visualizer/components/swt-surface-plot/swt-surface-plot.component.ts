@@ -1,5 +1,6 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges } from '@angular/core';
 import * as d3 from 'd3';
+import { clamp } from 'lodash';
 import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
 
 @Component({
@@ -7,7 +8,7 @@ import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
     templateUrl: './swt-surface-plot.component.html',
     styleUrls: [ './swt-surface-plot.component.scss' ]
 })
-export class SwtSurfacePlotComponent implements OnInit {
+export class SwtSurfacePlotComponent implements OnChanges {
     @Input() data: ISurfaceData;
     @Input() latitude = 0;
     @Input() longitude = 0;
@@ -27,7 +28,7 @@ export class SwtSurfacePlotComponent implements OnInit {
         this.hostElement = this.elRef.nativeElement;
     }
 
-    ngOnInit(): void {
+    ngOnChanges() {
         this.createSurfaceSvg();
     }
 
@@ -103,18 +104,23 @@ export class SwtSurfacePlotComponent implements OnInit {
                         .attr('y', this.projection(coordinates)[1])
                         .attr('dx', '0.5rem')
                         .attr('dy', '-0.5rem')
-                        .text( `${coordinates[0].toFixed(0)}, ${coordinates[1].toFixed(0)}` );
+                        .text( `${longitude.toFixed(0)}, ${latitude.toFixed(0)}` );
                     tooltip.append('tspan')
                         .attr('x', this.projection(coordinates)[0])
                         .attr('y', this.projection(coordinates)[1])
                         .attr('dx', '0.5rem')
                         .attr('dy', '0.5rem')
-                        .text(() => `${this.variable}: ${value}`);
+                        .text(() => `${this.variable}: ${value.toExponential(3)}`);
                 });
         });
     }
 
     geoBoxFromPoint(lon: number, lat: number): d3.GeoPermissibleObjects {
+        const minLon = clamp(lon - 2.5, -180, 180);
+        const maxLon = clamp(lon + 2.5, -180, 180);
+        const minLat = clamp(lat - 2.5, -90, 90);
+        const maxLat = clamp(lat + 2.5, -90, 90);
+
         return {
             type: 'FeatureCollection',
             features: [
@@ -125,11 +131,11 @@ export class SwtSurfacePlotComponent implements OnInit {
                     },
                     geometry: {
                         type: 'Polygon',
-                        coordinates: [ [ [ lon - 2.5, lat - 2.5 ],
-                        [ lon - 2.5, lat + 2.5 ],
-                        [ lon + 2.5, lat + 2.5 ],
-                        [ lon + 2.5, lat - 2.5 ],
-                        [ lon - 2.5, lat - 2.5 ] ] ]
+                        coordinates: [ [ [ minLon, minLat ],
+                        [ minLon, maxLat ],
+                        [ maxLon, maxLat ],
+                        [ maxLon, minLat ],
+                        [ minLon, minLat ] ] ]
                     }
                 }
             ]
