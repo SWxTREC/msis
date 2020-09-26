@@ -10,8 +10,8 @@ export class SwtAltitudePlotComponent implements OnInit {
 
     altitudeXscale: d3.ScaleLogarithmic<number, number> | d3.AxisScale<d3.AxisDomain>;
     altitudeYscale: d3.ScaleLinear<number, number> | d3.AxisScale<d3.AxisDomain>;
-    margin = 40;
-    height = 600 - (this.margin * 2);
+    margin = 10;
+    height = 525 - (this.margin * 2);
     width = 270 - (this.margin * 2);
     hostElement; // Native element hosting the SVG container
     svg; // Top level SVG element
@@ -23,11 +23,25 @@ export class SwtAltitudePlotComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.createAltitudeSvg();
+    }
+
+    addGraphicsElement() {
+        this.g = this.svg.append('g')
+            .attr('transform', 'translate( ' + this.margin + ',' + this.margin + ')');
+        this.g.append('rect')
+                .attr('x', 0)
+                .attr('y', 0)
+                .attr('width', this.width )
+                .attr('height', this.height )
+                .attr('fill', 'none')
+                .attr('stroke', 'teal');
     }
 
     createAltitudeSvg(): void {
-        // this.removeExistingChartFromParent();
-        // this.setChartDimensions();
+        this.removeExistingChartFromParent();
+        this.setChartDimensions();
+        this.addGraphicsElement();
         //
         //
         // // Create the surface SVG first
@@ -37,14 +51,14 @@ export class SwtAltitudePlotComponent implements OnInit {
         //     .attr('height', this.height + 2 * this.margin);
         //
         // // Set up the axes
-        // this.altitudeXscale = d3.scaleLog()
-        // .domain([ 1e6, 1e17 ])
-        // .range([ this.margin, this.width ]);
-        //
-        // this.altitudeYscale = d3.scaleLinear()
-        // .domain([ 0, 1000 ])
-        // .range([ this.height, this.margin ]);
-        //
+        this.altitudeXscale = d3.scaleLog()
+        .domain([ 1e6, 1e17 ])
+        .range([ this.margin, this.width ]);
+
+        this.altitudeYscale = d3.scaleLinear()
+        .domain([ 0, 1000 ])
+        .range([ this.height, this.margin ]);
+
         // // const xAxis = g => g
         // //     .attr('transform', `translate(0,${this.height})`)
         // //     .call(d3.axisBottom(this.altitudeXscale).ticks(this.width / 80).tickSizeOuter(0))
@@ -146,13 +160,19 @@ export class SwtAltitudePlotComponent implements OnInit {
     }
 
     setChartDimensions() {
-        const viewBoxHeight = 100;
-        const viewBoxWidth = 200;
+        const viewBoxHeight = this.height + ( this.margin * 2 ) ;
+        const viewBoxWidth = this.width + ( this.margin * 2 );
         this.svg = d3.select(this.hostElement).append('svg')
             .attr('width', '100%')
             .attr('height', '100%')
             .attr('viewBox', '0 0 ' + viewBoxWidth + ' ' + viewBoxHeight);
-
+        this.svg.append('rect')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', '100%')
+            .attr('height', '100%')
+            .attr('fill', 'none')
+            .attr('stroke', 'hotpink');
     }
 
 }

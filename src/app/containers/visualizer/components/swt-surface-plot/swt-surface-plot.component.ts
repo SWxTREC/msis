@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-import { ISurfaceData } from 'src/app/models';
+import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
 
 @Component({
     selector: 'lasp-swt-surface-plot',
@@ -20,7 +20,8 @@ export class SwtSurfacePlotComponent implements OnInit {
     svg: d3.Selection<SVGElement, {}, HTMLElement, any>; // Top level SVG element
     g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
     surfaceColor: d3.ScaleSequential<string>;
-    path: d3.GeoPath<any, d3.GeoPermissibleObjects>;
+    pathFromProjection: d3.GeoPath<any, d3.GeoPermissibleObjects>;
+    projection: d3.GeoProjection;
 
     constructor( private elRef: ElementRef ) {
         this.hostElement = this.elRef.nativeElement;
@@ -30,74 +31,90 @@ export class SwtSurfacePlotComponent implements OnInit {
         this.createSurfaceSvg();
     }
 
+    addGraphicsElement() {
+        this.g = this.svg.append('g')
+            .attr('transform', 'translate( ' + this.margin + ',' + this.margin + ')');
+        this.g.append('rect')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', this.width )
+            .attr('height', this.height )
+            .attr('fill', 'none')
+            .attr('stroke', 'teal');
+    }
+
     createSurfaceSvg(): void {
         this.removeExistingChartFromParent();
         this.setChartDimensions();
         this.setColorScale();
+        this.setProjection();
         this.addGraphicsElement();
-        console.log('svg', this.svg, this.g, this.hostElement);
-
-
-        // // Create the surface SVG first
-        // const svg = d3.select('#surface')
-        // .append('svg')
-        // .attr('width', this.width + 2 * this.margin)
-        // .attr('height', this.height + 2 * this.margin);
-
-        // TODO: We might need to fix the width of this to maintain scale/translation?
-        const projection = d3.geoEqualEarth()
-        .scale(187)
-        .translate([ this.width / 2, this.height / 2 ]);
-        // .center([ 0, 0 ]);
-        this.path = d3.geoPath(projection);
-        // this.path = path;
-
-        this.g.append('path')
-            .attr('id', 'outline')
-            .attr('d', this.path({ type: 'Sphere' }))
-            .attr('fill', 'none')
-            .attr('stroke', 'black');
-
-        const land = d3.json(
-            'https://unpkg.com/visionscarto-world-atlas@0.0.6/world/110m_land.geojson'
-        ).then((data: any) => {
-            return this.g.append('g')
-                .append('path')
-                .attr('fill', 'none')
-                .attr('stroke', 'black')
-                .attr('stroke-linejoin', 'round')
-                .attr('d', this.path(data));
-        });
-        // save to the class variable for later use
-        // this.surfaceSvg = svg;
+        this.drawMap();
+        this.drawSurface(this.data);
+        this.drawAltitudeBox();
     }
 
-    drawSurface(data: any) {
-        // Draw the surface map
-        // const variable = this.surfaceVariable;
-        // const svg = this.surfaceSvg;
-        // const path = this.path;
-        // const polyFromPoint = this.polyFromPoint;
-        const poly = this.polyFromPoint( this.longitude, this.latitude);
-        data[this.variable].map(function(result: any, i: number) {
-            this.svg.append('path')
-                .attr('id', result['Longitude'])
-                .attr('fill', this.surfaceColor(result))
-                .style('opacity', 0.5)
-                .style('stroke-opacity', 0.5)
-                .attr('d', this.path(this.polyFromPoint(data['Longitude'][i],
-                    data['Latitude'][i])));
-        });
-
+    drawAltitudeBox() {
+        const geoBox: d3.GeoPermissibleObjects = this.geoBoxFromPoint( this.longitude, this.latitude);
         // draw a red box around the altitude profile location
-        this.svg.append('path')
+        this.g.append('path')
         .attr('id', 'altitude-box')
         .attr('fill', 'none')
         .attr('stroke', 'red')
-        .attr('d', this.path(poly as any));
+        .attr('d', this.pathFromProjection(geoBox));
     }
 
-    polyFromPoint(lon: number, lat: number) {
+    drawMap() {
+        const objectType: d3.GeoPermissibleObjects = { type: 'Sphere' };
+        this.g.append('path')
+            .attr('id', 'earth-outline')
+            .attr('d', this.pathFromProjection(objectType))
+            .attr('fill', 'none')
+            .attr('stroke', 'black');
+
+        d3.json( EARTH_MAP_URL ).then((data: any) => {
+            this.g.append('g')
+                .append('path')
+                .attr('id', 'earth-map')
+                .attr('fill', 'none')
+                .attr('stroke', 'black')
+                .attr('stroke-linejoin', 'round')
+                .attr('d', this.pathFromProjection(data));
+        });
+    }
+
+    drawSurface(data: any) {
+        const tooltip = this.g.append('text')
+            .attr('class', 'surface__tooltip');
+        data[this.variable].map((value: number, i: number) => {
+            const latitude: number = data.Latitude[i];
+            const longitude: number = data.Longitude[i];
+            const coordinates: [number, number] = [ longitude, latitude ];
+            const geoBox: d3.GeoPermissibleObjects = this.geoBoxFromPoint(longitude, latitude);
+            this.g.append('path')
+                .attr('class', 'surface__cell')
+                .attr('fill', this.surfaceColor(value))
+                .style('opacity', 0.5)
+                .style('stroke-opacity', 0.5)
+                .attr('d', this.pathFromProjection(geoBox))
+                .on('mouseover', () => {
+                    tooltip
+                        .attr('x', this.projection(coordinates)[0])
+                        .attr('y', this.projection(coordinates)[1])
+                        .attr('dx', '0.5rem')
+                        .attr('dy', '-0.5rem')
+                        .text( `${coordinates[0].toFixed(0)}, ${coordinates[1].toFixed(0)}` );
+                    tooltip.append('tspan')
+                        .attr('x', this.projection(coordinates)[0])
+                        .attr('y', this.projection(coordinates)[1])
+                        .attr('dx', '0.5rem')
+                        .attr('dy', '0.5rem')
+                        .text(() => `${this.variable}: ${value}`);
+                });
+        });
+    }
+
+    geoBoxFromPoint(lon: number, lat: number): d3.GeoPermissibleObjects {
         return {
             type: 'FeatureCollection',
             features: [
@@ -117,18 +134,6 @@ export class SwtSurfacePlotComponent implements OnInit {
                 }
             ]
         };
-    }
-
-    addGraphicsElement() {
-        this.g = this.svg.append('g')
-            .attr('transform', 'translate( ' + this.margin + ',' + this.margin + ')');
-        this.g.append('rect')
-                .attr('x', 0)
-                .attr('y', 0)
-                .attr('width', this.width )
-                .attr('height', this.height )
-                .attr('fill', 'none')
-                .attr('stroke', 'teal');
     }
 
     removeExistingChartFromParent() {
@@ -156,13 +161,14 @@ export class SwtSurfacePlotComponent implements OnInit {
     }
 
     setColorScale() {
-
-        // this.colorScale = d3.scaleOrdinal(d3.schemeCategory10);
-        // Below is an example of using custom colors
-        // this.colorScale = d3.scaleOrdinal().domain(["0","1","2","3"]).range(['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728']);
         this.surfaceColor = d3.scaleSequential(d3.interpolatePlasma)
-        .domain([ d3.min<number>(this.data[this.variable]), d3.max<number>(this.data[this.variable]) ]);
+            .domain([ d3.min<number>(this.data[this.variable]), d3.max<number>(this.data[this.variable]) ]);
     }
 
-
+    setProjection() {
+        this.projection = d3.geoEqualEarth()
+            .scale(187)
+            .translate([ this.width / 2, this.height / 2 ]);
+        this.pathFromProjection = d3.geoPath(this.projection);
+    }
 }
