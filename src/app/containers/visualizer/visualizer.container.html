@@ -29,7 +29,7 @@
         <div class="viz__header">
             <mat-form-field floatLabel="always" class="viz__field">
                 <mat-label>Altitude of surface (km)</mat-label>
-                <input matInput type="number" formControlName="altitude">
+                <input matInput type="number" step="100" min="100" max="1000" formControlName="altitude">
                 <mat-hint></mat-hint>
                 <mat-error *ngIf="surfaceForm.controls.altitude.invalid">{{getValidationMessage('altitude')}}</mat-error>
             </mat-form-field>
@@ -61,13 +61,13 @@
         <div class="viz__header">
             <mat-form-field floatLabel="always" class="viz__field viz__field--small">
                 <mat-label>Latitude (deg)</mat-label>
-                <input matInput type="number" formControlName="latitude">
+                <input matInput type="number" step="5" max="90" min="-90" formControlName="latitude">
                 <mat-hint></mat-hint>
                 <mat-error *ngIf="altitudeForm.controls.latitude.invalid">{{getValidationMessage('latitude')}}</mat-error>
             </mat-form-field>
             <mat-form-field floatLabel="always" class="viz__field  viz__field--small">
                 <mat-label>Longitude (deg)</mat-label>
-                <input matInput type="number" formControlName="longitude">
+                <input matInput type="number" step="5" max="180" min="-180" formControlName="longitude">
                 <mat-hint></mat-hint>
                 <mat-error *ngIf="altitudeForm.controls.longitude.invalid">{{getValidationMessage('longitude')}}</mat-error>
             </mat-form-field>
