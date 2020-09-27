@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
-import * as d3 from 'd3';
 import { cloneDeep } from 'lodash';
 import * as moment from 'moment';
 import { debounceTime } from 'rxjs/operators';
