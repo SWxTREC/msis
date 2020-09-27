@@ -39,7 +39,6 @@ export class SwtAltitudePlotComponent implements OnChanges {
     ngOnChanges(): void {
         this.filteredVariables = [ ...this.variables ];
         this.createAltitudeSvg();
-
     }
 
     addGraphicsElement(): void {
