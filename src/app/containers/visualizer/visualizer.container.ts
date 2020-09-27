@@ -48,8 +48,9 @@ export class VisualizerComponent implements OnInit {
         latitude: new FormControl(0, [ Validators.min(-90), Validators.max(90) ]),
         longitude: new FormControl(0, [ Validators.min(-180), Validators.max(360) ])
     });
-    surfaceData: ISurfaceData;
-    altitudeData: IAltitudeData;
+    variableForm = new FormControl('H');
+    surfacePoints: ISurfaceData;
+    altitudePoints: IAltitudeData;
     variables = [
         'AnomO',
         'Ar',
@@ -63,81 +64,46 @@ export class VisualizerComponent implements OnInit {
         'O2',
         'Temperature'
     ];
-    surfacePoints: any;
-    altitudePoints: any;
     surfaceVariable = 'H';
     surfaceSvg: ISurfaceData;
     altitudeSvg: IAltitudeData;
-    variable = 'H';
-    // path;
-    // TODO: Make these responsive or put a few breakpoints for good sizes in
-    // margin = 40;
-    // surfaceWidth = 800 - (this.margin * 2);
-    // surfaceHeight = 600 - (this.margin * 2);
 
     constructor(
         private modelService: ModelService
-    ) {
-        const surfacePointsUrl =
-            `https://gist.githubusercontent.com/greglucas
-            /c00879a8463fa1a931caca2a5bc4b713/raw/a2e789985ad14bd5b3dc8e090914884a58b82ff5/surface_points.json`;
-        d3.json(surfacePointsUrl).then( data =>  {
-            console.log('surfacePoints', data);
-            this.surfacePoints = data;
-        });
-        const altitudePointsUrl =
-            `https://gist.githubusercontent.com/greglucas
-            /c00879a8463fa1a931caca2a5bc4b713/raw/a2e789985ad14bd5b3dc8e090914884a58b82ff5/altitude_test.json`;
-        d3.json(altitudePointsUrl).then( data =>  {
-            console.log('altitudePoints', data);
-            this.altitudePoints = data;
-        });
-    }
+    ) {}
 
     ngOnInit() {
-        // create the SVGs and draw the initial default plots
-        // this.createSurfaceSvg();
-        // this.createAltitudeSvg();
-        // Moving onto the actual data now
-        // const _this = this;
-        // this.surfacePoints.then(function(data) {
-        //     return _this.drawSurface(data);
-        // });
-        // this.altitudePoints.then(function(data) {
-        //     return _this.drawAltitude(data);
-        // });
+        this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+            this.surfacePoints = cloneDeep(results);
+        });
+        this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+            this.altitudePoints = cloneDeep(results);
+        });
 
-        // this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
-        //     this.surfaceData = cloneDeep(results);
-        // });
-        // this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
-        //     this.altitudeData = cloneDeep(results);
-        // });
-
-        // this.modelForm.valueChanges.pipe(
-        //     debounceTime(300)
-        // ).subscribe( () => {
-        //     this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
-        //         this.surfaceData = cloneDeep(results);
-        //     });
-        //     this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
-        //         this.altitudeData = cloneDeep(results);
-        //     });
-        // });
-        // this.surfaceForm.valueChanges.pipe(
-        //     debounceTime(300)
-        // ).subscribe( () => {
-        //     this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
-        //         this.surfaceData = cloneDeep(results);
-        //     });
-        // });
-        // this.altitudeForm.valueChanges.pipe(
-        //     debounceTime(300)
-        // ).subscribe( () => {
-        //     this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
-        //         this.altitudeData = cloneDeep(results);
-        //     });
-        // });
+        this.modelForm.valueChanges.pipe(
+            debounceTime(300)
+        ).subscribe( () => {
+            this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+                this.surfacePoints = cloneDeep(results);
+            });
+            this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+                this.altitudePoints = cloneDeep(results);
+            });
+        });
+        this.surfaceForm.valueChanges.pipe(
+            debounceTime(300)
+        ).subscribe( () => {
+            this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+                this.surfacePoints = cloneDeep(results);
+            });
+        });
+        this.altitudeForm.valueChanges.pipe(
+            debounceTime(300)
+        ).subscribe( () => {
+            this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+                this.altitudePoints = cloneDeep(results);
+            });
+        });
     }
 
     getAltitudeParams(): IAltitudeParameters {

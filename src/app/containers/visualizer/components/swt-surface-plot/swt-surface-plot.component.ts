@@ -12,7 +12,7 @@ export class SwtSurfacePlotComponent implements OnChanges {
     @Input() data: ISurfaceData;
     @Input() latitude = 0;
     @Input() longitude = 0;
-    @Input() variable = 'H';
+    @Input() variable: string;
 
     margin = 40;
     width = 1000 - (this.margin * 2);
@@ -35,13 +35,6 @@ export class SwtSurfacePlotComponent implements OnChanges {
     addGraphicsElement() {
         this.g = this.svg.append('g')
             .attr('transform', 'translate( ' + this.margin + ',' + this.margin + ')');
-        this.g.append('rect')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', this.width )
-            .attr('height', this.height )
-            .attr('fill', 'none')
-            .attr('stroke', 'teal');
     }
 
     createSurfaceSvg(): void {
@@ -157,13 +150,6 @@ export class SwtSurfacePlotComponent implements OnChanges {
             .attr('width', '100%')
             .attr('height', '100%')
             .attr('viewBox', '0 0 ' + viewBoxWidth + ' ' + viewBoxHeight);
-        this.svg.append('rect')
-            .attr('x', 0)
-            .attr('y', 0)
-            .attr('width', '100%')
-            .attr('height', '100%')
-            .attr('fill', 'none')
-            .attr('stroke', 'hotpink');
     }
 
     setColorScale() {

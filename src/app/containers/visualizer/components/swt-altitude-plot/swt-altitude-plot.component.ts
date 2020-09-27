@@ -105,7 +105,6 @@ export class SwtAltitudePlotComponent implements OnChanges {
                 .style('fill', activeVariable ? this.colorArray[i] : 'silver' ) // dynamic variable coloring
                 .text(d === 'Temperature' ? 'Temp' : d)
                 .on('click', () => {
-                    console.log('click!', d);
                     let newVariables: string[];
                     const setVariables: Set<any> = new Set(this.filteredVariables);
                     if ( setVariables.has(d) ) {
@@ -116,7 +115,6 @@ export class SwtAltitudePlotComponent implements OnChanges {
                         newVariables = Array.from(setVariables);
                     }
                     this.setXDomain(newVariables);
-                    console.log(newVariables, this.xDomain);
                     this.filteredVariables = newVariables;
                     this.createAltitudeSvg();
                 })

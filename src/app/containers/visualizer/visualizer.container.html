@@ -38,7 +38,7 @@
             <lasp-swt-surface-plot
                 *ngIf="surfacePoints"
                 [data]="surfacePoints"
-                [variable]="variable"
+                [variable]="variableForm.value"
                 [latitude]="altitudeForm.value.latitude"
                 [longitude]="altitudeForm.value.longitude"
                 >
@@ -48,8 +48,11 @@
         <mat-toolbar color="primary">
             <mat-toolbar-row  class="viz__variables">
                 <span class="viz__group-label">Total</span>
-                <mat-button-toggle-group>
-                    <mat-button-toggle *ngFor="let variable of variables" [value]="variable">{{ variable }}</mat-button-toggle>
+                <mat-button-toggle-group [formControl]="variableForm">
+                    <mat-button-toggle
+                        *ngFor="let variable of variables"
+                        [value]="variable"
+                    >{{ variable }}</mat-button-toggle>
                 </mat-button-toggle-group>
             </mat-toolbar-row>
         </mat-toolbar>
@@ -74,7 +77,7 @@
                 *ngIf="altitudePoints"
                 [data]="altitudePoints"
                 [altitude]="surfaceForm.value.altitude"
-                [variable]="variable"
+                [variable]="variableForm.value"
                 [variables]="variables"
                 >
             </lasp-swt-altitude-plot>
