@@ -104,7 +104,11 @@ export class SwtSurfacePlotComponent implements OnChanges {
                         .attr('y', this.projection(coordinates)[1])
                         .attr('dx', '0.5rem')
                         .attr('dy', '0.5rem')
-                        .text(() => `${this.variable}: ${value.toExponential(3)}`);
+                        .text(() => `${this.variable}: ${value.toExponential(3)} m`)
+                        .append('tspan')
+                            .attr('baseline-shift', 'super')
+                            .attr('font-size', '70%')
+                            .text('-3');
                 })
                 .on('click', () => {
                     this.changeLocation.emit([ longitude, latitude ]);
