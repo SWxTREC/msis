@@ -50,8 +50,10 @@ export class SwtAltitudePlotComponent implements OnChanges {
         this.removeExistingChartFromParent();
         this.setChartDimensions();
         this.setColors();
-        this.addGraphicsElement();
         this.setXDomain(this.filteredVariables);
+        this.setXScale();
+        this.setYScale();
+        this.addGraphicsElement();
         this.drawXAxis();
         this.drawYAxis();
         this.drawSurfaceLine();
@@ -61,22 +63,21 @@ export class SwtAltitudePlotComponent implements OnChanges {
 
     drawAltitude(): void {
         const getLine = d3.line()
-            .x((d) => {
-                return this.xScale(d as unknown as number);
-            })
-            .y((_d, i) => this.yScale(this.data['Altitude'][i]));
+            .defined(d => d !== null)
+            .x((d) => this.xScale(+d))
+            .y((d, i) => this.yScale(this.data['Altitude'][i]));
         this.filteredVariables.forEach( d => {
+            const color = this.colorArray[this.variables.indexOf(d)];
             if ( this.data[d] ) {
-                const color = this.colorArray[this.variables.indexOf(d)];
                 this.g.append('path')
-                .datum(d)
-                .attr('id', d)
-                .attr('fill', 'none')
-                .attr('stroke-linejoin', 'round')
-                .attr('stroke-linecap', 'round')
-                .attr('stroke-width', d === this.variable ? 3 : 1) // thicker line for surface var
-                .style('stroke', color) // dynamic variable coloring
-                .attr('d', getLine(this.data[d]));
+                    .datum(this.data[d])
+                    .attr('id', d)
+                    .attr('fill', 'none')
+                    .attr('stroke-linejoin', 'round')
+                    .attr('stroke-linecap', 'round')
+                    .attr('stroke-width', d === this.variable ? 3 : 1) // thicker line for surface var
+                    .style('stroke', color) // dynamic variable coloring
+                    .attr('d', getLine);
             }
         });
     }
@@ -137,24 +138,29 @@ export class SwtAltitudePlotComponent implements OnChanges {
     }
 
     drawXAxis() {
-        this.xScale = d3.scaleLog()
-            .domain(this.xDomain)
-            .range([ 0, this.width ]);
-        this.g.append('g')
+        const xAxis = this.g.append('g')
             .attr('transform', `translate(0,${this.height})`)
-            .call(d3.axisBottom(this.xScale).ticks(this.width / 80).tickSizeOuter(0))
-            .call(g => g.select('.tick:last-of-type text').clone()
-                .attr('y', 20)
-                .attr('x', -10)
-                .attr('text-anchor', 'start')
-                .attr('font-weight', 'bold')
-                .text('Density (N/m3)'));
+            .call(d3.axisBottom(this.xScale).ticks(this.width / 80).tickSizeOuter(0));
+        const label = xAxis.append('text')
+            .attr('class', 'axis__label')
+            .attr('y', this.margin.bottom - 5)
+            .attr('x', this.width)
+            .attr('dx', -5)
+            .attr('fill', 'black')
+            .attr('text-anchor', 'end');
+        label.append('tspan')
+            .text('Density (');
+        label.append('tspan')
+            .text('m');
+        label.append('tspan')
+            .attr('baseline-shift', 'super')
+            .attr('font-size', '70%')
+            .text('-3');
+        label.append('tspan')
+            .text(')');
     }
 
     drawYAxis() {
-        this.yScale = d3.scaleLinear()
-            .domain([ 100, 1000 ])
-            .range([ this.height, 0 ]);
         this.g.append('g')
             .call(d3.axisLeft(this.yScale))
             .call(g => g.select('.tick:last-of-type text').clone()
@@ -188,10 +194,21 @@ export class SwtAltitudePlotComponent implements OnChanges {
         this.colorArray = this.variables.map( d => altitudeColor(d) );
     }
 
+    setXScale() {
+        this.xScale = d3.scaleLog()
+            .domain(this.xDomain)
+            .range([ 0, this.width ]);
+    }
+
+    setYScale() {
+        this.yScale = d3.scaleLinear()
+            .domain([ 0, 1000 ])
+            .range([ this.height, 0 ]);
+    }
+
     setXDomain( variables: string[] ) {
         // make one long array of all the variable values
         const allValues = variables.reduce( (aggregator: number[], variable: string) => aggregator.concat(this.data[variable]), []);
-        this.xDomain[0] = d3.min(allValues);
-        this.xDomain[1] = d3.max(allValues);
+        this.xDomain = d3.extent(allValues);
     }
 }

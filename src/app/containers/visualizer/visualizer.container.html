@@ -29,7 +29,7 @@
         <div class="viz__header">
             <mat-form-field floatLabel="always" class="viz__field">
                 <mat-label>Altitude of surface (km)</mat-label>
-                <input matInput type="number" step="100" min="100" max="1000" formControlName="altitude">
+                <input matInput type="number" step="100" min="0" max="1000" formControlName="altitude">
                 <mat-hint></mat-hint>
                 <mat-error *ngIf="surfaceForm.controls.altitude.invalid">{{getValidationMessage('altitude')}}</mat-error>
             </mat-form-field>
