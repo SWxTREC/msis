@@ -57,7 +57,7 @@ export class VisualizerComponent implements OnInit {
         'He',
         'N',
         'N2',
-        'NO',
+        // 'NO', TODO: enable this when ready
         'O',
         'O2',
         'Mass',
