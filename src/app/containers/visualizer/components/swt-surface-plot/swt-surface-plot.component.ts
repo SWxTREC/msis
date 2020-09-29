@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import * as d3 from 'd3';
 import { clamp } from 'lodash';
 import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
@@ -13,6 +13,7 @@ export class SwtSurfacePlotComponent implements OnChanges {
     @Input() latitude = 0;
     @Input() longitude = 0;
     @Input() variable: string;
+    @Output() changeLocation: EventEmitter<number[]> = new EventEmitter();
 
     margin = 40;
     width = 1000 - (this.margin * 2);
@@ -52,10 +53,10 @@ export class SwtSurfacePlotComponent implements OnChanges {
         const geoBox: d3.GeoPermissibleObjects = this.geoBoxFromPoint( this.longitude, this.latitude);
         // draw a red box around the altitude profile location
         this.g.append('path')
-        .attr('id', 'altitude-box')
-        .attr('fill', 'none')
-        .attr('stroke', 'red')
-        .attr('d', this.pathFromProjection(geoBox));
+            .attr('id', 'altitude-box')
+            .attr('fill', 'none')
+            .attr('stroke', 'red')
+            .attr('d', this.pathFromProjection(geoBox));
     }
 
     drawMap() {
@@ -97,13 +98,16 @@ export class SwtSurfacePlotComponent implements OnChanges {
                         .attr('y', this.projection(coordinates)[1])
                         .attr('dx', '0.5rem')
                         .attr('dy', '-0.5rem')
-                        .text( `${longitude.toFixed(0)}, ${latitude.toFixed(0)}` );
+                        .text( `(${longitude.toFixed(0)}, ${latitude.toFixed(0)})` );
                     tooltip.append('tspan')
                         .attr('x', this.projection(coordinates)[0])
                         .attr('y', this.projection(coordinates)[1])
                         .attr('dx', '0.5rem')
                         .attr('dy', '0.5rem')
                         .text(() => `${this.variable}: ${value.toExponential(3)}`);
+                })
+                .on('click', () => {
+                    this.changeLocation.emit([ longitude, latitude ]);
                 });
         });
     }

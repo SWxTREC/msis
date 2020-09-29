@@ -150,4 +150,9 @@ export class VisualizerComponent implements OnInit {
             break;
         }
     }
+
+    updateLocation( coordinates: number[] ) {
+        this.altitudeForm.controls.longitude.setValue(coordinates[0]);
+        this.altitudeForm.controls.latitude.setValue(coordinates[1]);
+    }
 }
