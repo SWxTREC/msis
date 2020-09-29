@@ -55,12 +55,12 @@ export class VisualizerComponent implements OnInit {
         'Ar',
         'H',
         'He',
-        'Mass',
         'N',
         'N2',
         'NO',
         'O',
         'O2',
+        'Mass',
         'Temperature'
     ];
     surfaceVariable = 'H';

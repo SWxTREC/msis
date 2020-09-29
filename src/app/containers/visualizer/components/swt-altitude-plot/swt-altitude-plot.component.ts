@@ -37,7 +37,7 @@ export class SwtAltitudePlotComponent implements OnChanges {
     }
 
     ngOnChanges(): void {
-        this.filteredVariables = [ ...this.variables ];
+        this.filteredVariables = [ ...this.variables ].filter( variable => variable !== 'Temperature' && variable !== 'Mass');
         this.createAltitudeSvg();
     }
 
@@ -101,7 +101,7 @@ export class SwtAltitudePlotComponent implements OnChanges {
                 .attr('x', this.width - (space / 2))
                 .attr('y', i * space * 1.5 - (space / 2)) // spacing
                 .attr('text-anchor', 'end')
-                .attr('class', d === this.variable ? 'altitude__legend--active' : 'altitude__legend')    // style the legend
+                .attr('class', d === this.variable ? 'altitude__legend--active' : 'altitude__legend') // style the legend
                 .style('fill', activeVariable ? this.colorArray[i] : 'silver' ) // dynamic variable coloring
                 .text(d === 'Temperature' ? 'Temp' : d)
                 .on('click', () => {
