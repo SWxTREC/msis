@@ -1,5 +1,5 @@
 export interface IAltitudeData {
-    altitudeForm: number[];
+    Altitude: number[];
     AnomO: number[];
     Ar: number[];
     H: number[];

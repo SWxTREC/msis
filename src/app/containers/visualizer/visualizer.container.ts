@@ -47,21 +47,25 @@ export class VisualizerComponent implements OnInit {
         latitude: new FormControl(0, [ Validators.min(-90), Validators.max(90) ]),
         longitude: new FormControl(0, [ Validators.min(-180), Validators.max(360) ])
     });
-    surfaceData: ISurfaceData;
-    altitudeData: IAltitudeData;
+    variableForm = new FormControl('H');
+    surfacePoints: ISurfaceData;
+    altitudePoints: IAltitudeData;
     variables = [
         'AnomO',
         'Ar',
         'H',
         'He',
-        'Mass',
         'N',
         'N2',
-        'N0',
+        // 'NO', TODO: enable this when ready
         'O',
         'O2',
+        'Mass',
         'Temperature'
     ];
+    surfaceVariable = 'H';
+    surfaceSvg: ISurfaceData;
+    altitudeSvg: IAltitudeData;
 
     constructor(
         private modelService: ModelService
@@ -69,34 +73,34 @@ export class VisualizerComponent implements OnInit {
 
     ngOnInit() {
         this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
-            this.surfaceData = cloneDeep(results);
+            this.surfacePoints = cloneDeep(results);
         });
         this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
-            this.altitudeData = cloneDeep(results);
+            this.altitudePoints = cloneDeep(results);
         });
 
         this.modelForm.valueChanges.pipe(
             debounceTime(300)
         ).subscribe( () => {
             this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
-                this.surfaceData = cloneDeep(results);
+                this.surfacePoints = cloneDeep(results);
             });
             this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
-                this.altitudeData = cloneDeep(results);
+                this.altitudePoints = cloneDeep(results);
             });
         });
         this.surfaceForm.valueChanges.pipe(
             debounceTime(300)
         ).subscribe( () => {
             this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
-                this.surfaceData = cloneDeep(results);
+                this.surfacePoints = cloneDeep(results);
             });
         });
         this.altitudeForm.valueChanges.pipe(
             debounceTime(300)
         ).subscribe( () => {
             this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
-                this.altitudeData = cloneDeep(results);
+                this.altitudePoints = cloneDeep(results);
             });
         });
     }
@@ -123,7 +127,6 @@ export class VisualizerComponent implements OnInit {
     }
 
     getValidationMessage( control: string ): string {
-        console.log('control', control);
         switch (control) {
         case 'date':
             if ( this.modelForm.controls.date.hasError('required') ) {
@@ -146,5 +149,10 @@ export class VisualizerComponent implements OnInit {
             }
             break;
         }
+    }
+
+    updateLocation( coordinates: number[] ) {
+        this.altitudeForm.controls.longitude.setValue(coordinates[0]);
+        this.altitudeForm.controls.latitude.setValue(coordinates[1]);
     }
 }

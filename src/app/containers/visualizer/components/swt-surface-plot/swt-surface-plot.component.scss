@@ -1,0 +1,14 @@
+::ng-deep {
+    .surface {
+        &__cell {
+            pointer-events:all;
+            &:hover {
+                fill-opacity: 60%;
+            }
+        }
+        &__tooltip {
+            font-size: small;
+            fill: black;
+        }
+    }
+}

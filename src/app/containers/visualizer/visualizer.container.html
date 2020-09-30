@@ -29,47 +29,61 @@
         <div class="viz__header">
             <mat-form-field floatLabel="always" class="viz__field">
                 <mat-label>Altitude of surface (km)</mat-label>
-                <input matInput type="number" formControlName="altitude">
+                <input matInput type="number" step="100" min="0" max="1000" formControlName="altitude">
                 <mat-hint></mat-hint>
                 <mat-error *ngIf="surfaceForm.controls.altitude.invalid">{{getValidationMessage('altitude')}}</mat-error>
             </mat-form-field>
         </div>
         <div class="viz__graphic">
-            <div *ngFor="let item of surfaceData | keyvalue">
-                <small>{{ item.key }}: [{{ item.value[0] }}...] ({{ item.value.length }})</small>
-            </div>
+            <lasp-swt-surface-plot
+                *ngIf="surfacePoints"
+                [data]="surfacePoints"
+                [variable]="variableForm.value"
+                [latitude]="altitudeForm.value.latitude"
+                [longitude]="altitudeForm.value.longitude"
+                (changeLocation)="updateLocation( $event )"
+                >
+            </lasp-swt-surface-plot>
+            <div id="surface"></div>
         </div>
         <mat-toolbar color="primary">
             <mat-toolbar-row  class="viz__variables">
-                <span class="viz__group-label">Total</span>
-                <mat-button-toggle-group>
-                    <mat-button-toggle *ngFor="let variable of variables" [value]="variable">{{ variable }}</mat-button-toggle>
+                <mat-button-toggle-group [formControl]="variableForm">
+                    <mat-button-toggle
+                        *ngFor="let variable of variables"
+                        [value]="variable"
+                    >{{ variable }}</mat-button-toggle>
                 </mat-button-toggle-group>
             </mat-toolbar-row>
         </mat-toolbar>
     </mat-card>
     <mat-card class="viz__altitude" [formGroup]="altitudeForm">
         <div class="viz__header">
-            <mat-form-field floatLabel="always" class="viz__field viz__field--small">
-                <mat-label>Latitude (deg)</mat-label>
-                <input matInput type="number" formControlName="latitude">
-                <mat-hint></mat-hint>
-                <mat-error *ngIf="altitudeForm.controls.latitude.invalid">{{getValidationMessage('latitude')}}</mat-error>
-            </mat-form-field>
             <mat-form-field floatLabel="always" class="viz__field  viz__field--small">
                 <mat-label>Longitude (deg)</mat-label>
-                <input matInput type="number" formControlName="longitude">
+                <input matInput type="number" step="5" max="180" min="-180" formControlName="longitude">
                 <mat-hint></mat-hint>
                 <mat-error *ngIf="altitudeForm.controls.longitude.invalid">{{getValidationMessage('longitude')}}</mat-error>
             </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field viz__field--small">
+                <mat-label>Latitude (deg)</mat-label>
+                <input matInput type="number" step="5" max="90" min="-90" formControlName="latitude">
+                <mat-hint></mat-hint>
+                <mat-error *ngIf="altitudeForm.controls.latitude.invalid">{{getValidationMessage('latitude')}}</mat-error>
+            </mat-form-field>
         </div>
         <div class="viz__graphic">
-            <div *ngFor="let item of altitudeData | keyvalue">
-                <small>{{ item.key }}: [{{ item.value[0] }}...] ({{ item.value.length }})</small>
-            </div>
+            <lasp-swt-altitude-plot
+                *ngIf="altitudePoints"
+                [data]="altitudePoints"
+                [altitude]="surfaceForm.value.altitude"
+                [variable]="variableForm.value"
+                [variables]="variables"
+                >
+            </lasp-swt-altitude-plot>
         </div>
         <div class="viz__header">
-            <mat-slide-toggle
+            <mat-slide-toggle disabled
                 color="primary"
                 >
               Log axis

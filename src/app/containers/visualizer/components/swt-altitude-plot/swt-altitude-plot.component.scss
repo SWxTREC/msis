@@ -1,0 +1,16 @@
+::ng-deep {
+    .altitude {
+        &__legend {
+            font-size: small;
+            cursor: pointer;
+            &--active {
+                font-weight: bold;
+            }
+        }
+    }
+    .axis {
+        &__label {
+            font-weight: bold;
+        }
+    }
+}
