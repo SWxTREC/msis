@@ -17,6 +17,7 @@ export class SwtSurfacePlotComponent implements OnChanges {
     @Input() variable: string;
     @Output() changeLocation: EventEmitter<number[]> = new EventEmitter();
 
+    centerLongitude = 0;
     margin = 40;
     width = 1000 - (this.margin * 2);
     height = 520 - (this.margin * 2);
@@ -78,6 +79,56 @@ export class SwtSurfacePlotComponent implements OnChanges {
                 .attr('stroke-linejoin', 'round')
                 .attr('d', this.pathFromProjection(data));
         });
+
+        // Add 6am, noon, 6pm lines
+        const l0 = this.centerLongitude > -90 ? this.centerLongitude - 90 : this.centerLongitude + 270;
+        const l1 = this.centerLongitude;
+        const l2 = this.centerLongitude < 90 ? this.centerLongitude + 90 : this.centerLongitude - 270;
+
+        this.g.append('path')
+            .attr('class', "-90 degrees")
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1.5)
+            .attr('stroke-linejoin', 'round')
+            .attr("d", this.pathFromProjection({ type: "LineString", coordinates: [[l0, -90], [l0, -45], [l0, 0], [l0, 45], [l0, 90]] }));
+        this.g.append('text')
+            .attr('x', this.projection([l0, 90])[0])
+            .attr('y', this.projection([l0, 90])[1] - 15)
+            .attr('dy', '0.5rem')
+            .attr('font-size', '100%')
+            .attr('text-anchor', 'middle')
+            .text('6 AM')
+
+        this.g.append('path')
+            .attr('class', "0 degrees")
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1.5)
+            .attr('stroke-linejoin', 'round')
+            .attr("d", this.pathFromProjection({ type: "LineString", coordinates: [[l1, -90], [l1, -45], [l1, 0], [l1, 45], [l1, 90]] }));
+        this.g.append('text')
+            .attr('x', this.projection([l1, 90])[0])
+            .attr('y', this.projection([l1, 90])[1] - 15)
+            .attr('dy', '0.5rem')
+            .attr('font-size', '100%')
+            .attr('text-anchor', 'middle')
+            .text('Noon')
+
+        this.g.append('path')
+            .attr('class', "90 degrees")
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1.5)
+            .attr('stroke-linejoin', 'round')
+            .attr("d", this.pathFromProjection({ type: "LineString", coordinates: [[l2, -90], [l2, -45], [l2, 0], [l2, 45], [l2, 90]] }));
+        this.g.append('text')
+            .attr('x', this.projection([l2, 90])[0])
+            .attr('y', this.projection([l2, 90])[1] - 15)
+            .attr('dy', '0.5rem')
+            .attr('font-size', '100%')
+            .attr('text-anchor', 'middle')
+            .text('6 PM')
     }
 
     drawSurface(data: any) {
@@ -168,11 +219,12 @@ export class SwtSurfacePlotComponent implements OnChanges {
     }
 
     setProjection() {
+        this.centerLongitude = 180 - (this.date.hour() + this.date.minute()/60)/24*360;
         this.projection = d3.geoEqualEarth()
             .scale(187)
             // Center the plot under local noon
             // 12 UTC == 0 degrees, 18 UTC == 90 degrees (rotates opposite direction)
-            .rotate([(this.date.hour() + this.date.minute()/60)/24*360 - 180, 0])
+            .rotate([-this.centerLongitude, 0])
             .translate([ this.width / 2, this.height / 2 ]);
         this.pathFromProjection = d3.geoPath(this.projection);
     }
