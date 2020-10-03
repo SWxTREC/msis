@@ -38,6 +38,7 @@
             <lasp-swt-surface-plot
                 *ngIf="surfacePoints"
                 [data]="surfacePoints"
+                [date]="modelForm.value.date"
                 [variable]="variableForm.value"
                 [latitude]="altitudeForm.value.latitude"
                 [longitude]="altitudeForm.value.longitude"

@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import * as d3 from 'd3';
 import { clamp } from 'lodash';
+import { Moment } from 'moment';
 import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
 
 @Component({
@@ -10,6 +11,7 @@ import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
 })
 export class SwtSurfacePlotComponent implements OnChanges {
     @Input() data: ISurfaceData;
+    @Input() date: Moment;
     @Input() latitude = 0;
     @Input() longitude = 0;
     @Input() variable: string;
@@ -168,6 +170,9 @@ export class SwtSurfacePlotComponent implements OnChanges {
     setProjection() {
         this.projection = d3.geoEqualEarth()
             .scale(187)
+            // Center the plot under local noon
+            // 12 UTC == 0 degrees, 18 UTC == 90 degrees (rotates opposite direction)
+            .rotate([(this.date.hour() + this.date.minute()/60)/24*360 - 180, 0])
             .translate([ this.width / 2, this.height / 2 ]);
         this.pathFromProjection = d3.geoPath(this.projection);
     }
