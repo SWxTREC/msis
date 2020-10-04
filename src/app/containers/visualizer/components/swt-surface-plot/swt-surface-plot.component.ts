@@ -93,7 +93,7 @@ export class SwtSurfacePlotComponent implements OnChanges {
         this.setColorScale();
         // update the fill color of the surface cells
         this.surfaceCells.attr('fill', (feature: any) => {
-            return this.surfaceColor(feature.properties[this.variable])
+            return this.surfaceColor(this.getData(feature.properties['index']));
         });
         // update the location of the altitude box
         this.altitudeBox.attr('d', this.pathFromProjection(this.geoBoxFromPoint(this.longitude, this.latitude)));
@@ -126,7 +126,7 @@ export class SwtSurfacePlotComponent implements OnChanges {
                     .attr('y', pixelCoordinates[1])
                     .attr('dx', '0.5rem')
                     .attr('dy', '0.5rem')
-                    .text(() => `${this.variable}: ${feature.properties[this.variable].toExponential(3)} m`)
+                    .text(() => `${this.variable}: ${this.getData(feature.properties['index']).toExponential(3)} m`)
                     .append('tspan')
                     .attr('baseline-shift', 'super')
                     .attr('font-size', '70%')
@@ -143,6 +143,10 @@ export class SwtSurfacePlotComponent implements OnChanges {
         this.updateSurface();
     }
 
+    getData(i: number): number {
+        // Return the data value for the current variable and index
+        return this.data[this.variable][i];
+    }
 
     geoFeatureCollection(data: any): any {
         // Create an empty featureCollection that we can populate
@@ -157,10 +161,10 @@ export class SwtSurfacePlotComponent implements OnChanges {
         data['Longitude'].map((longitude: number, i: number) => {
             const latitude: number = data.Latitude[i];
             var feature: any = this.geoBoxFromPoint(longitude, latitude);
-            // For each feature polygon, add the data to the properties
-            Object.keys(data).map(key => {
-                feature.properties[key] = data[key][i];
-            });
+            // Store the index to reference data later on
+            feature.properties['index'] = i;
+            feature.properties['Longitude'] = longitude;
+            feature.properties['Latitude'] = latitude;
             // Add the feature into the list of features on the collection
             featureCollection.features.push(feature);
         });
