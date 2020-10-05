@@ -84,51 +84,26 @@ export class SwtSurfacePlotComponent implements OnChanges {
         const l0 = this.centerLongitude > -90 ? this.centerLongitude - 90 : this.centerLongitude + 270;
         const l1 = this.centerLongitude;
         const l2 = this.centerLongitude < 90 ? this.centerLongitude + 90 : this.centerLongitude - 270;
+        this.drawLatitudeLabels(l0, '6 AM');
+        this.drawLatitudeLabels(l1, 'noon');
+        this.drawLatitudeLabels(l2, '6 PM');
+    }
 
+    drawLatitudeLabels(lon: number, label: string) {
         this.g.append('path')
-            .attr('class', "-90 degrees")
+            .attr('class', "latLine")
             .attr('fill', 'none')
             .attr('stroke', 'black')
             .attr('stroke-width', 1.5)
             .attr('stroke-linejoin', 'round')
-            .attr("d", this.pathFromProjection({ type: "LineString", coordinates: [[l0, -90], [l0, -45], [l0, 0], [l0, 45], [l0, 90]] }));
+            .attr("d", this.pathFromProjection({ type: "LineString", coordinates: [[lon, -90], [lon, -45], [lon, 0], [lon, 45], [lon, 90]] }));
         this.g.append('text')
-            .attr('x', this.projection([l0, 90])[0])
-            .attr('y', this.projection([l0, 90])[1] - 15)
+            .attr('x', this.projection([lon, 90])[0])
+            .attr('y', this.projection([lon, 90])[1] - 15)
             .attr('dy', '0.5rem')
             .attr('font-size', '100%')
             .attr('text-anchor', 'middle')
-            .text('6 AM')
-
-        this.g.append('path')
-            .attr('class', "0 degrees")
-            .attr('fill', 'none')
-            .attr('stroke', 'black')
-            .attr('stroke-width', 1.5)
-            .attr('stroke-linejoin', 'round')
-            .attr("d", this.pathFromProjection({ type: "LineString", coordinates: [[l1, -90], [l1, -45], [l1, 0], [l1, 45], [l1, 90]] }));
-        this.g.append('text')
-            .attr('x', this.projection([l1, 90])[0])
-            .attr('y', this.projection([l1, 90])[1] - 15)
-            .attr('dy', '0.5rem')
-            .attr('font-size', '100%')
-            .attr('text-anchor', 'middle')
-            .text('Noon')
-
-        this.g.append('path')
-            .attr('class', "90 degrees")
-            .attr('fill', 'none')
-            .attr('stroke', 'black')
-            .attr('stroke-width', 1.5)
-            .attr('stroke-linejoin', 'round')
-            .attr("d", this.pathFromProjection({ type: "LineString", coordinates: [[l2, -90], [l2, -45], [l2, 0], [l2, 45], [l2, 90]] }));
-        this.g.append('text')
-            .attr('x', this.projection([l2, 90])[0])
-            .attr('y', this.projection([l2, 90])[1] - 15)
-            .attr('dy', '0.5rem')
-            .attr('font-size', '100%')
-            .attr('text-anchor', 'middle')
-            .text('6 PM')
+            .text(label)
     }
 
     drawSurface(data: any) {
