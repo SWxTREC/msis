@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import * as d3 from 'd3';
 import { clamp } from 'lodash';
+import { Moment } from 'moment';
 import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
 
 @Component({
@@ -10,11 +11,13 @@ import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
 })
 export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     @Input() data: ISurfaceData;
+    @Input() date: Moment;
     @Input() latitude = 0;
     @Input() longitude = 0;
     @Input() variable: string;
     @Output() changeLocation: EventEmitter<number[]> = new EventEmitter();
 
+    centerLongitude = 0;
     margin = 40;
     width = 1000 - (this.margin * 2);
     height = 520 - (this.margin * 2);
@@ -86,6 +89,31 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
                 .attr('stroke-linejoin', 'round')
                 .attr('d', this.pathFromProjection(data));
         });
+
+        // Add 6am, noon, 6pm lines
+        const l0 = this.centerLongitude > -90 ? this.centerLongitude - 90 : this.centerLongitude + 270;
+        const l1 = this.centerLongitude;
+        const l2 = this.centerLongitude < 90 ? this.centerLongitude + 90 : this.centerLongitude - 270;
+        this.drawLatitudeLabels(l0, '6 AM');
+        this.drawLatitudeLabels(l1, 'noon');
+        this.drawLatitudeLabels(l2, '6 PM');
+    }
+
+    drawLatitudeLabels(lon: number, label: string) {
+        this.g.append('path')
+            .attr('class', "latLine")
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('stroke-width', 1.5)
+            .attr('stroke-linejoin', 'round')
+            .attr("d", this.pathFromProjection({ type: "LineString", coordinates: [[lon, -90], [lon, -45], [lon, 0], [lon, 45], [lon, 90]] }));
+        this.g.append('text')
+            .attr('x', this.projection([lon, 90])[0])
+            .attr('y', this.projection([lon, 90])[1] - 15)
+            .attr('dy', '0.5rem')
+            .attr('font-size', '100%')
+            .attr('text-anchor', 'middle')
+            .text(label)
     }
 
     updateSurface() {
@@ -208,8 +236,12 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     setProjection() {
+        this.centerLongitude = 180 - (this.date.hour() + this.date.minute()/60)/24*360;
         this.projection = d3.geoEqualEarth()
             .scale(187)
+            // Center the plot under local noon
+            // 12 UTC == 0 degrees, 18 UTC == 90 degrees (rotates opposite direction)
+            .rotate([-this.centerLongitude, 0])
             .translate([ this.width / 2, this.height / 2 ]);
         this.pathFromProjection = d3.geoPath(this.projection);
     }
