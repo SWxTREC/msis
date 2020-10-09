@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import * as d3 from 'd3';
 import { clamp } from 'lodash';
 import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
@@ -6,9 +6,9 @@ import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
 @Component({
     selector: 'lasp-swt-surface-plot',
     templateUrl: './swt-surface-plot.component.html',
-    styleUrls: ['./swt-surface-plot.component.scss']
+    styleUrls: [ './swt-surface-plot.component.scss' ]
 })
-export class SwtSurfacePlotComponent implements OnChanges {
+export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     @Input() data: ISurfaceData;
     @Input() latitude = 0;
     @Input() longitude = 0;
@@ -101,7 +101,7 @@ export class SwtSurfacePlotComponent implements OnChanges {
 
     drawSurface(data: any) {
         const featureCollection = this.geoFeatureCollection(data);
-        this.surfaceCells = this.g.selectAll(".surface__cell")
+        this.surfaceCells = this.g.selectAll('.surface__cell')
             .data(featureCollection.features)
             .enter()
             .append('path')
@@ -113,7 +113,7 @@ export class SwtSurfacePlotComponent implements OnChanges {
         this.surfaceCells
             .on('mouseover', (_: any, feature: any) => {
                 // mouseover returns the MouseEvent and then the feature as the second argument
-                const coordinates: [number, number] = [feature.properties.Longitude, feature.properties.Latitude];
+                const coordinates: [number, number] = [ feature.properties.Longitude, feature.properties.Latitude ];
                 const pixelCoordinates: [number, number] = this.projection(coordinates);
                 tooltip
                     .attr('x', pixelCoordinates[0])
@@ -133,7 +133,7 @@ export class SwtSurfacePlotComponent implements OnChanges {
                     .text('-3');
             })
             .on('click', (_: any, feature: any) => {
-                this.changeLocation.emit([feature.properties.Longitude, feature.properties.Latitude]);
+                this.changeLocation.emit([ feature.properties.Longitude, feature.properties.Latitude ]);
             });
 
         // Add an altitude Box in
@@ -150,17 +150,17 @@ export class SwtSurfacePlotComponent implements OnChanges {
 
     geoFeatureCollection(data: any): any {
         // Create an empty featureCollection that we can populate
-        var featureCollection = {
-            "name": "SurfacePolygons",
-            "type": "FeatureCollection",
-            "features": []
+        const featureCollection = {
+            name: 'SurfacePolygons',
+            type: 'FeatureCollection',
+            features: []
         };
 
         // Map over every point in the data and create a single
         // Feature polygon
         data['Longitude'].map((longitude: number, i: number) => {
             const latitude: number = data.Latitude[i];
-            var feature: any = this.geoBoxFromPoint(longitude, latitude);
+            const feature: any = this.geoBoxFromPoint(longitude, latitude);
             // Store the index to reference data later on
             feature.properties['index'] = i;
             feature.properties['Longitude'] = longitude;
@@ -168,7 +168,7 @@ export class SwtSurfacePlotComponent implements OnChanges {
             // Add the feature into the list of features on the collection
             featureCollection.features.push(feature);
         });
-        return featureCollection
+        return featureCollection;
     }
 
     geoBoxFromPoint(lon: number, lat: number): d3.GeoPermissibleObjects {
@@ -184,13 +184,13 @@ export class SwtSurfacePlotComponent implements OnChanges {
             },
             geometry: {
                 type: 'Polygon',
-                coordinates: [[[minLon, minLat],
-                [minLon, maxLat],
-                [maxLon, maxLat],
-                [maxLon, minLat],
-                [minLon, minLat]]]
+                coordinates: [ [ [ minLon, minLat ],
+                [ minLon, maxLat ],
+                [ maxLon, maxLat ],
+                [ maxLon, minLat ],
+                [ minLon, minLat ] ] ]
             }
-        }
+        };
     }
 
     setChartDimensions() {
@@ -204,13 +204,13 @@ export class SwtSurfacePlotComponent implements OnChanges {
 
     setColorScale() {
         this.surfaceColor = d3.scaleSequential(d3.interpolatePlasma)
-            .domain([d3.min<number>(this.data[this.variable]), d3.max<number>(this.data[this.variable])]);
+            .domain([ d3.min<number>(this.data[this.variable]), d3.max<number>(this.data[this.variable]) ]);
     }
 
     setProjection() {
         this.projection = d3.geoEqualEarth()
             .scale(187)
-            .translate([this.width / 2, this.height / 2]);
+            .translate([ this.width / 2, this.height / 2 ]);
         this.pathFromProjection = d3.geoPath(this.projection);
     }
 }
