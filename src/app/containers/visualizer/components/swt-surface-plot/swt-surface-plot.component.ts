@@ -21,6 +21,8 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     margin = 40;
     width = 1000 - (this.margin * 2);
     height = 520 - (this.margin * 2);
+    legendWidth = this.width / 2;
+    legendHeight = 20;
     hostElement: HTMLElement; // Native element hosting the SVG container
     svg: d3.Selection<SVGElement, {}, HTMLElement, any>; // Top level SVG element
     g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
@@ -45,6 +47,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             return;
         }
         this.updateSurface();
+        this.updateLegend();
     }
 
     addGraphicsElement() {
@@ -57,8 +60,9 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.setColorScale();
         this.setProjection();
         this.addGraphicsElement();
-        this.drawMap();
         this.drawSurface(this.data);
+        this.drawMap();
+        this.drawColorBar();
     }
 
     drawAltitudeBox() {
@@ -69,7 +73,50 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .attr('id', 'altitude-box')
             .attr('fill', 'none')
             .attr('stroke', 'red')
+            .attr('stroke-width', 2)
             .attr('d', this.pathFromProjection(geoBox));
+    }
+
+    drawColorBar() {
+        // Append a linearGradient element to the defs and give it a unique id
+        const linearGradient = this.svg.append('defs').append('linearGradient')
+            .attr('id', 'linear-gradient');
+
+        const surfaceColorAny = this.surfaceColor as any;
+
+        // Draw the rectangle and fill with gradient
+        this.svg.append('g')
+            .attr('transform', `translate(0,${this.height + this.margin})`)
+            .append('rect')
+            .attr('transform', `translate(${this.margin + this.width / 2 - this.legendWidth / 2}, 0)`)
+            .attr('width', this.legendWidth)
+            .attr('height', this.legendHeight)
+            .style('fill', 'url(#linear-gradient)');
+
+        linearGradient.selectAll('stop')
+            .data(surfaceColorAny.ticks().map((t, i, n) => ({ offset: `${100 * i / n.length}%`, color: this.surfaceColor(t) })))
+            .enter().append('stop')
+            .attr('offset', (d: any) => d.offset)
+            .attr('stop-color', (d: any) => d.color);
+
+        this.svg.append('g')
+            .attr('class', `legendAxis`)
+            .attr('transform', `translate(0,${this.height + this.margin + this.legendHeight})`);
+        this.updateLegend();
+    }
+
+    updateLegend() {
+        const legendAxisScale = d3.scaleLinear()
+            .domain(this.surfaceColor.domain())
+            .range([ this.margin + this.width / 2 - this.legendWidth / 2, this.margin + this.width / 2 + this.legendWidth / 2 ])
+            .nice();
+
+        d3.selectAll('.legendAxis')
+            .call(d3.axisBottom(legendAxisScale)
+                .ticks(this.legendWidth / 80)
+                .tickSize(-this.legendHeight)
+                .tickFormat(d3.format('.2e')))
+            .attr('font-size', '85%');
     }
 
     drawMap() {
@@ -101,28 +148,34 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
     drawLatitudeLabels(lon: number, label: string) {
         this.g.append('path')
-            .attr('class', "latLine")
+            .attr('class', 'latLine')
             .attr('fill', 'none')
             .attr('stroke', 'black')
             .attr('stroke-width', 1.5)
             .attr('stroke-linejoin', 'round')
-            .attr("d", this.pathFromProjection({ type: "LineString", coordinates: [[lon, -90], [lon, -45], [lon, 0], [lon, 45], [lon, 90]] }));
+            .attr('d', this.pathFromProjection(
+                { type: 'LineString', coordinates: [ [ lon, -90 ], [ lon, -45 ], [ lon, 0 ], [ lon, 45 ], [ lon, 90 ] ] }
+                ));
         this.g.append('text')
-            .attr('x', this.projection([lon, 90])[0])
-            .attr('y', this.projection([lon, 90])[1] - 15)
-            .attr('dy', '0.5rem')
+            .attr('x', this.projection([ lon, 90 ])[0])
+            .attr('y', this.projection([ lon, 90 ])[1] - 15)
+            .attr('dy', '0.8rem')
             .attr('font-size', '100%')
             .attr('text-anchor', 'middle')
-            .text(label)
+            .text(label);
     }
 
     updateSurface() {
         // Update the colorscale we are using
         this.setColorScale();
         // update the fill color of the surface cells
-        this.surfaceCells.attr('fill', (feature: any) => {
-            return this.surfaceColor(this.getData(feature.properties['index']));
-        });
+        this.surfaceCells
+            .attr('fill', (feature: any) => {
+                return this.surfaceColor(this.getData(feature.properties['index']));
+            })
+            .attr('stroke', (feature: any) => {
+                return this.surfaceColor(this.getData(feature.properties['index']));
+            });
         // update the location of the altitude box
         this.altitudeBox.attr('d', this.pathFromProjection(this.geoBoxFromPoint(this.longitude, this.latitude)));
     }
@@ -169,6 +222,9 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
         // Update the attributes after drawing the initial areas
         this.updateSurface();
+
+        // draw the colorbar
+        this.drawColorBar();
     }
 
     getData(i: number): number {
@@ -231,18 +287,18 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     setColorScale() {
-        this.surfaceColor = d3.scaleSequential(d3.interpolatePlasma)
+        this.surfaceColor = d3.scaleSequential(d3.interpolateCividis)
             .domain([ d3.min<number>(this.data[this.variable]), d3.max<number>(this.data[this.variable]) ]);
     }
 
     setProjection() {
-        this.centerLongitude = 180 - (this.date.hour() + this.date.minute()/60)/24*360;
+        this.centerLongitude = 180 - (this.date.hour() + this.date.minute() / 60) / 24 * 360;
         this.projection = d3.geoEqualEarth()
-            .scale(187)
+            .scale(170)
             // Center the plot under local noon
             // 12 UTC == 0 degrees, 18 UTC == 90 degrees (rotates opposite direction)
-            .rotate([-this.centerLongitude, 0])
-            .translate([ this.width / 2, this.height / 2 ]);
+            .rotate([ -this.centerLongitude, 0 ])
+            .translate([ this.width / 2, this.height / 2 - this.legendHeight ]);
         this.pathFromProjection = d3.geoPath(this.projection);
     }
 }
