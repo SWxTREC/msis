@@ -5,16 +5,24 @@ $helper-font-size: 8pt;
 
 .viz {
     &__altitude {
-        margin-top: 1rem;
         flex: 1;
+        border: 5px solid $color-primary;
+        border-radius: 0 0 4px 0;
+        border-left: none;
+        padding: 0;
     }
     &__body {
         display: flex;
-        justify-content: space-between;
+    }
+    &__form-group {
+        padding: 0.3rem 0 0.7rem 0;
+    }
+    &__header-form {
+        display: flex;
+        justify-content: center;
+        padding: 1rem;
     }
     &__graphic {
-        margin: 1rem 0;
-        border: 1px solid $color-accent;
         height: 525px;
     }
     &__group-label {
@@ -26,32 +34,52 @@ $helper-font-size: 8pt;
         padding: 1rem;
         padding-bottom: 0.3rem;
         border: 5px solid $color-primary;
-        border-radius: 4px;
+        border-radius: 4px 4px 0 0;
+        border-bottom: none;
         &--column {
             flex-direction: column;
             align-items: center;
         }
     }
     &__field {
+        width: 150px;
         &:not(:last-child) {
             margin-right: 0.5rem;
         }
         ::ng-deep {
             .mat-form-field-subscript-wrapper {
-                margin-top: 0.2em;
-                padding: 0 0.3em;
+                margin-top: 0;
+                padding: 0;
+                font-size: 70%;
             }
             .mat-form-field-infix {
-                padding: 0.7rem 0;
+                padding: 0.4rem 0;
             }
         }
         &--small {
             width: 110px;
         }
+        &--highlight {
+            ::ng-deep {
+                .mat-form-field-outline-start {
+                    color: $color-primary;
+                    border-width: 2.5px;
+                }
+                .mat-form-field-outline-gap {
+                    color: $color-primary;
+                    border-width: 2.5px;
+                }
+                .mat-form-field-outline-end {
+                    color: $color-primary;
+                    border-width: 2.5px;
+                }
+            }
+        }
     }
     &__surface {
-        margin-top: 1rem;
-        margin-right: 1rem;
+        border: 5px solid $color-primary;
+        border-radius: 0 0 0 4px;
+        padding: 0;
         flex: 4;
     }
     .mat-error {
