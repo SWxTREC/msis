@@ -38,16 +38,16 @@ export class VisualizerComponent implements OnInit {
     lastApDateWithValue: number = moment.utc().startOf('day').subtract(1, 'month').valueOf();
     modelForm = new FormGroup({
         date: new FormControl(moment.utc(this.lastApDateWithValue), [ Validators.required, Validators.min(0) ]),
-        f107: new FormControl(100, [ Validators.required, Validators.min(0) ]),
-        f107a: new FormControl(98, [ Validators.required, Validators.min(0) ]),
+        f107: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
+        f107a: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
         apForm: new FormGroup({
-            apDay: new FormControl(40, [ Validators.required, Validators.min(0) ]),
-            apCurrent: new FormControl(40, [ Validators.required, Validators.min(0) ]),
-            ap3: new FormControl(40, [ Validators.required, Validators.min(0) ]),
-            ap6: new FormControl(40, [ Validators.required, Validators.min(0) ]),
-            ap9: new FormControl(40, [ Validators.required, Validators.min(0) ]),
-            ap1233: new FormControl(40, [ Validators.required, Validators.min(0) ]),
-            ap3657: new FormControl(40, [ Validators.required, Validators.min(0) ])
+            apDay: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
+            apCurrent: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
+            ap3: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
+            ap6: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
+            ap9: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
+            ap1233: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
+            ap3657: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ])
         })
     });
     surfaceForm = new FormGroup({
@@ -97,7 +97,8 @@ export class VisualizerComponent implements OnInit {
         this.latisService.getDailyAp( momentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
             const apValues = response.ap.data.map( values => values[1]);
-            this.setDailyAp( apValues );
+            const averageDailyAp = mean(apValues);
+            this.setDailyAp( averageDailyAp );
             console.log('have daily Ap');
         });
         this.latisService.getApValues( momentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
@@ -109,17 +110,11 @@ export class VisualizerComponent implements OnInit {
             console.log('have past Ap 20');
         });
 
-        // this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
-        //     this.surfacePoints = cloneDeep(results);
-        // });
-        // this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
-        //     this.altitudePoints = cloneDeep(results);
-        // });
-
         this.modelForm.controls.date.valueChanges.pipe(
                 debounceTime(300)
             ).subscribe( (newMomentDate) => {
                 console.log('date change');
+                this.resetForm();
                 const f10Range: number[] = this.getF10Range( newMomentDate.valueOf() );
                 const timeQuery: string = this.latisService.getTimeQuery( f10Range[0], f10Range[1] );
                 this.latisService.getF10Values(timeQuery).subscribe( (response: any) => {
@@ -130,9 +125,8 @@ export class VisualizerComponent implements OnInit {
                     // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
                     const apValues = response.ap.data.map( values => values[1]);
                     const averageDailyAp = mean(apValues);
-                    const apForm = this.modelForm.controls.apForm as FormGroup;
-                    apForm.controls.apDay.setValue(averageDailyAp.toFixed(2));
-                    console.log('have daily Ap');
+                    this.setDailyAp( averageDailyAp );
+                    console.log('date change have daily Ap');
                 });
                 this.latisService.getApValues( momentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // current time (closest 3hr value) time<=momentDate&take_right(20)
@@ -140,14 +134,14 @@ export class VisualizerComponent implements OnInit {
                     // if a value is missing, the next value is used, is this okay? The best we can do?
                     const data = response.ap.data.map( values => values[1]);
                     this.setApValues( data );
-                    console.log('have past Ap 20');
+                    console.log('date change have past Ap 20');
                 });
             });
 
         this.modelForm.valueChanges.pipe(
                 debounceTime(300)
             ).subscribe( () => {
-                console.log('model form value change, submit requests');
+                console.log('model form value change, submit requests', this.modelForm.value);
                 this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
                     this.surfacePoints = cloneDeep(results);
                 });
@@ -183,23 +177,31 @@ export class VisualizerComponent implements OnInit {
     }
 
     getAltitudeParams(): IAltitudeParameters {
+        // fake an array of Ap values based on daily Ap, until the real values come through
+        const apArray: number[] = this.modelForm.value.apForm.apCurrent ?
+            Object.values(this.modelForm.value.apForm) : Array(7).fill(this.modelForm.value.apForm.apDay);
+        console.log('apArray', apArray);
         return {
-            ap: Object.values(this.modelForm.value.apForm),
+            ap: apArray,
             date: this.modelForm.value.date.format('YYYY-MM-DDTHH:mm'),
-            f107: this.modelForm.value.f107,
-            f107a: this.modelForm.value.f107a,
+            f107: this.modelForm.value.f107 || 75,
+            f107a: this.modelForm.value.f107a || 75,
             latitude: this.altitudeForm.value.latitude,
             longitude: this.altitudeForm.value.longitude
         };
     }
 
     getSurfaceParams(): ISurfaceParameters {
+        // fake an array of Ap values based on daily Ap, until the real values come through
+        const apArray: number[] = this.modelForm.value.apForm.apCurrent ?
+            Object.values(this.modelForm.value.apForm) : Array(7).fill(this.modelForm.value.apForm.apDay);
+        console.log('apArray', apArray);
         return {
             altitude: this.surfaceForm.value.altitude,
-            ap: Object.values(this.modelForm.value.apForm),
+            ap: apArray,
             date: this.modelForm.value.date.format('YYYY-MM-DDTHH:mm'),
-            f107: this.modelForm.value.f107,
-            f107a: this.modelForm.value.f107a
+            f107: this.modelForm.value.f107 || 75,
+            f107a: this.modelForm.value.f107a || 75
         };
     }
 
@@ -228,6 +230,15 @@ export class VisualizerComponent implements OnInit {
         }
     }
 
+    resetForm() {
+        Object.keys(this.modelForm.controls).forEach( key => {
+            if ( key !== 'date') {
+                this.modelForm.controls[key].reset();
+                this.modelForm.controls[key].disable();
+            }
+        });
+    }
+
     setApValues( data: number[] ) {
         // current time
         // current time -3hr
@@ -239,20 +250,21 @@ export class VisualizerComponent implements OnInit {
         const data3657 = data.slice(12, 20);
         const average1233 = mean(data1233);
         const average3657 = mean(data3657);
-        // set form values
+        // set form values, there is probably a more succint way to do this…
         const apForm = this.modelForm.controls.apForm as FormGroup;
         apForm.controls.apCurrent.setValue(data[0]);
         apForm.controls.ap3.setValue(data[1]);
         apForm.controls.ap6.setValue(data[2]);
         apForm.controls.ap9.setValue(data[3]);
-        apForm.controls.ap1233.setValue(average1233.toFixed(2));
-        apForm.controls.ap3657.setValue(average3657.toFixed(2));
+        apForm.controls.ap1233.setValue(+average1233.toFixed(2));
+        apForm.controls.ap3657.setValue(+average3657.toFixed(2));
+        apForm.enable();
     }
 
-    setDailyAp( data: number[] ) {
-        const averageDailyAp = mean(data);
+    setDailyAp( value: number ) {
         const apForm = this.modelForm.controls.apForm as FormGroup;
-        apForm.controls.apDay.setValue(averageDailyAp.toFixed(2));
+        apForm.controls.apDay.setValue(+value.toFixed(2));
+        apForm.controls.apDay.enable();
     }
 
     setF107Values( data: number[], date: moment.Moment ) {
@@ -277,13 +289,15 @@ export class VisualizerComponent implements OnInit {
         const startOfPreviousDay = date.subtract(1, 'day').startOf('day').valueOf();
         // median of the previous day, either the second value, or, if no second value, the first value
         const previousDayValue = f107ByDay[startOfPreviousDay][1] || f107ByDay[startOfPreviousDay][0];
-        this.modelForm.controls.f107.setValue(previousDayValue);
+        this.modelForm.controls.f107.setValue(+previousDayValue.toFixed(2));
+        this.modelForm.controls.f107.enable();
         // get the values over the entire selection of days (54 or 82)
         // use the median (middle) value if it exists, otherwise, use the only value
         const arrayOfMedianValues = Object.values(f107ByDay).map( value => value[1] || value[0]);
         // get the average
         const averageValue = mean(arrayOfMedianValues);
-        this.modelForm.controls.f107a.setValue(averageValue.toFixed(2));
+        this.modelForm.controls.f107a.setValue(+averageValue.toFixed(2));
+        this.modelForm.controls.f107a.enable();
     }
 
     updateLocation( coordinates: number[] ) {
