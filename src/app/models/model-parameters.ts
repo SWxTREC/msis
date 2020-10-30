@@ -14,7 +14,7 @@ export interface IAltitudeData {
 }
 
 export interface IAltitudeParameters {
-    ap: number;
+    ap: number[];
     date: Date;
     f107: number;
     f107a: number;
@@ -41,7 +41,7 @@ export interface ISurfaceData {
 
 export interface ISurfaceParameters {
     altitude: number;
-    ap: number;
+    ap: number[];
     date: Date;
     f107: number;
     f107a: number;

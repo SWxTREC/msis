@@ -17,11 +17,43 @@
             <input matInput type="number" formControlName="f107a">
             <mat-hint>average solar radio flux at 10.7cm</mat-hint>
         </mat-form-field>
-        <mat-form-field floatLabel="always" class="viz__field">
-            <mat-label>Ap</mat-label>
-            <input matInput type="number" formControlName="ap">
-            <mat-hint>average geomagnetic activity</mat-hint>
-        </mat-form-field>
+        <div formGroupName="apForm">
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>Ap daily average</mat-label>
+                <input matInput type="number" formControlName="apDay">
+                <mat-hint>geomagnetic activity on day selected</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>Ap</mat-label>
+                <input matInput type="number" formControlName="apCurrent">
+                <mat-hint>most recent Ap value</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>Ap -3 hrs</mat-label>
+                <input matInput type="number" formControlName="ap3">
+                <mat-hint>Ap 3 hours before most recent</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>Ap -6 hrs</mat-label>
+                <input matInput type="number" formControlName="ap6">
+                <mat-hint>Ap 6 hours before most recent</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>Ap -9</mat-label>
+                <input matInput type="number" formControlName="ap9">
+                <mat-hint>Ap 9 hours before most recent</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>Ap -12 average</mat-label>
+                <input matInput type="number" formControlName="ap1233">
+                <mat-hint>average of 24 hrs before Ap -9</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>Ap -36 average</mat-label>
+                <input matInput type="number" formControlName="ap3657">
+                <mat-hint>average of 24 hrs before Ap -12 average</mat-hint>
+            </mat-form-field>
+        </div>
     </form>
 </mat-card>
 <div class="viz__body">
