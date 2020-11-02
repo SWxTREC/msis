@@ -35,11 +35,12 @@ export const DATEPICKER_FORMAT = {
 export class VisualizerComponent implements OnInit {
     invalidFieldMessage: string;
     invalidFields: string[];
-    lastApDateWithValue: number = moment.utc().startOf('day').subtract(1, 'month').valueOf();
+    // TODO: fix this to be the current day once Ap is updated to current day
+    lastApDateWithValue: number = moment.utc('2020-10-15').startOf('day').valueOf();
     modelForm = new FormGroup({
         date: new FormControl(moment.utc(this.lastApDateWithValue), [ Validators.required, Validators.min(0) ]),
-        f107: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
-        f107a: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
+        f107: new FormControl({ value: 75, disabled: true }, [ Validators.required, Validators.min(0) ]),
+        f107a: new FormControl({ value: 75, disabled: true }, [ Validators.required, Validators.min(0) ]),
         apForm: new FormGroup({
             apDay: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
             apCurrent: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
@@ -84,75 +85,71 @@ export class VisualizerComponent implements OnInit {
 
     ngOnInit() {
         // initial default date, currently the lastApDateWithValue
-        // TODO: disable dates that don't have data, like the future or dates beyond laspApDateWithValue
-        const momentDate = moment.utc(this.lastApDateWithValue);
+        // TODO: disable dates that don't have data, like the future or dates beyond lastApDateWithValue
+        const initialMomentDate = moment.utc(this.lastApDateWithValue);
         // figure out which f10.7 range to use, 54 days to past or 81 days centered on date, all must have values
-        const f10DateRange: number[] = this.getF10Range( momentDate.valueOf() );
+        const f10DateRange: number[] = this.getF10Range( initialMomentDate.valueOf() );
         const f10TimeQuery: string = this.latisService.getTimeQuery( f10DateRange[0], f10DateRange[1]);
         this.latisService.getF10Values( f10TimeQuery ).subscribe( (response: any) => {
             const data: number[] = response.penticton_radio_flux.data;
-            this.setF107Values( data, momentDate );
-            console.log('have f207Values');
+            this.setF107Values( data, initialMomentDate );
         });
-        this.latisService.getDailyAp( momentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
+        this.latisService.getDailyAp( initialMomentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
             const apValues = response.ap.data.map( values => values[1]);
             const averageDailyAp = mean(apValues);
             this.setDailyAp( averageDailyAp );
-            console.log('have daily Ap');
         });
-        this.latisService.getApValues( momentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
-            // current time (closest 3hr value) time<=momentDate&take_right(20)
+        this.latisService.getApValues( this.lastApDateWithValue ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
+            // current time (closest 3hr value) time<=date&take_right(20)
             // NOTE: this will take the last 20 Ap values and put them into the model
             // if a value is missing, the next value is used, is this okay? The best we can do?
             const data = response.ap.data.map( values => values[1]);
             this.setApValues( data );
-            console.log('have past Ap 20');
         });
 
         this.modelForm.controls.date.valueChanges.pipe(
                 debounceTime(300)
             ).subscribe( (newMomentDate) => {
-                console.log('date change');
                 this.resetForm();
                 const f10Range: number[] = this.getF10Range( newMomentDate.valueOf() );
                 const timeQuery: string = this.latisService.getTimeQuery( f10Range[0], f10Range[1] );
-                this.latisService.getF10Values(timeQuery).subscribe( (response: any) => {
-                    const data: number[] = response.penticton_radio_flux.data;
-                    this.setF107Values( data, newMomentDate );
-                });
-                this.latisService.getDailyAp( momentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
+                this.latisService.getDailyAp( newMomentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
                     const apValues = response.ap.data.map( values => values[1]);
                     const averageDailyAp = mean(apValues);
                     this.setDailyAp( averageDailyAp );
-                    console.log('date change have daily Ap');
                 });
-                this.latisService.getApValues( momentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
+                this.latisService.getApValues( newMomentDate.valueOf() )
+                .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // current time (closest 3hr value) time<=momentDate&take_right(20)
                     // NOTE: this will take the last 20 Ap values and put them into the model
                     // if a value is missing, the next value is used, is this okay? The best we can do?
                     const data = response.ap.data.map( values => values[1]);
                     this.setApValues( data );
-                    console.log('date change have past Ap 20');
+                });
+                this.latisService.getF10Values(timeQuery).subscribe( (response: any) => {
+                    const data: number[] = response.penticton_radio_flux.data;
+                    this.setF107Values( data, newMomentDate );
                 });
             });
 
         this.modelForm.valueChanges.pipe(
                 debounceTime(300)
             ).subscribe( () => {
-                console.log('model form value change, submit requests', this.modelForm.value);
-                this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
-                    this.surfacePoints = cloneDeep(results);
-                });
-                this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
-                    this.altitudePoints = cloneDeep(results);
-                });
+                // I want this 'if' statement to be uneccessary…some day
+                if ( this.modelForm.controls.date && this.modelForm.controls.apForm ) {
+                    this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+                        this.surfacePoints = cloneDeep(results);
+                    });
+                    this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+                        this.altitudePoints = cloneDeep(results);
+                    });
+                }
             });
         this.surfaceForm.valueChanges.pipe(
                 debounceTime(300)
             ).subscribe( () => {
-                console.log('surface form value change, submit surface request');
                 this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
                     this.surfacePoints = cloneDeep(results);
                 });
@@ -160,7 +157,6 @@ export class VisualizerComponent implements OnInit {
         this.altitudeForm.valueChanges.pipe(
                 debounceTime(300)
             ).subscribe( () => {
-                console.log('altitude form value change, submit altitude request');
                 this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
                     this.altitudePoints = cloneDeep(results);
                 });
@@ -177,31 +173,23 @@ export class VisualizerComponent implements OnInit {
     }
 
     getAltitudeParams(): IAltitudeParameters {
-        // fake an array of Ap values based on daily Ap, until the real values come through
-        const apArray: number[] = this.modelForm.value.apForm.apCurrent ?
-            Object.values(this.modelForm.value.apForm) : Array(7).fill(this.modelForm.value.apForm.apDay);
-        console.log('apArray', apArray);
         return {
-            ap: apArray,
+            ap: Object.values(this.modelForm.value.apForm),
             date: this.modelForm.value.date.format('YYYY-MM-DDTHH:mm'),
-            f107: this.modelForm.value.f107 || 75,
-            f107a: this.modelForm.value.f107a || 75,
+            f107: this.modelForm.controls.f107.value,
+            f107a: this.modelForm.controls.f107.value,
             latitude: this.altitudeForm.value.latitude,
             longitude: this.altitudeForm.value.longitude
         };
     }
 
     getSurfaceParams(): ISurfaceParameters {
-        // fake an array of Ap values based on daily Ap, until the real values come through
-        const apArray: number[] = this.modelForm.value.apForm.apCurrent ?
-            Object.values(this.modelForm.value.apForm) : Array(7).fill(this.modelForm.value.apForm.apDay);
-        console.log('apArray', apArray);
         return {
             altitude: this.surfaceForm.value.altitude,
-            ap: apArray,
+            ap: Object.values(this.modelForm.value.apForm),
             date: this.modelForm.value.date.format('YYYY-MM-DDTHH:mm'),
-            f107: this.modelForm.value.f107 || 75,
-            f107a: this.modelForm.value.f107a || 75
+            f107: this.modelForm.controls.f107.value,
+            f107a: this.modelForm.controls.f107.value
         };
     }
 
@@ -231,9 +219,9 @@ export class VisualizerComponent implements OnInit {
     }
 
     resetForm() {
+        // keep the values as temporary values, but disable until they are replaced with real values??
         Object.keys(this.modelForm.controls).forEach( key => {
             if ( key !== 'date') {
-                this.modelForm.controls[key].reset();
                 this.modelForm.controls[key].disable();
             }
         });
@@ -250,20 +238,33 @@ export class VisualizerComponent implements OnInit {
         const data3657 = data.slice(12, 20);
         const average1233 = mean(data1233);
         const average3657 = mean(data3657);
-        // set form values, there is probably a more succint way to do this…
         const apForm = this.modelForm.controls.apForm as FormGroup;
-        apForm.controls.apCurrent.setValue(data[0]);
-        apForm.controls.ap3.setValue(data[1]);
-        apForm.controls.ap6.setValue(data[2]);
-        apForm.controls.ap9.setValue(data[3]);
-        apForm.controls.ap1233.setValue(+average1233.toFixed(2));
-        apForm.controls.ap3657.setValue(+average3657.toFixed(2));
+        apForm.patchValue({
+            apCurrent: data[0],
+            ap3: data[1],
+            ap6: data[2],
+            ap9: data[3],
+            ap1233: +average1233.toFixed(2),
+            ap3657: +average3657.toFixed(2)
+        });
         apForm.enable();
     }
 
     setDailyAp( value: number ) {
-        const apForm = this.modelForm.controls.apForm as FormGroup;
+        const apForm: FormGroup = this.modelForm.controls.apForm as FormGroup;
         apForm.controls.apDay.setValue(+value.toFixed(2));
+        // if the rest of the ap values have yet to come in, show the temporary values
+        // in the request, but do not enable the form controls
+        if ( apForm.controls.apCurrent.disabled ) {
+            apForm.patchValue({
+                apCurrent: value.toFixed(2),
+                ap3: value.toFixed(2),
+                ap6: value.toFixed(2),
+                ap9: value.toFixed(2),
+                ap1233: value.toFixed(2),
+                ap3657: value.toFixed(2)
+            });
+        }
         apForm.controls.apDay.enable();
     }
 
