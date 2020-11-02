@@ -169,13 +169,13 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         // Map over every point in the data and create a single
         // Feature polygon
         if ( data ) {
-            data['Longitude'].map((longitude: number, i: number) => {
+            data.Longitude.map((longitude: number, i: number) => {
                 const latitude: number = data.Latitude[i];
                 const feature: any = this.geoBoxFromPoint(longitude, latitude);
                 // Store the index to reference data later on
-                feature.properties['index'] = i;
-                feature.properties['Longitude'] = longitude;
-                feature.properties['Latitude'] = latitude;
+                feature.properties.index = i;
+                feature.properties.Longitude = longitude;
+                feature.properties.Latitude = latitude;
                 // Add the feature into the list of features on the collection
                 featureCollection.features.push(feature);
             });
@@ -265,7 +265,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
                     .attr('y', pixelCoordinates[1])
                     .attr('dx', '0.5rem')
                     .attr('dy', '0.5rem')
-                    .text(() => `${this.variable}: ${this.getData(feature.properties['index']).toExponential(3)} m`)
+                    .text(() => `${this.variable}: ${this.getData(feature.properties.index).toExponential(3)} m`)
                     .append('tspan')
                     .attr('baseline-shift', 'super')
                     .attr('font-size', '70%')
