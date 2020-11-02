@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output }
 import * as d3 from 'd3';
 import { clamp } from 'lodash';
 import { Moment } from 'moment';
-import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
+import { EARTH_MAP_URL, EMPTY_SURFACE_DATA, ISurfaceData } from 'src/app/models';
 
 @Component({
     selector: 'lasp-swt-surface-plot',
@@ -10,7 +10,7 @@ import { EARTH_MAP_URL, ISurfaceData } from 'src/app/models';
     styleUrls: [ './swt-surface-plot.component.scss' ]
 })
 export class SwtSurfacePlotComponent implements OnChanges, OnInit {
-    @Input() data: ISurfaceData;
+    @Input() data: ISurfaceData = EMPTY_SURFACE_DATA;
     @Input() date: Moment;
     @Input() latitude = 0;
     @Input() longitude = 0;
@@ -32,6 +32,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
     constructor(private elRef: ElementRef) {
         this.hostElement = this.elRef.nativeElement;
+        console.log('data', this.data, EMPTY_SURFACE_DATA);
     }
 
     ngOnInit() {
@@ -39,12 +40,10 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     ngOnChanges() {
-        // nGOnChanges is called before OnInit(), so if we have undefined
-        // items, just exit right away.
-        if (this.altitudeBox === undefined) {
-            return;
+        if (this.data) {
+            this.drawSurface(this.data);
+            this.updateSurface();
         }
-        this.updateSurface();
     }
 
     addGraphicsElement() {
@@ -54,7 +53,6 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
     createSurfaceSvg(): void {
         this.setChartDimensions();
-        this.setColorScale();
         this.setProjection();
         this.addGraphicsElement();
         this.drawMap();
@@ -101,19 +99,21 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
     drawLatitudeLabels(lon: number, label: string) {
         this.g.append('path')
-            .attr('class', "latLine")
+            .attr('class', 'latLine')
             .attr('fill', 'none')
             .attr('stroke', 'black')
             .attr('stroke-width', 1.5)
             .attr('stroke-linejoin', 'round')
-            .attr("d", this.pathFromProjection({ type: "LineString", coordinates: [[lon, -90], [lon, -45], [lon, 0], [lon, 45], [lon, 90]] }));
+            .attr('d', this.pathFromProjection(
+                { type: 'LineString', coordinates: [ [ lon, -90 ], [ lon, -45 ], [ lon, 0 ], [ lon, 45 ], [ lon, 90 ] ] }
+            ));
         this.g.append('text')
-            .attr('x', this.projection([lon, 90])[0])
-            .attr('y', this.projection([lon, 90])[1] - 15)
+            .attr('x', this.projection([ lon, 90 ])[0])
+            .attr('y', this.projection([ lon, 90 ])[1] - 15)
             .attr('dy', '0.5rem')
             .attr('font-size', '100%')
             .attr('text-anchor', 'middle')
-            .text(label)
+            .text(label);
     }
 
     updateSurface() {
@@ -122,7 +122,8 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         // update the fill color of the surface cells
         this.surfaceCells.attr('fill', (feature: any) => {
             return this.surfaceColor(this.getData(feature.properties['index']));
-        });
+        })
+        .attr('fill-opacity', 0.5);
         // update the location of the altitude box
         this.altitudeBox.attr('d', this.pathFromProjection(this.geoBoxFromPoint(this.longitude, this.latitude)));
     }
@@ -166,9 +167,6 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
         // Add an altitude Box in
         this.drawAltitudeBox();
-
-        // Update the attributes after drawing the initial areas
-        this.updateSurface();
     }
 
     getData(i: number): number {
@@ -186,16 +184,18 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
         // Map over every point in the data and create a single
         // Feature polygon
-        data['Longitude'].map((longitude: number, i: number) => {
-            const latitude: number = data.Latitude[i];
-            const feature: any = this.geoBoxFromPoint(longitude, latitude);
-            // Store the index to reference data later on
-            feature.properties['index'] = i;
-            feature.properties['Longitude'] = longitude;
-            feature.properties['Latitude'] = latitude;
-            // Add the feature into the list of features on the collection
-            featureCollection.features.push(feature);
-        });
+        if ( data ) {
+            data['Longitude'].map((longitude: number, i: number) => {
+                const latitude: number = data.Latitude[i];
+                const feature: any = this.geoBoxFromPoint(longitude, latitude);
+                // Store the index to reference data later on
+                feature.properties['index'] = i;
+                feature.properties['Longitude'] = longitude;
+                feature.properties['Latitude'] = latitude;
+                // Add the feature into the list of features on the collection
+                featureCollection.features.push(feature);
+            });
+        }
         return featureCollection;
     }
 
@@ -236,12 +236,12 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     setProjection() {
-        this.centerLongitude = 180 - (this.date.hour() + this.date.minute()/60)/24*360;
+        this.centerLongitude = 180 - (this.date.hour() + this.date.minute() / 60) / 24 * 360;
         this.projection = d3.geoEqualEarth()
             .scale(187)
             // Center the plot under local noon
             // 12 UTC == 0 degrees, 18 UTC == 90 degrees (rotates opposite direction)
-            .rotate([-this.centerLongitude, 0])
+            .rotate([ -this.centerLongitude, 0 ])
             .translate([ this.width / 2, this.height / 2 ]);
         this.pathFromProjection = d3.geoPath(this.projection);
     }
