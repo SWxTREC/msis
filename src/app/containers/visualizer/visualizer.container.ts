@@ -90,17 +90,14 @@ export class VisualizerComponent implements OnInit {
         // figure out which f10.7 range to use, 54 days to past or 81 days centered on date, all must have values
         const f10DateRange: number[] = this.getF10Range( initialMomentDate.valueOf() );
         const f10TimeQuery: string = this.latisService.getTimeQuery( f10DateRange[0], f10DateRange[1]);
-        console.log('f10TimeQuery', f10TimeQuery);
         this.latisService.getF10Values( f10TimeQuery ).subscribe( (response: any) => {
             const data: number[] = response.penticton_radio_flux_nearest_noon.data;
-            console.log('f107 here', data);
             this.setF107Values( data, initialMomentDate );
         });
         this.latisService.getDailyAp( initialMomentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
             const apValues = response.ap.data.map( values => values[1]);
             const averageDailyAp = mean(apValues);
-            console.log('daily ap here', apValues, averageDailyAp);
             this.setDailyAp( averageDailyAp );
         });
         this.latisService.getApValues( this.lastApDateWithValue ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
@@ -108,7 +105,6 @@ export class VisualizerComponent implements OnInit {
             // NOTE: this will take the last 20 Ap values and put them into the model
             // if a value is missing, the next value is used, is this okay? The best we can do?
             const data = response.ap.data.map( values => values[1]).reverse();
-            console.log('the rest of ap values are here', data);
             this.setApValues( data );
         });
 
@@ -123,7 +119,6 @@ export class VisualizerComponent implements OnInit {
                     const apValues = response.ap.data.map( values => values[1]);
                     const averageDailyAp = mean(apValues);
                     this.setDailyAp( averageDailyAp );
-                    console.log('date change daily ap here', apValues, averageDailyAp);
                 });
                 this.latisService.getApValues( newMomentDate.valueOf() )
                 .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
@@ -131,13 +126,11 @@ export class VisualizerComponent implements OnInit {
                     // NOTE: this will take the last 20 Ap values and put them into the model
                     // if a value is missing, the next value is used, is this okay? The best we can do?
                     const data = response.ap.data.map( values => values[1]).reverse();
-                    console.log('date change the rest of ap values are here', data);
                     this.setApValues( data );
                 });
                 this.latisService.getF10Values(timeQuery).subscribe( (response: any) => {
                     const data: number[] = response.penticton_radio_flux_nearest_noon.data;
                     this.setF107Values( data, newMomentDate );
-                    console.log('date change f107 here', data);
 
                 });
             });

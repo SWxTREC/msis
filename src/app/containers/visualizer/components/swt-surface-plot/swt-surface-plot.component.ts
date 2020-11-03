@@ -27,6 +27,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     svg: d3.Selection<SVGElement, {}, HTMLElement, any>; // Top level SVG element
     g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
     altitudeBox: d3.Selection<SVGElement, {}, HTMLElement, any>; // Altitude box
+    colorBar: d3.Selection<SVGElement, {}, HTMLElement, any>; // Color bar
     surfaceCells: d3.Selection<SVGElement, {}, SVGElement, any>; // All of the surface polygons
     surfaceColor: d3.ScaleSequential<string>;
     pathFromProjection: d3.GeoPath<any, d3.GeoPermissibleObjects>;
@@ -45,7 +46,6 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             this.setSurfaceCells(this.data);
             this.fillSurfaceCells();
             this.drawColorBar();
-            this.drawMap();
         }
     }
 
@@ -55,6 +55,10 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     drawAltitudeBox() {
+        if ( this.altitudeBox ) {
+            this.svg.selectAll('#altitude-box').remove();
+        }
+
         const geoBox: d3.GeoPermissibleObjects = this.geoBoxFromPoint(this.longitude, this.latitude);
         // draw a red box around the altitude profile location
         this.altitudeBox = this.g
@@ -67,6 +71,9 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     drawColorBar() {
+        if ( this.colorBar ) {
+            this.svg.selectAll('#color-bar').remove();
+        }
         // Append a linearGradient element to the defs and give it a unique id
         const linearGradient = this.svg.append('defs').append('linearGradient')
             .attr('id', 'linear-gradient');
@@ -74,13 +81,15 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         const surfaceColorAny = this.surfaceColor as any;
 
         // Draw the rectangle and fill with gradient
-        this.svg.append('g')
+        this.colorBar = this.svg.append('g')
             .attr('transform', `translate(0,${this.height + this.margin})`)
             .append('rect')
+            .attr('id', 'color-bar')
             .attr('transform', `translate(${this.margin + this.width / 2 - this.legendWidth / 2}, 0)`)
             .attr('width', this.legendWidth)
             .attr('height', this.legendHeight)
-            .style('fill', 'url(#linear-gradient)');
+            .style('fill', 'url(#linear-gradient)')
+            .attr('fill-opacity', 0.8);
 
         linearGradient.selectAll('stop')
             .data(surfaceColorAny.ticks().map((t, i, n) => ({ offset: `${100 * i / n.length}%`, color: this.surfaceColor(t) })))
@@ -118,6 +127,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .attr('id', 'earth-outline')
             .attr('d', this.pathFromProjection(objectType))
             .attr('fill', 'none')
+            .attr('stroke-width', 0.5)
             .attr('stroke', 'black');
 
         d3.json(EARTH_MAP_URL).then((data: any) => {
@@ -139,18 +149,43 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     fillSurfaceCells() {
+        // add tooltip
+        const tooltip = this.g.append('text')
+            .attr('class', 'surface__tooltip');
         // Update the colorscale we are using
         this.setColorScale();
         // update the fill color of the surface cells
+        // this.svg.on('mouseout', () => this.svg.selectAll('.surface__tooltip').remove());
         this.surfaceCells
+            .attr('shape-rendering', 'crispEdges')
             .attr('fill', (feature: any) => {
                 return this.surfaceColor(this.getData(feature.properties.index));
             })
-            .attr('stroke', (feature: any) => {
-                return this.surfaceColor(this.getData(feature.properties.index));
+            .attr('fill-opacity', 0.8)
+            .on('mouseover', (_: any, feature: any) => {
+                // mouseover returns the MouseEvent and then the feature as the second argument
+                const coordinates: [number, number] = [ feature.properties.Longitude, feature.properties.Latitude ];
+                const pixelCoordinates: [number, number] = this.projection(coordinates);
+                tooltip
+                    .attr('x', pixelCoordinates[0])
+                    .attr('y', pixelCoordinates[1])
+                    .attr('dx', '0.5rem')
+                    .attr('dy', '-0.5rem')
+                    .text(`(${feature.properties.Longitude.toFixed(0)}, ${feature.properties.Latitude.toFixed(0)})`);
+                tooltip.append('tspan')
+                    .attr('x', pixelCoordinates[0])
+                    .attr('y', pixelCoordinates[1])
+                    .attr('dx', '0.5rem')
+                    .attr('dy', '0.5rem')
+                    .text(() => `${this.variable}: ${this.getData(feature.properties.index).toExponential(3)} m`)
+                    .append('tspan')
+                    .attr('baseline-shift', 'super')
+                    .attr('font-size', '70%')
+                    .text('-3');
+            })
+            .on('click', (_: any, feature: any) => {
+                this.changeLocation.emit([ feature.properties.Longitude, feature.properties.Latitude ]);
             });
-        // update the location of the altitude box
-        this.altitudeBox.attr('d', this.pathFromProjection(this.geoBoxFromPoint(this.longitude, this.latitude)));
     }
 
     getData(i: number): number {
@@ -239,6 +274,11 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     setSurfaceCells(data: any) {
+        if ( this.surfaceCells ) {
+            this.svg.selectAll('.surface__cell').remove();
+            this.svg.selectAll('.surface__tooltip').remove();
+        }
+
         const featureCollection = this.geoFeatureCollection(data);
         this.surfaceCells = this.g.selectAll('.surface__cell')
             .data(featureCollection.features)
@@ -246,34 +286,6 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .append('path')
             .attr('class', 'surface__cell')
             .attr('d', this.pathFromProjection);
-
-        const tooltip = this.g.append('text')
-            .attr('class', 'surface__tooltip');
-        this.surfaceCells
-            .on('mouseover', (_: any, feature: any) => {
-                // mouseover returns the MouseEvent and then the feature as the second argument
-                const coordinates: [number, number] = [ feature.properties.Longitude, feature.properties.Latitude ];
-                const pixelCoordinates: [number, number] = this.projection(coordinates);
-                tooltip
-                    .attr('x', pixelCoordinates[0])
-                    .attr('y', pixelCoordinates[1])
-                    .attr('dx', '0.5rem')
-                    .attr('dy', '-0.5rem')
-                    .text(`(${feature.properties.Longitude.toFixed(0)}, ${feature.properties.Latitude.toFixed(0)})`);
-                tooltip.append('tspan')
-                    .attr('x', pixelCoordinates[0])
-                    .attr('y', pixelCoordinates[1])
-                    .attr('dx', '0.5rem')
-                    .attr('dy', '0.5rem')
-                    .text(() => `${this.variable}: ${this.getData(feature.properties.index).toExponential(3)} m`)
-                    .append('tspan')
-                    .attr('baseline-shift', 'super')
-                    .attr('font-size', '70%')
-                    .text('-3');
-            })
-            .on('click', (_: any, feature: any) => {
-                this.changeLocation.emit([ feature.properties.Longitude, feature.properties.Latitude ]);
-            });
 
         // Add an altitude Box in
         this.drawAltitudeBox();
@@ -290,6 +302,6 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
                 .ticks(this.legendWidth / 80)
                 .tickSize(-this.legendHeight)
                 .tickFormat(d3.format('.2e')))
-            .attr('font-size', '85%');
+            .attr('font-size', '70%');
     }
 }
