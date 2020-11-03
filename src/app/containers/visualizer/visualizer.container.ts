@@ -47,8 +47,8 @@ export class VisualizerComponent implements OnInit {
             ap3: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
             ap6: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
             ap9: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
-            ap1233: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
-            ap3657: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ])
+            ap12T33: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ]),
+            ap36T57: new FormControl({ value: undefined, disabled: true }, [ Validators.required, Validators.min(0) ])
         })
     });
     surfaceForm = new FormGroup({
@@ -90,21 +90,25 @@ export class VisualizerComponent implements OnInit {
         // figure out which f10.7 range to use, 54 days to past or 81 days centered on date, all must have values
         const f10DateRange: number[] = this.getF10Range( initialMomentDate.valueOf() );
         const f10TimeQuery: string = this.latisService.getTimeQuery( f10DateRange[0], f10DateRange[1]);
+        console.log('f10TimeQuery', f10TimeQuery);
         this.latisService.getF10Values( f10TimeQuery ).subscribe( (response: any) => {
-            const data: number[] = response.penticton_radio_flux.data;
+            const data: number[] = response.penticton_radio_flux_nearest_noon.data;
+            console.log('f107 here', data);
             this.setF107Values( data, initialMomentDate );
         });
         this.latisService.getDailyAp( initialMomentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
             const apValues = response.ap.data.map( values => values[1]);
             const averageDailyAp = mean(apValues);
+            console.log('daily ap here', apValues, averageDailyAp);
             this.setDailyAp( averageDailyAp );
         });
         this.latisService.getApValues( this.lastApDateWithValue ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
-            // current time (closest 3hr value) time<=date&take_right(20)
+            // current time (closest 3hr value) time<=date&take_right(20).reverse();
             // NOTE: this will take the last 20 Ap values and put them into the model
             // if a value is missing, the next value is used, is this okay? The best we can do?
-            const data = response.ap.data.map( values => values[1]);
+            const data = response.ap.data.map( values => values[1]).reverse();
+            console.log('the rest of ap values are here', data);
             this.setApValues( data );
         });
 
@@ -119,18 +123,22 @@ export class VisualizerComponent implements OnInit {
                     const apValues = response.ap.data.map( values => values[1]);
                     const averageDailyAp = mean(apValues);
                     this.setDailyAp( averageDailyAp );
+                    console.log('date change daily ap here', apValues, averageDailyAp);
                 });
                 this.latisService.getApValues( newMomentDate.valueOf() )
                 .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // current time (closest 3hr value) time<=momentDate&take_right(20)
                     // NOTE: this will take the last 20 Ap values and put them into the model
                     // if a value is missing, the next value is used, is this okay? The best we can do?
-                    const data = response.ap.data.map( values => values[1]);
+                    const data = response.ap.data.map( values => values[1]).reverse();
+                    console.log('date change the rest of ap values are here', data);
                     this.setApValues( data );
                 });
                 this.latisService.getF10Values(timeQuery).subscribe( (response: any) => {
-                    const data: number[] = response.penticton_radio_flux.data;
+                    const data: number[] = response.penticton_radio_flux_nearest_noon.data;
                     this.setF107Values( data, newMomentDate );
+                    console.log('date change f107 here', data);
+
                 });
             });
 
@@ -165,10 +173,12 @@ export class VisualizerComponent implements OnInit {
 
     getF10Range( date: number ): number[] {
         const use54: boolean = Date.now() - date < (1000 * 60 * 60 * 24 * 41);
-        const startOfDate: number = moment.utc(date).startOf('day').valueOf();
-        const startRange: number = use54 ?  moment.utc(startOfDate).subtract(54, 'day').valueOf()
-            : moment.utc(startOfDate).subtract(41, 'day').valueOf();
-        const endRange: number = use54 ?  startOfDate : moment.utc(startOfDate).add(40, 'day').valueOf();
+        console.log('use54?', use54);
+        const startOfDate: moment.Moment = moment.utc(date).startOf('day');
+        console.log('date', startOfDate.format());
+        const startRange: number = use54 ?  startOfDate.subtract(54, 'day').valueOf()
+            : startOfDate.subtract(41, 'day').valueOf();
+        const endRange: number = use54 ?  date : startOfDate.add(40, 'day').valueOf();
         return [ startRange, endRange ];
     }
 
@@ -234,18 +244,18 @@ export class VisualizerComponent implements OnInit {
         // current time -9hr
         // average for 8 values from current time -12hr to current time -33hrs
         // average for 8 values from current time -36hr to current time -57hrs
-        const data1233 = data.slice(4, 12);
-        const data3657 = data.slice(12, 20);
-        const average1233 = mean(data1233);
-        const average3657 = mean(data3657);
+        const data12T33 = data.slice(4, 12);
+        const data36T57 = data.slice(12, 20);
+        const average12T33 = mean(data12T33);
+        const average36T57 = mean(data36T57);
         const apForm = this.modelForm.controls.apForm as FormGroup;
         apForm.patchValue({
             apCurrent: data[0],
             ap3: data[1],
             ap6: data[2],
             ap9: data[3],
-            ap1233: +average1233.toFixed(2),
-            ap3657: +average3657.toFixed(2)
+            ap12T33: +average12T33.toFixed(2),
+            ap36T57: +average36T57.toFixed(2)
         });
         apForm.enable();
     }
@@ -261,42 +271,35 @@ export class VisualizerComponent implements OnInit {
                 ap3: value.toFixed(2),
                 ap6: value.toFixed(2),
                 ap9: value.toFixed(2),
-                ap1233: value.toFixed(2),
-                ap3657: value.toFixed(2)
+                ap12T33: value.toFixed(2),
+                ap36T57: value.toFixed(2)
             });
         }
         apForm.controls.apDay.enable();
     }
 
     setF107Values( data: number[], date: moment.Moment ) {
-        // currently there are usually 3 values for each day, in future, we will switch to the one definitive value
-        // until then, we need to choose a value, so we choose according to this logic:
-        // the middle value in order of value, if there are 3 values,
-        // the second value, highest value, if there are 2 values
-        // the first value if there is 1 value
-        // TODO: do we need a case for no values for the day?
         // group values by day
         const f107ByDay = data.reduce(  (aggregator, values)  => {
             const day = moment.utc(values[0]).startOf('day').valueOf();
             if ( aggregator[day] ) {
                 aggregator[day].push(values[1]);
-                aggregator[day].sort(); // when multiple values, sort to find median
             } else {
-                aggregator[day] = [ values[1] ];
+                aggregator[day] =  values[1];
             }
             return aggregator;
         }, {});
         // get the previous day's value
         const startOfPreviousDay = date.subtract(1, 'day').startOf('day').valueOf();
-        // median of the previous day, either the second value, or, if no second value, the first value
-        const previousDayValue = f107ByDay[startOfPreviousDay][1] || f107ByDay[startOfPreviousDay][0];
+        const previousDayValue = f107ByDay[startOfPreviousDay];
         this.modelForm.controls.f107.setValue(+previousDayValue.toFixed(2));
         this.modelForm.controls.f107.enable();
         // get the values over the entire selection of days (54 or 82)
-        // use the median (middle) value if it exists, otherwise, use the only value
-        const arrayOfMedianValues = Object.values(f107ByDay).map( value => value[1] || value[0]);
+        const arrayOfValues = Object.keys(f107ByDay).map( key => {
+            return f107ByDay[key];
+        });
         // get the average
-        const averageValue = mean(arrayOfMedianValues);
+        const averageValue = mean(arrayOfValues);
         this.modelForm.controls.f107a.setValue(+averageValue.toFixed(2));
         this.modelForm.controls.f107a.enable();
     }

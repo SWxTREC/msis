@@ -10,9 +10,11 @@ export class LatisService {
 
     constructor(private http: HttpClient) {}
 
-    getApValues( date: number ) {
-        // return the nearest Ap value in the past 3 hours, then the previous 20 values
-        return this.http.get(`${environment.latisSwp}ap.jsond?time<=${ date }&take_right(20)`);
+    getApValues( endDate: number ) {
+        const startDate: number = endDate - ( 1000 * 60 * 60 * 24 * 5 );
+        const timeQuery: string = this.getTimeQuery( startDate, endDate );
+        // return the 20 values before the selected date
+        return this.http.get(`${environment.latisSwp}ap.jsond?${ timeQuery }&take_right(20)`);
     }
 
     getDailyAp( date: moment.Moment ) {
@@ -24,7 +26,7 @@ export class LatisService {
     }
 
     getF10Values( timeQuery: string ) {
-        return this.http.get(`${environment.latisLisird}penticton_radio_flux.jsond?${timeQuery}`);
+        return this.http.get(`${environment.latisLisird}penticton_radio_flux_nearest_noon.jsond?${timeQuery}`);
     }
 
     getTimeQuery(startTimestamp: number, endTimestamp: number): string {
