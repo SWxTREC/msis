@@ -172,10 +172,10 @@ export class VisualizerComponent implements OnInit {
     }
 
     getF10Range( date: number ): number[] {
+        // if we are within 41 days of today's date, then only use the most recent 54 days
+        // otherwise: use 41 days before to 40 days after (81 total days)
         const use54: boolean = Date.now() - date < (1000 * 60 * 60 * 24 * 41);
-        console.log('use54?', use54);
         const startOfDate: moment.Moment = moment.utc(date).startOf('day');
-        console.log('date', startOfDate.format());
         const startRange: number = use54 ?  startOfDate.subtract(54, 'day').valueOf()
             : startOfDate.subtract(41, 'day').valueOf();
         const endRange: number = use54 ?  date : startOfDate.add(40, 'day').valueOf();
