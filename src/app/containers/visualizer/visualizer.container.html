@@ -2,7 +2,7 @@
     <form  [formGroup]="modelForm">
         <mat-form-field  class="viz__field viz__field--highlight">
             <mat-label>Date</mat-label>
-            <input matInput formControlName="date" [matDatepicker]="date" formControlName="date">
+            <input matInput formControlName="date" [matDatepicker]="date" formControlName="date" [matDatepickerFilter]="validDates" [min]="dataExtent[0]" [max]="dataExtent[1]">
             <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
             <mat-datepicker #date></mat-datepicker>
             <mat-error *ngIf="modelForm.controls.date.invalid">{{getValidationMessage('date')}}</mat-error>

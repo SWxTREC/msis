@@ -33,12 +33,14 @@ export const DATEPICKER_FORMAT = {
     ]
 })
 export class VisualizerComponent implements OnInit {
+    // extent of ap and penticton data
     invalidFieldMessage: string;
     invalidFields: string[];
     // TODO: fix this to be the current day once Ap is updated to current day
     lastApDateWithValue: number = moment.utc('2020-10-15').startOf('day').valueOf();
+    dataExtent: moment.Moment[] = [ moment.utc('1947-01-01'), moment.utc(this.lastApDateWithValue) ];
     modelForm = new FormGroup({
-        date: new FormControl(moment.utc(this.lastApDateWithValue), [ Validators.required, Validators.min(0) ]),
+        date: new FormControl(this.dataExtent[1], [ Validators.required, Validators.min(0) ]),
         f107: new FormControl({ value: 75, disabled: true }, [ Validators.required, Validators.min(0) ]),
         f107a: new FormControl({ value: 75, disabled: true }, [ Validators.required, Validators.min(0) ]),
         apForm: new FormGroup({
@@ -77,6 +79,10 @@ export class VisualizerComponent implements OnInit {
     surfaceVariable = 'H';
     surfaceSvg: ISurfaceData;
     altitudeSvg: IAltitudeData;
+    validDates = (d: moment.Moment | null): boolean => {
+        return d.isSameOrAfter(this.dataExtent[0]) && d.isSameOrBefore(this.dataExtent[1]);
+    }
+
 
     constructor(
         private modelService: ModelService,
@@ -84,9 +90,7 @@ export class VisualizerComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        // initial default date, currently the lastApDateWithValue
-        // TODO: disable dates that don't have data, like the future or dates beyond lastApDateWithValue
-        const initialMomentDate = moment.utc(this.lastApDateWithValue);
+        const initialMomentDate = this.dataExtent[1];
         // figure out which f10.7 range to use, 54 days to past or 81 days centered on date, all must have values
         const f10DateRange: number[] = this.getF10Range( initialMomentDate.valueOf() );
         const f10TimeQuery: string = this.latisService.getTimeQuery( f10DateRange[0], f10DateRange[1]);
@@ -100,7 +104,7 @@ export class VisualizerComponent implements OnInit {
             const averageDailyAp = mean(apValues);
             this.setDailyAp( averageDailyAp );
         });
-        this.latisService.getApValues( this.lastApDateWithValue ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
+        this.latisService.getApValues( this.dataExtent[1].valueOf() ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // current time (closest 3hr value) time<=date&take_right(20).reverse();
             // NOTE: this will take the last 20 Ap values and put them into the model
             // if a value is missing, the next value is used, is this okay? The best we can do?
