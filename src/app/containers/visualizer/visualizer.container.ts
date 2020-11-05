@@ -90,7 +90,7 @@ export class VisualizerComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        const initialMomentDate = this.dataExtent[1];
+        const initialMomentDate: moment.Moment = this.dataExtent[1];
         // figure out which f10.7 range to use, 54 days to past or 81 days centered on date, all must have values
         const f10DateRange: number[] = this.getF10Range( initialMomentDate.valueOf() );
         const f10TimeQuery: string = this.latisService.getTimeQuery( f10DateRange[0], f10DateRange[1]);
@@ -135,7 +135,6 @@ export class VisualizerComponent implements OnInit {
                 this.latisService.getF10Values(timeQuery).subscribe( (response: any) => {
                     const data: number[] = response.penticton_radio_flux_nearest_noon.data;
                     this.setF107Values( data, newMomentDate );
-
                 });
             });
 
@@ -171,11 +170,15 @@ export class VisualizerComponent implements OnInit {
     getF10Range( date: number ): number[] {
         // if we are within 41 days of today's date, then only use the most recent 54 days
         // otherwise: use 41 days before to 40 days after (81 total days)
+        // moment addition and substraction mutates the variable, so clone first
         const use54: boolean = Date.now() - date < (1000 * 60 * 60 * 24 * 41);
-        const startOfDate: moment.Moment = moment.utc(date).startOf('day');
-        const startRange: number = use54 ?  startOfDate.subtract(54, 'day').valueOf()
-            : startOfDate.subtract(41, 'day').valueOf();
-        const endRange: number = use54 ?  date : startOfDate.add(40, 'day').valueOf();
+        const startOfDate: moment.Moment = moment.utc(date).clone().startOf('day');
+        const date54: number = startOfDate.clone().subtract(54, 'day').valueOf();
+        const date81Start: number = startOfDate.clone().subtract(41, 'day').valueOf();
+        const date81End: number = startOfDate.clone().add(40, 'day').valueOf();
+        const startRange: number = use54 ?  date54
+            : date81Start;
+        const endRange: number = use54 ?  date : date81End;
         return [ startRange, endRange ];
     }
 
@@ -287,7 +290,7 @@ export class VisualizerComponent implements OnInit {
             return aggregator;
         }, {});
         // get the previous day's value
-        const startOfPreviousDay = date.subtract(1, 'day').startOf('day').valueOf();
+        const startOfPreviousDay = date.clone().subtract(1, 'day').startOf('day').valueOf();
         const previousDayValue = f107ByDay[startOfPreviousDay];
         this.modelForm.controls.f107.setValue(+previousDayValue.toFixed(2));
         this.modelForm.controls.f107.enable();
