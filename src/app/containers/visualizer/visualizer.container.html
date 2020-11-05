@@ -1,8 +1,8 @@
 <mat-card class="viz__header">
     <form  [formGroup]="modelForm">
-        <mat-form-field  class="viz__field">
+        <mat-form-field  class="viz__field viz__field--highlight">
             <mat-label>Date</mat-label>
-            <input matInput formControlName="date" [matDatepicker]="date" formControlName="date">
+            <input matInput formControlName="date" [matDatepicker]="date" formControlName="date" [matDatepickerFilter]="validDates" [min]="dataExtent[0]" [max]="dataExtent[1]">
             <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
             <mat-datepicker #date></mat-datepicker>
             <mat-error *ngIf="modelForm.controls.date.invalid">{{getValidationMessage('date')}}</mat-error>
@@ -10,23 +10,55 @@
         <mat-form-field floatLabel="always" class="viz__field">
             <mat-label>F10.7</mat-label>
             <input matInput type="number" formControlName="f107">
-            <mat-hint>solar radio flux at 10.7cm</mat-hint>
+            <mat-hint>solar radio flux at 10.7cm previous full day</mat-hint>
         </mat-form-field>
         <mat-form-field floatLabel="always" class="viz__field">
             <mat-label>F10.7a</mat-label>
             <input matInput type="number" formControlName="f107a">
-            <mat-hint>average solar radio flux at 10.7cm</mat-hint>
+            <mat-hint>81-day average solar radio flux at 10.7cm</mat-hint>
         </mat-form-field>
-        <mat-form-field floatLabel="always" class="viz__field">
-            <mat-label>Ap</mat-label>
-            <input matInput type="number" formControlName="ap">
-            <mat-hint>average geomagnetic activity</mat-hint>
-        </mat-form-field>
+        <div class="viz__form-group" formGroupName="apForm">
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>Ap daily average</mat-label>
+                <input matInput type="number" formControlName="apDay">
+                <mat-hint>geomagnetic activity on day selected</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>ap</mat-label>
+                <input matInput type="number" formControlName="apCurrent">
+                <mat-hint>most recent ap value</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>ap -3 hrs</mat-label>
+                <input matInput type="number" formControlName="ap3">
+                <mat-hint>ap 3 hours before most recent</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>ap -6 hrs</mat-label>
+                <input matInput type="number" formControlName="ap6">
+                <mat-hint>ap 6 hours before most recent</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>ap -9</mat-label>
+                <input matInput type="number" formControlName="ap9">
+                <mat-hint>ap 9 hours before most recent</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>ap -12 average</mat-label>
+                <input matInput type="number" formControlName="ap12T33">
+                <mat-hint>average of 24 hrs before ap -9</mat-hint>
+            </mat-form-field>
+            <mat-form-field floatLabel="always" class="viz__field">
+                <mat-label>ap -36 average</mat-label>
+                <input matInput type="number" formControlName="ap36T57">
+                <mat-hint>average of 24 hrs before ap -12 average</mat-hint>
+            </mat-form-field>
+        </div>
     </form>
 </mat-card>
 <div class="viz__body">
     <mat-card class="viz__surface" [formGroup]="surfaceForm">
-        <div class="viz__header">
+        <div class="viz__header-form">
             <mat-form-field floatLabel="always" class="viz__field">
                 <mat-label>Altitude of surface (km)</mat-label>
                 <input matInput type="number" step="100" min="0" max="1000" formControlName="altitude">
@@ -36,7 +68,6 @@
         </div>
         <div class="viz__graphic">
             <lasp-swt-surface-plot
-                *ngIf="surfacePoints"
                 [data]="surfacePoints"
                 [date]="modelForm.value.date"
                 [variable]="variableForm.value"
@@ -59,8 +90,8 @@
         </mat-toolbar>
     </mat-card>
     <mat-card class="viz__altitude" [formGroup]="altitudeForm">
-        <div class="viz__header">
-            <mat-form-field floatLabel="always" class="viz__field  viz__field--small">
+        <div class="viz__header-form">
+            <mat-form-field floatLabel="always" class="viz__field viz__field--small">
                 <mat-label>Longitude (deg)</mat-label>
                 <input matInput type="number" step="5" max="180" min="-180" formControlName="longitude">
                 <mat-hint></mat-hint>
@@ -83,7 +114,7 @@
                 >
             </lasp-swt-altitude-plot>
         </div>
-        <div class="viz__header">
+        <div class="viz__header-form">
             <mat-slide-toggle disabled
                 color="primary"
                 >

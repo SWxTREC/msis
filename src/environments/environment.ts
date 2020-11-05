@@ -5,6 +5,10 @@ import { version } from '../../package.json';
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+    latisSwp: 'https://swp-dev.pdmz.lasp.colorado.edu/space-weather-portal/latis/dap/',
+    // latisSwp: 'https://lasp.colorado.edu/space-weather-portal/latis/dap/',
+    // latisLisird: 'https://lasp.colorado.edu/lisird/latis/dap/',
+    latisLisird: 'http://lisird-stage.pdmz.lasp.colorado.edu/lisird/latis/dap/',
     msisApi: 'https://uqw5ak3cjh.execute-api.us-east-1.amazonaws.com/Prod/msis2',
     production: false,
     version: version
