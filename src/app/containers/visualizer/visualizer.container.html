@@ -67,7 +67,7 @@
             </mat-form-field>
         </div>
         <div class="viz__graphic">
-            <lasp-swt-surface-plot
+            <swt-surface-plot
                 [data]="surfacePoints"
                 [date]="modelForm.value.date"
                 [variable]="variableForm.value"
@@ -75,7 +75,7 @@
                 [longitude]="altitudeForm.value.longitude"
                 (changeLocation)="updateLocation( $event )"
                 >
-            </lasp-swt-surface-plot>
+            </swt-surface-plot>
             <div id="surface"></div>
         </div>
         <mat-toolbar color="primary">
@@ -105,14 +105,14 @@
             </mat-form-field>
         </div>
         <div class="viz__graphic">
-            <lasp-swt-altitude-plot
+            <swt-altitude-plot
                 *ngIf="altitudePoints"
                 [data]="altitudePoints"
                 [altitude]="surfaceForm.value.altitude"
                 [variable]="variableForm.value"
                 [variables]="variables"
                 >
-            </lasp-swt-altitude-plot>
+            </swt-altitude-plot>
         </div>
         <div class="viz__header-form">
             <mat-slide-toggle disabled

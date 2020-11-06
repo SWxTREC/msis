@@ -1,17 +1,17 @@
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 import * as d3 from 'd3';
 import { clamp } from 'lodash';
-import { Moment } from 'moment';
+import * as moment from 'moment';
 import { EARTH_MAP_URL, EMPTY_SURFACE_DATA, ISurfaceData } from 'src/app/models';
 
 @Component({
-    selector: 'lasp-swt-surface-plot',
+    selector: 'swt-surface-plot',
     templateUrl: './swt-surface-plot.component.html',
     styleUrls: [ './swt-surface-plot.component.scss' ]
 })
 export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     @Input() data: ISurfaceData = EMPTY_SURFACE_DATA;
-    @Input() date: Moment;
+    @Input() date: moment.Moment;
     @Input() latitude = 0;
     @Input() longitude = 0;
     @Input() variable: string;

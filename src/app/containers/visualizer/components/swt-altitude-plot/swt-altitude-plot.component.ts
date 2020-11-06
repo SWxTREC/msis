@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import { IAltitudeData } from 'src/app/models';
 
 @Component({
-    selector: 'lasp-swt-altitude-plot',
+    selector: 'swt-altitude-plot',
     templateUrl: './swt-altitude-plot.component.html',
     styleUrls: [ './swt-altitude-plot.component.scss' ]
 })
