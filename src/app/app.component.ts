@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-
+import {
+    LaspBaseAppSnippetsService
+} from 'lasp-base-app-snippets';
 import {
     IImageLink,
     INavItem,
     ISocialLink,
     IVersion
 } from 'lasp-footer';
-
-import {
-    LaspBaseAppSnippetsService
-} from 'lasp-base-app-snippets';
 
 import { environment } from '../environments/environment';
 
@@ -20,6 +18,8 @@ import { environment } from '../environments/environment';
     styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent {
+    latisLisird = environment.latisLisird;
+    latisSwp = environment.latisSwp;
 
     // please have no more than 7 items in the nav menu
     navItems: INavItem[] = [
@@ -52,10 +52,24 @@ export class AppComponent {
     versions: IVersion[] = [
         {
             version: environment.version
+        },
+        {
+            productName: 'Ap/ap data from GFZ German Research Centre for Geosciences provided via',
+            version:  'LaTiS-swp',
+            link: this.latisSwp,
+            linkedPart: 'version'
+        },
+        {
+            productName: 'Penticton F10.7 data from National Resources Canada provided via',
+            version: 'LaTiS-lisird',
+            link: this.latisLisird,
+            linkedPart: 'version'
         }
     ];
 
-    constructor( private _snippets: LaspBaseAppSnippetsService ) {
+    constructor(
+        private _snippets: LaspBaseAppSnippetsService
+    ) {
         this._snippets.appComponent.allExcept([ this._snippets.appComponent.setupGoogleAnalytics ]);
     }
 }
