@@ -28,7 +28,6 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
     g2: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element drawn over the top of "g"
     colorBar: d3.Selection<SVGElement, {}, HTMLElement, any>; // Color bar
-    surfaceCells: d3.Selection<SVGElement, {}, SVGElement, any>; // All of the surface polygons
     surfaceColor: d3.ScaleSequential<string>;
     pathFromProjection: d3.GeoPath<any, d3.GeoPermissibleObjects>;
     projection: d3.GeoProjection;
