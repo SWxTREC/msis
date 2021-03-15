@@ -254,13 +254,13 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .domain([ d3.min<number>(this.data[this.variable]), d3.max<number>(this.data[this.variable]) ]);
     }
 
-    setDrag() {
+    setMapInteractivity() {
         const sensitivity = 75;
         const initialScale = 170;
-        const k = sensitivity / this.projection.scale();
         // Drag
         this.svg.call(d3.drag().on('drag', (event: any) => {
             const rotate = this.projection.rotate();
+            const k = sensitivity / this.projection.scale();
             this.projection.rotate([
                 rotate[0] + event.dx * k,
                 rotate[1] - event.dy * k
@@ -283,6 +283,20 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
                 event.transform.k = 0.3;
             }
         }));
+
+        // Automatic roation
+        d3.timer( () => {
+            const rotate = this.projection.rotate();
+            const k = sensitivity / this.projection.scale();
+            this.projection.rotate([
+                rotate[0] - 1 * k,
+                rotate[1]
+            ]);
+            // our projection has been moved, so update the path creator
+            this.pathFromProjection = d3.geoPath(this.projection);
+            // update all the geopaths
+            this.svg.selectAll('path').attr('d', this.pathFromProjection);
+        }, 400);
     }
 
     setInitialSvg(): void {
@@ -291,7 +305,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.addGraphicsElement();
         this.setSurfaceCells(this.data);
         this.drawMap();
-        this.setDrag();
+        this.setMapInteractivity();
     }
 
     setProjection() {
