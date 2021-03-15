@@ -26,7 +26,6 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     hostElement: HTMLElement; // Native element hosting the SVG container
     svg: d3.Selection<SVGElement, {}, HTMLElement, any>; // Top level SVG element
     g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
-    altitudeBox: d3.Selection<SVGElement, {}, HTMLElement, any>; // Altitude box
     colorBar: d3.Selection<SVGElement, {}, HTMLElement, any>; // Color bar
     surfaceCells: d3.Selection<SVGElement, {}, SVGElement, any>; // All of the surface polygons
     surfaceColor: d3.ScaleSequential<string>;
@@ -55,19 +54,17 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     drawAltitudeBox() {
-        if ( this.altitudeBox ) {
-            this.svg.selectAll('#altitude-box').remove();
-        }
-
         const geoBox: d3.GeoPermissibleObjects = this.geoBoxFromPoint(this.longitude, this.latitude);
         // draw a red box around the altitude profile location
-        this.altitudeBox = this.g
+        this.g.selectAll('#altitude-box')
+            .data([ geoBox ]) // feature
+            .enter()
             .append('path')
             .attr('id', 'altitude-box')
             .attr('fill', 'none')
             .attr('stroke', 'red')
             .attr('stroke-width', 2)
-            .attr('d', this.pathFromProjection(geoBox));
+            .attr('d', this.pathFromProjection);
     }
 
     drawColorBar() {
