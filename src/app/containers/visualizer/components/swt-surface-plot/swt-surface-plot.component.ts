@@ -131,13 +131,16 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .attr('stroke', 'black');
 
         d3.json(EARTH_MAP_URL).then((data: any) => {
-            this.g.append('g')
+            this.g.selectAll('.country__outlines')
+                .data(data.features)
+                .enter()
                 .append('path')
+                .attr('class', 'country__outlines')
                 .attr('id', 'earth-map')
                 .attr('fill', 'none')
                 .attr('stroke', 'black')
                 .attr('stroke-linejoin', 'round')
-                .attr('d', this.pathFromProjection(data));
+                .attr('d', this.pathFromProjection);
         });
         // Add 6am, noon, 6pm lines
         const l0 = this.centerLongitude > -90 ? this.centerLongitude - 90 : this.centerLongitude + 270;
@@ -254,21 +257,51 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .domain([ d3.min<number>(this.data[this.variable]), d3.max<number>(this.data[this.variable]) ]);
     }
 
+    setDrag() {
+        const sensitivity = 75;
+        const initialScale = 170;
+        const k = sensitivity / this.projection.scale();
+        // Drag
+        this.svg.call(d3.drag().on('drag', (event: any) => {
+            const rotate = this.projection.rotate();
+            this.projection.rotate([
+                rotate[0] + event.dx * k,
+                rotate[1] - event.dy * k
+            ]);
+            // our projection has been moved, so update the path creator
+            this.pathFromProjection = d3.geoPath(this.projection);
+            // update all the geopaths
+            this.svg.selectAll('path').attr('d', this.pathFromProjection);
+        }));
+
+        // Zoom
+        // this.svg.call(d3.zoom().on('zoom', () => {
+        //     if (d3.event.transform.k > 0.3) {
+        //         this.projection.scale(initialScale * d3.event.transform.k);
+        //     } else {
+        //         d3.event.transform.k = 0.3;
+        //     }
+        // }));
+    }
+
     setInitialSvg(): void {
         this.setChartDimensions();
         this.setProjection();
         this.addGraphicsElement();
         this.setSurfaceCells(this.data);
         this.drawMap();
+        this.setDrag();
     }
 
     setProjection() {
         this.centerLongitude = 180 - (this.date.hour() + this.date.minute() / 60) / 24 * 360;
-        this.projection = d3.geoEqualEarth()
+        this.projection = d3.geoOrthographic()
             .scale(170)
             // Center the plot under local noon
             // 12 UTC == 0 degrees, 18 UTC == 90 degrees (rotates opposite direction)
             .rotate([ -this.centerLongitude, 0 ])
+            // tilt it down a little bit
+            .rotate([ 0, -30 ])
             .translate([ this.width / 2, this.height / 2 - this.legendHeight ]);
         this.pathFromProjection = d3.geoPath(this.projection);
     }
