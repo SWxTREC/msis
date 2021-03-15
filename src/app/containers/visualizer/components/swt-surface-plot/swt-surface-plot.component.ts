@@ -272,13 +272,17 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         }));
 
         // Zoom
-        // this.svg.call(d3.zoom().on('zoom', () => {
-        //     if (d3.event.transform.k > 0.3) {
-        //         this.projection.scale(initialScale * d3.event.transform.k);
-        //     } else {
-        //         d3.event.transform.k = 0.3;
-        //     }
-        // }));
+        this.svg.call(d3.zoom().on('zoom', (event: any) => {
+            if (event.transform.k > 0.3) {
+                this.projection.scale(initialScale * event.transform.k);
+                // our projection has been moved, so update the path creator
+                this.pathFromProjection = d3.geoPath(this.projection);
+                // update all the geopaths
+                this.svg.selectAll('path').attr('d', this.pathFromProjection);
+            } else {
+                event.transform.k = 0.3;
+            }
+        }));
     }
 
     setInitialSvg(): void {
