@@ -26,6 +26,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     hostElement: HTMLElement; // Native element hosting the SVG container
     svg: d3.Selection<SVGElement, {}, HTMLElement, any>; // Top level SVG element
     g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
+    g2: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element drawn over the top of "g"
     colorBar: d3.Selection<SVGElement, {}, HTMLElement, any>; // Color bar
     surfaceCells: d3.Selection<SVGElement, {}, SVGElement, any>; // All of the surface polygons
     surfaceColor: d3.ScaleSequential<string>;
@@ -51,12 +52,14 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     addGraphicsElement() {
         this.g = this.svg.append('g')
             .attr('transform', 'translate( ' + this.margin + ',' + this.margin + ')');
+        this.g2 = this.svg.append('g')
+            .attr('transform', 'translate( ' + this.margin + ',' + this.margin + ')');
     }
 
     drawAltitudeBox() {
         const geoBox: d3.GeoPermissibleObjects = this.geoBoxFromPoint(this.longitude, this.latitude);
         // draw a red box around the altitude profile location
-        this.g.selectAll('#altitude-box')
+        this.g2.selectAll('#altitude-box')
             .data([ geoBox ]) // feature
             .enter()
             .append('path')
@@ -134,7 +137,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             ]
         };
 
-        this.g.selectAll('.latLines')
+        this.g2.selectAll('.latLines')
             .data(<any>featureCollection.features)
             .enter()
             .append('path')
@@ -146,7 +149,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
         // Need the projection saved outside to access from in the functions
         const proj = this.projection;
-        this.g.selectAll('.latLineText')
+        this.g2.selectAll('.latLineText')
             .data(featureCollection.features)
             .enter()
             .append('text')
@@ -161,7 +164,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
     drawMap() {
         const objectType: d3.GeoPermissibleObjects = { type: 'Sphere' };
-        this.g.append('path')
+        this.g2.append('path')
             .attr('id', 'earth-outline')
             .attr('d', this.pathFromProjection(objectType))
             .attr('fill', 'none')
@@ -169,7 +172,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .attr('stroke', 'black');
 
         d3.json(EARTH_MAP_URL).then((data: any) => {
-            this.g.selectAll('.country__outlines')
+            this.g2.selectAll('.country__outlines')
                 .data(data.features)
                 .enter()
                 .append('path')
@@ -190,7 +193,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.setColorScale();
         // update the fill color of the surface cells
         // this.svg.on('mouseout', () => this.svg.selectAll('.surface__tooltip').remove());
-        this.surfaceCells
+        this.g.selectAll('.surface__cell')
             .attr('shape-rendering', 'crispEdges')
             .attr('fill', (feature: any) => {
                 return this.surfaceColor(this.getData(feature.properties.index));
@@ -348,13 +351,8 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     setSurfaceCells(data: any) {
-        if ( this.surfaceCells ) {
-            this.svg.selectAll('.surface__cell').remove();
-            this.svg.selectAll('.surface__tooltip').remove();
-        }
-
         const featureCollection = this.geoFeatureCollection(data);
-        this.surfaceCells = this.g.selectAll('.surface__cell')
+        this.g.selectAll('.surface__cell')
             .data(featureCollection.features)
             .enter()
             .append('path')
@@ -371,7 +369,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         // update all the geopaths
         this.svg.selectAll('path').attr('d', this.pathFromProjection);
         const proj = this.projection;
-        this.g.selectAll('.latLineText')
+        this.svg.selectAll('.latLineText')
             .attr('x', function(d: any) { return proj([ d.properties.longitude, 50 ])[0]; })
             .attr('y', function(d: any) { return proj([ d.properties.longitude, 50 ])[1]; });
     }
