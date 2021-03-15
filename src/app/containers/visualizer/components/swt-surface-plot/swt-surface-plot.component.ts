@@ -55,6 +55,19 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .attr('transform', 'translate( ' + this.margin + ',' + this.margin + ')');
     }
 
+    addTooltip() {
+        // Add the tooltip as a div within the same container as the svg
+        d3.select('#surface').append('div')
+            .attr('class', 'surface__tooltip')
+            .style('opacity', 0)
+            .style('background-color', 'white')
+            .style('border-width', '2px')
+            .style('border-radius', '3px')
+            .style('border-color', 'black')
+            .style('padding', '4px')
+            .style('position', 'absolute');
+    }
+
     drawAltitudeBox() {
         const geoBox: d3.GeoPermissibleObjects = this.geoBoxFromPoint(this.longitude, this.latitude);
         // draw a red box around the altitude profile location
@@ -185,13 +198,11 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     fillSurfaceCells() {
-        // add tooltip
-        const tooltip = this.g.append('text')
-            .attr('class', 'surface__tooltip');
         // Update the colorscale we are using
         this.setColorScale();
+        const tooltip = d3.select('.surface__tooltip');
+
         // update the fill color of the surface cells
-        // this.svg.on('mouseout', () => this.svg.selectAll('.surface__tooltip').remove());
         this.g.selectAll('.surface__cell')
             .attr('shape-rendering', 'crispEdges')
             .attr('fill', (feature: any) => {
@@ -203,21 +214,31 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
                 const coordinates: [number, number] = [ feature.properties.Longitude, feature.properties.Latitude ];
                 const pixelCoordinates: [number, number] = this.projection(coordinates);
                 tooltip
-                    .attr('x', pixelCoordinates[0])
-                    .attr('y', pixelCoordinates[1])
-                    .attr('dx', '0.5rem')
-                    .attr('dy', '-0.5rem')
-                    .text(`(${feature.properties.Longitude.toFixed(0)}, ${feature.properties.Latitude.toFixed(0)})`);
-                tooltip.append('tspan')
-                    .attr('x', pixelCoordinates[0])
-                    .attr('y', pixelCoordinates[1])
-                    .attr('dx', '0.5rem')
-                    .attr('dy', '0.5rem')
-                    .text(() => `${this.variable}: ${this.getData(feature.properties.index).toExponential(3)} m`)
-                    .append('tspan')
-                    .attr('baseline-shift', 'super')
-                    .attr('font-size', '70%')
-                    .text('-3');
+                    .transition().duration(200)
+                    .style('opacity', 0.8);
+
+                let units = 'm<sup>3</sup>';
+                if (this.variable === 'Mass') {
+                    units = 'kg/m<sup>3</sup>';
+                } else if (this.variable === 'Temperature') {
+                    units = 'K';
+                }
+                tooltip
+                    .html(
+                        '<center>' +
+                        `(${feature.properties.Longitude.toFixed(0)}&deg;, ${feature.properties.Latitude.toFixed(0)}&deg;)` +
+                        '<br><strong>' +
+                        `${this.variable}: ${this.getData(feature.properties.index).toExponential(3)}` +
+                        ' ' + units +
+                        '</strong></center>'
+                    )
+                    .style('left', (pixelCoordinates[0] + 2 * this.margin) + 'px')
+                    .style('top', (pixelCoordinates[1] + 2 * this.margin + this.legendHeight) + 'px');
+            })
+            .on('mouseout', () => {
+                tooltip
+                    .transition().duration(200)
+                    .style('opacity', 0);
             })
             .on('click', (_: any, feature: any) => {
                 this.changeLocation.emit([ feature.properties.Longitude, feature.properties.Latitude ]);
@@ -330,6 +351,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.setChartDimensions();
         this.setProjection();
         this.addGraphicsElement();
+        this.addTooltip();
         this.setSurfaceCells(this.data);
         this.drawMap();
         this.drawLatitudeLabels();
