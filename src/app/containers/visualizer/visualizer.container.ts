@@ -309,8 +309,11 @@ export class VisualizerComponent implements OnInit {
     }
 
     downloadSvg( element: any ) {
+        const nativeElement = this[element].elRef.nativeElement;
+        const altitudeBox = nativeElement.querySelector('#altitude-box');
+        altitudeBox.style.display = 'none';
         const serializer = new XMLSerializer;
-        const serializedSvg = serializer.serializeToString(this[element].elRef.nativeElement);
+        const serializedSvg = serializer.serializeToString(nativeElement);
         const blob = new Blob([ serializedSvg ], { type: 'image/svg+xml' });
         const url = window.URL.createObjectURL(blob);
         const anchor = document.createElement('a');
@@ -320,6 +323,7 @@ export class VisualizerComponent implements OnInit {
         anchor.click();
         window.URL.revokeObjectURL(url);
         anchor.remove();
+        altitudeBox.style.display = 'unset';
     }
 
     updateLocation( coordinates: number[] ) {

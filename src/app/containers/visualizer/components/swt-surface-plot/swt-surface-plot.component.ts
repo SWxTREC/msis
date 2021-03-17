@@ -299,26 +299,6 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         };
     }
 
-<<<<<<< HEAD
-    setSave() {
-        const element = d3.select('#surfaceDownload');
-        element.on('click', () => {
-            // Remove the altitude box and redraw after it we've cloned the object
-            // because we don't want it in the saved image
-            this.svg.selectAll('#altitude-box').remove();
-            const svg = this.hostElement.cloneNode(true);
-            this.drawAltitudeBox();
-            const serializer = new window.XMLSerializer;
-            const string = serializer.serializeToString(svg);
-            const blob = new Blob([ string ], { type: 'image/svg+xml' });
-
-            element.attr('href', URL.createObjectURL(blob))
-                .attr('download', 'msis-surface.svg');
-        });
-    }
-
-=======
->>>>>>> a2e2c71... angularize svg download, smart containers, dumb components
     setChartDimensions() {
         const viewBoxHeight = this.height + (this.margin * 2);
         const viewBoxWidth = this.width + (this.margin * 2);
