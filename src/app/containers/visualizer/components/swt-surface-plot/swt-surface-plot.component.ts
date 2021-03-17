@@ -299,6 +299,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         };
     }
 
+<<<<<<< HEAD
     setSave() {
         const element = d3.select('#surfaceDownload');
         element.on('click', () => {
@@ -316,6 +317,8 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         });
     }
 
+=======
+>>>>>>> a2e2c71... angularize svg download, smart containers, dumb components
     setChartDimensions() {
         const viewBoxHeight = this.height + (this.margin * 2);
         const viewBoxWidth = this.width + (this.margin * 2);
@@ -381,7 +384,6 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.drawMap();
         this.drawLatitudeLabels();
         this.setMapInteractivity();
-        this.setSave();
     }
 
     setProjection() {

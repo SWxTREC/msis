@@ -68,6 +68,7 @@
         </div>
         <div class="viz__graphic">
             <swt-surface-plot
+                #surfacePlot
                 [data]="surfacePoints"
                 [date]="modelForm.value.date"
                 [variable]="variableForm.value"
@@ -76,7 +77,6 @@
                 (changeLocation)="updateLocation( $event )"
                 >
             </swt-surface-plot>
-            <div id="surface"></div>
         </div>
         <mat-toolbar color="primary">
             <mat-toolbar-row  class="viz__variables">
@@ -86,9 +86,7 @@
                         [value]="variable"
                     >{{ variable }}</mat-button-toggle>
                 </mat-button-toggle-group>
-                <a mat-mini-fab color="accent" href="#" id="surfaceDownload" class="ignore-global-link-styles" style="margin: 15px;" target="_blank">
-                    <mat-icon>download</mat-icon>
-                </a>
+                <button mat-icon-button matTooltip="Download surface plot" class="viz__download" (click)="downloadSvg('surfacePlot')"><mat-icon>download</mat-icon></button>
             </mat-toolbar-row>
         </mat-toolbar>
     </mat-card>

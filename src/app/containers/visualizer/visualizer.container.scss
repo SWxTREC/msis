@@ -14,6 +14,10 @@ $helper-font-size: 8pt;
     &__body {
         display: flex;
     }
+    &__download {
+        position: absolute;
+        right: 20px;
+    }
     &__form-group {
         padding: 0.3rem 0 0.7rem 0;
     }
