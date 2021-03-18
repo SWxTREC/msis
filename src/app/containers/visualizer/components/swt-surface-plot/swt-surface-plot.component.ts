@@ -26,9 +26,8 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     hostElement: HTMLElement; // Native element hosting the SVG container
     svg: d3.Selection<SVGElement, {}, HTMLElement, any>; // Top level SVG element
     g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
-    altitudeBox: d3.Selection<SVGElement, {}, HTMLElement, any>; // Altitude box
+    g2: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element drawn over the top of "g"
     colorBar: d3.Selection<SVGElement, {}, HTMLElement, any>; // Color bar
-    surfaceCells: d3.Selection<SVGElement, {}, SVGElement, any>; // All of the surface polygons
     surfaceColor: d3.ScaleSequential<string>;
     pathFromProjection: d3.GeoPath<any, d3.GeoPermissibleObjects>;
     projection: d3.GeoProjection;
@@ -52,22 +51,22 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     addGraphicsElement() {
         this.g = this.svg.append('g')
             .attr('transform', 'translate( ' + this.margin + ',' + this.margin + ')');
+        this.g2 = this.svg.append('g')
+            .attr('transform', 'translate( ' + this.margin + ',' + this.margin + ')');
     }
 
     drawAltitudeBox() {
-        if ( this.altitudeBox ) {
-            this.svg.selectAll('#altitude-box').remove();
-        }
-
         const geoBox: d3.GeoPermissibleObjects = this.geoBoxFromPoint(this.longitude, this.latitude);
         // draw a red box around the altitude profile location
-        this.altitudeBox = this.g
+        this.g2.selectAll('#altitude-box')
+            .data([ geoBox ]) // feature
+            .enter()
             .append('path')
             .attr('id', 'altitude-box')
             .attr('fill', 'none')
             .attr('stroke', 'red')
             .attr('stroke-width', 2)
-            .attr('d', this.pathFromProjection(geoBox));
+            .attr('d', this.pathFromProjection);
     }
 
     drawColorBar() {
@@ -103,27 +102,68 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.updateLegend();
     }
 
-    drawLatitudeLabels(lon: number, label: string) {
-        this.g.append('path')
-            .attr('class', 'latLine')
+    drawLatitudeLabels() {
+        // Add 6am, noon, 6pm, and midnight lines
+        const l0 = this.centerLongitude > -90 ? this.centerLongitude - 90 : this.centerLongitude + 270;
+        const l1 = this.centerLongitude;
+        const l2 = this.centerLongitude < 90 ? this.centerLongitude + 90 : this.centerLongitude - 270;
+        const l3 = this.centerLongitude > 0 ? this.centerLongitude - 180 : this.centerLongitude + 180;
+
+        const featureCollection = {
+            name: 'LatitudeLines',
+            type: 'FeatureCollection',
+            features: [
+                {
+                    type: 'LineString',
+                    coordinates: [ [ l0, -90 ], [ l0, -45 ], [ l0, 0 ], [ l0, 45 ], [ l0, 90 ] ],
+                    properties: { name: '6 AM', longitude: l0 }
+                },
+                {
+                    type: 'LineString',
+                    coordinates: [ [ l1, -90 ], [ l1, -45 ], [ l1, 0 ], [ l1, 45 ], [ l1, 90 ] ],
+                    properties: { name: 'noon', longitude: l1 }
+                },
+                {
+                    type: 'LineString',
+                    coordinates: [ [ l2, -90 ], [ l2, -45 ], [ l2, 0 ], [ l2, 45 ], [ l2, 90 ] ],
+                    properties: { name: '6 PM', longitude: l2 }
+                },
+                {
+                    type: 'LineString',
+                    coordinates: [ [ l3, -90 ], [ l3, -45 ], [ l3, 0 ], [ l3, 45 ], [ l3, 90 ] ],
+                    properties: { name: 'midnight', longitude: l3 }
+                }
+            ]
+        };
+
+        this.g2.selectAll('.latLines')
+            .data(<any>featureCollection.features)
+            .enter()
+            .append('path')
+            .attr('class', 'latLines')
             .attr('fill', 'none')
             .attr('stroke', 'black')
-            .attr('stroke-width', 0.5)
-            .attr('d', this.pathFromProjection(
-                { type: 'LineString', coordinates: [ [ lon, -90 ], [ lon, -45 ], [ lon, 0 ], [ lon, 45 ], [ lon, 90 ] ] }
-                ));
-        this.g.append('text')
-            .attr('x', this.projection([ lon, 90 ])[0])
-            .attr('y', this.projection([ lon, 90 ])[1] - 15)
+            .attr('stroke-width', 0.75)
+            .attr('d', this.pathFromProjection);
+
+        // Need the projection saved outside to access from in the functions
+        const proj = this.projection;
+        this.g2.selectAll('.latLineText')
+            .data(featureCollection.features)
+            .enter()
+            .append('text')
+            .attr('class', 'latLineText')
+            .attr('x', function(d) { return proj([ d.properties.longitude, 50 ])[0]; })
+            .attr('y', function(d) { return proj([ d.properties.longitude, 50 ])[1]; })
             .attr('dy', '0.8rem')
             .attr('font-size', '100%')
             .attr('text-anchor', 'middle')
-            .text(label);
+            .text(function(d) { return d.properties.name; });
     }
 
     drawMap() {
         const objectType: d3.GeoPermissibleObjects = { type: 'Sphere' };
-        this.g.append('path')
+        this.g2.append('path')
             .attr('id', 'earth-outline')
             .attr('d', this.pathFromProjection(objectType))
             .attr('fill', 'none')
@@ -131,21 +171,17 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .attr('stroke', 'black');
 
         d3.json(EARTH_MAP_URL).then((data: any) => {
-            this.g.append('g')
+            this.g2.selectAll('.country__outlines')
+                .data(data.features)
+                .enter()
                 .append('path')
+                .attr('class', 'country__outlines')
                 .attr('id', 'earth-map')
                 .attr('fill', 'none')
                 .attr('stroke', 'black')
                 .attr('stroke-linejoin', 'round')
-                .attr('d', this.pathFromProjection(data));
+                .attr('d', this.pathFromProjection);
         });
-        // Add 6am, noon, 6pm lines
-        const l0 = this.centerLongitude > -90 ? this.centerLongitude - 90 : this.centerLongitude + 270;
-        const l1 = this.centerLongitude;
-        const l2 = this.centerLongitude < 90 ? this.centerLongitude + 90 : this.centerLongitude - 270;
-        this.drawLatitudeLabels(l0, '6 AM');
-        this.drawLatitudeLabels(l1, 'noon');
-        this.drawLatitudeLabels(l2, '6 PM');
     }
 
     fillSurfaceCells() {
@@ -156,7 +192,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.setColorScale();
         // update the fill color of the surface cells
         // this.svg.on('mouseout', () => this.svg.selectAll('.surface__tooltip').remove());
-        this.surfaceCells
+        this.g.selectAll('.surface__cell')
             .attr('shape-rendering', 'crispEdges')
             .attr('fill', (feature: any) => {
                 return this.surfaceColor(this.getData(feature.properties.index));
@@ -254,33 +290,68 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .domain([ d3.min<number>(this.data[this.variable]), d3.max<number>(this.data[this.variable]) ]);
     }
 
+    setMapInteractivity() {
+        const sensitivity = 75;
+        const initialScale = 170;
+        // Drag
+        this.svg.call(d3.drag().on('drag', (event: any) => {
+            const rotate = this.projection.rotate();
+            const k = sensitivity / this.projection.scale();
+            this.projection.rotate([
+                rotate[0] + event.dx * k,
+                rotate[1] - event.dy * k
+            ]);
+            this.updateDraw();
+        }));
+
+        // Zoom
+        this.svg.call(d3.zoom().on('zoom', (event: any) => {
+            if (event.transform.k > 0.3) {
+                this.projection.scale(initialScale * event.transform.k);
+                this.updateDraw();
+            } else {
+                event.transform.k = 0.3;
+            }
+        }));
+
+        // Automatic roation
+        d3.timer( () => {
+            const rotate = this.projection.rotate();
+            const k = sensitivity / this.projection.scale();
+            this.projection.rotate([
+                rotate[0] - 1 * k,
+                rotate[1]
+            ]);
+            this.updateDraw();
+        }, 400);
+    }
+
     setInitialSvg(): void {
         this.setChartDimensions();
         this.setProjection();
         this.addGraphicsElement();
         this.setSurfaceCells(this.data);
         this.drawMap();
+        this.drawLatitudeLabels();
+        this.setMapInteractivity();
     }
 
     setProjection() {
         this.centerLongitude = 180 - (this.date.hour() + this.date.minute() / 60) / 24 * 360;
-        this.projection = d3.geoEqualEarth()
+        this.projection = d3.geoOrthographic()
             .scale(170)
             // Center the plot under local noon
             // 12 UTC == 0 degrees, 18 UTC == 90 degrees (rotates opposite direction)
             .rotate([ -this.centerLongitude, 0 ])
+            // tilt it down a little bit
+            .rotate([ 0, -30 ])
             .translate([ this.width / 2, this.height / 2 - this.legendHeight ]);
         this.pathFromProjection = d3.geoPath(this.projection);
     }
 
     setSurfaceCells(data: any) {
-        if ( this.surfaceCells ) {
-            this.svg.selectAll('.surface__cell').remove();
-            this.svg.selectAll('.surface__tooltip').remove();
-        }
-
         const featureCollection = this.geoFeatureCollection(data);
-        this.surfaceCells = this.g.selectAll('.surface__cell')
+        this.g.selectAll('.surface__cell')
             .data(featureCollection.features)
             .enter()
             .append('path')
@@ -289,6 +360,17 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
         // Add an altitude Box in
         this.drawAltitudeBox();
+    }
+
+    updateDraw() {
+        // our projection has been moved, so update the path creator
+        this.pathFromProjection = d3.geoPath(this.projection);
+        // update all the geopaths
+        this.svg.selectAll('path').attr('d', this.pathFromProjection);
+        const proj = this.projection;
+        this.svg.selectAll('.latLineText')
+            .attr('x', function(d: any) { return proj([ d.properties.longitude, 50 ])[0]; })
+            .attr('y', function(d: any) { return proj([ d.properties.longitude, 50 ])[1]; });
     }
 
     updateLegend() {
