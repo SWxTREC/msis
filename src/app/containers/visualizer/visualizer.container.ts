@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
@@ -10,6 +10,8 @@ import {
     LatisService,
     ModelService
 } from 'src/app/services';
+
+import { SwtSurfacePlotComponent } from './components';
 
 export const DATEPICKER_FORMAT = {
     parse: {
@@ -33,6 +35,8 @@ export const DATEPICKER_FORMAT = {
     ]
 })
 export class VisualizerComponent implements OnInit {
+    @ViewChild('surfacePlot') surfacePlot: SwtSurfacePlotComponent;
+
     // extent of ap and penticton data
     invalidFieldMessage: string;
     invalidFields: string[];
@@ -302,6 +306,24 @@ export class VisualizerComponent implements OnInit {
         const averageValue = mean(arrayOfValues);
         this.modelForm.controls.f107a.setValue(+averageValue.toFixed(2));
         this.modelForm.controls.f107a.enable();
+    }
+
+    downloadSvg( element: any ) {
+        const nativeElement = this[element].elRef.nativeElement;
+        const altitudeBox = nativeElement.querySelector('#altitude-box');
+        altitudeBox.style.display = 'none';
+        const serializer = new XMLSerializer;
+        const serializedSvg = serializer.serializeToString(nativeElement);
+        const blob = new Blob([ serializedSvg ], { type: 'image/svg+xml' });
+        const url = window.URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = url;
+        anchor.download = 'swxtrec-msis-surface-plot-' + moment.utc(this.modelForm.value.date).format('YYYY-MM-DD') + '.svg';
+        anchor.target = '_self';
+        anchor.click();
+        window.URL.revokeObjectURL(url);
+        anchor.remove();
+        altitudeBox.style.display = 'unset';
     }
 
     updateLocation( coordinates: number[] ) {
