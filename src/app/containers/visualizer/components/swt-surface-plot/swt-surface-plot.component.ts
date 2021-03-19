@@ -28,6 +28,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
     g2: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element drawn over the top of "g"
     colorBar: d3.Selection<SVGElement, {}, HTMLElement, any>; // Color bar
+    tooltip: d3.Selection<SVGElement, {}, HTMLElement, any>; // tooltip for the plot
     surfaceColor: d3.ScaleSequential<string>;
     pathFromProjection: d3.GeoPath<any, d3.GeoPermissibleObjects>;
     projection: d3.GeoProjection;
@@ -62,6 +63,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .data([ geoBox ]) // feature
             .enter()
             .append('path')
+            .attr('pointer-events', 'none')
             .attr('id', 'altitude-box')
             .attr('fill', 'none')
             .attr('stroke', 'red')
@@ -140,6 +142,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .data(<any>featureCollection.features)
             .enter()
             .append('path')
+            .attr('pointer-events', 'none')
             .attr('class', 'latLines')
             .attr('fill', 'none')
             .attr('stroke', 'black')
@@ -153,6 +156,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .enter()
             .append('text')
             .attr('class', 'latLineText')
+            .attr('pointer-events', 'none')
             .attr('x', function(d) { return proj([ d.properties.longitude, 50 ])[0]; })
             .attr('y', function(d) { return proj([ d.properties.longitude, 50 ])[1]; })
             .attr('dy', '0.8rem')
@@ -165,7 +169,9 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         const objectType: d3.GeoPermissibleObjects = { type: 'Sphere' };
         this.g2.append('path')
             .attr('id', 'earth-outline')
-            .attr('d', this.pathFromProjection(objectType))
+            .datum(objectType)
+            .attr('d', this.pathFromProjection)
+            .attr('pointer-events', 'none')
             .attr('fill', 'none')
             .attr('stroke-width', 0.5)
             .attr('stroke', 'black');
@@ -177,6 +183,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
                 .append('path')
                 .attr('class', 'country__outlines')
                 .attr('id', 'earth-map')
+                .attr('pointer-events', 'none')
                 .attr('fill', 'none')
                 .attr('stroke', 'black')
                 .attr('stroke-linejoin', 'round')
@@ -185,13 +192,9 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     fillSurfaceCells() {
-        // add tooltip
-        const tooltip = this.g.append('text')
-            .attr('class', 'surface__tooltip');
         // Update the colorscale we are using
         this.setColorScale();
         // update the fill color of the surface cells
-        // this.svg.on('mouseout', () => this.svg.selectAll('.surface__tooltip').remove());
         this.g.selectAll('.surface__cell')
             .attr('shape-rendering', 'crispEdges')
             .attr('fill', (feature: any) => {
@@ -202,22 +205,42 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
                 // mouseover returns the MouseEvent and then the feature as the second argument
                 const coordinates: [number, number] = [ feature.properties.Longitude, feature.properties.Latitude ];
                 const pixelCoordinates: [number, number] = this.projection(coordinates);
-                tooltip
+                this.tooltip
+                    .attr('text-anchor', 'middle')
+                    .attr('pointer-events', 'none')
+                    .attr('opacity', 1)
                     .attr('x', pixelCoordinates[0])
-                    .attr('y', pixelCoordinates[1])
+                    .attr('y', pixelCoordinates[1] - 30)
                     .attr('dx', '0.5rem')
                     .attr('dy', '-0.5rem')
                     .text(`(${feature.properties.Longitude.toFixed(0)}, ${feature.properties.Latitude.toFixed(0)})`);
-                tooltip.append('tspan')
+
+                this.tooltip.append('tspan')
+                    .attr('pointer-events', 'none')
                     .attr('x', pixelCoordinates[0])
-                    .attr('y', pixelCoordinates[1])
+                    .attr('y', pixelCoordinates[1] - 30)
                     .attr('dx', '0.5rem')
                     .attr('dy', '0.5rem')
-                    .text(() => `${this.variable}: ${this.getData(feature.properties.index).toExponential(3)} m`)
-                    .append('tspan')
-                    .attr('baseline-shift', 'super')
-                    .attr('font-size', '70%')
-                    .text('-3');
+                    .text(() => `${this.variable}: ${this.getData(feature.properties.index).toExponential(3)}`);
+
+                if (this.variable === 'Mass') {
+                    this.tooltip.append('tspan')
+                        .text(' kg/m')
+                        .append('tspan')
+                        .attr('baseline-shift', 'super')
+                        .attr('font-size', '70%')
+                        .text('3');
+                } else if (this.variable === 'Temperature') {
+                    this.tooltip.append('tspan')
+                        .text(' K');
+                } else {
+                    this.tooltip.append('tspan')
+                        .text(' m')
+                        .append('tspan')
+                        .attr('baseline-shift', 'super')
+                        .attr('font-size', '70%')
+                        .text('-3');
+                }
             })
             .on('click', (_: any, feature: any) => {
                 this.changeLocation.emit([ feature.properties.Longitude, feature.properties.Latitude ]);
@@ -291,10 +314,17 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     setMapInteractivity() {
+        // add tooltip
+        this.tooltip = this.g2.append('text')
+            .attr('class', 'surface__tooltip')
+            .attr('pointer-events', 'none');
+        // remove the tooltip when we move out of the svg
+        this.g.on('mouseleave', () => this.tooltip.transition().duration(500).attr('opacity', 0));
+
         const sensitivity = 75;
         const initialScale = 170;
         // Drag
-        this.svg.call(d3.drag().on('drag', (event: any) => {
+        this.g.call(d3.drag().on('drag', (event: any) => {
             const rotate = this.projection.rotate();
             const k = sensitivity / this.projection.scale();
             this.projection.rotate([
@@ -305,7 +335,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         }));
 
         // Zoom
-        this.svg.call(d3.zoom().on('zoom', (event: any) => {
+        this.g.call(d3.zoom().on('zoom', (event: any) => {
             if (event.transform.k > 0.3) {
                 this.projection.scale(initialScale * event.transform.k);
                 this.updateDraw();
