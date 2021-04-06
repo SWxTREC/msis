@@ -41,7 +41,7 @@
     "lasp-search": "^1.0.6",
     "lodash": "^4.17.20",
     "moment": "^2.24.0",
-    "ngx-markdown": "^8.2.2",
+    "ngx-markdown": "^11.1.2",
     "rxjs": "^6.6.2",
     "tslib": "^1.13.0",
     "zone.js": "~0.10.3"
