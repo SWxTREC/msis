@@ -41,10 +41,10 @@ export class VisualizerComponent implements OnInit {
     invalidFieldMessage: string;
     invalidFields: string[];
     // TODO: fix this to be the current day once Ap is updated to current day
-    lastApDateWithValue: number = moment.utc('2020-10-15').startOf('day').valueOf();
-    dataExtent: moment.Moment[] = [ moment.utc('1947-01-01'), moment.utc(this.lastApDateWithValue) ];
+    lastApDateWithValue: number;
+    dataExtent: moment.Moment[];
     modelForm = new FormGroup({
-        date: new FormControl(this.dataExtent[1], [ Validators.required, Validators.min(0) ]),
+        date: new FormControl(undefined, [ Validators.required, Validators.min(0) ]),
         f107: new FormControl({ value: 75, disabled: true }, [ Validators.required, Validators.min(0) ]),
         f107a: new FormControl({ value: 75, disabled: true }, [ Validators.required, Validators.min(0) ]),
         apForm: new FormGroup({
@@ -84,14 +84,22 @@ export class VisualizerComponent implements OnInit {
     surfaceSvg: ISurfaceData;
     altitudeSvg: IAltitudeData;
     validDates = (d: moment.Moment | null): boolean => {
-        return d.isSameOrAfter(this.dataExtent[0]) && d.isSameOrBefore(this.dataExtent[1]);
+        if ( d && this.dataExtent ) {
+            return d.isSameOrAfter(this.dataExtent[0]) && d.isSameOrBefore(this.dataExtent[1]);
+        }
     }
-
 
     constructor(
         private modelService: ModelService,
         private latisService: LatisService
-    ) {}
+    ) {
+        this.latisService.mostRecentAp.subscribe( (timestamp: number) => {
+            this.lastApDateWithValue = timestamp;
+            this.dataExtent = [ moment.utc('1947-01-01'), moment.utc(this.lastApDateWithValue) ];
+            this.modelForm.controls.date.setValue(this.dataExtent[1]);
+        });
+
+    }
 
     ngOnInit() {
         const initialMomentDate: moment.Moment = this.dataExtent[1];

@@ -1,14 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
+import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class LatisService {
+    mostRecentAp: BehaviorSubject<number> = new BehaviorSubject(undefined);
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+        // get the most recent ap value on app load
+        this.http.get(`${environment.latisSwp}ap.jsond?last()`).subscribe( (response: any) => {
+            this.mostRecentAp.next(response.ap.data[ 0 ][ 0 ]);
+        });
+    }
 
     getApValues( endDate: number ) {
         const startDate: number = endDate - ( 1000 * 60 * 60 * 24 * 5 );
@@ -21,7 +28,7 @@ export class LatisService {
         const startDate: number = moment.utc(date).startOf('day').valueOf();
         const endDate: number = moment.utc(date).endOf('day').valueOf();
         const timeQuery: string = this.getTimeQuery( startDate, endDate );
-        // return all of the Ap readings from selected date (up to 8 every 24 hours)
+        // return all of the ap readings from selected date (up to 8 every 24 hours)
         return this.http.get(`${environment.latisSwp}ap.jsond?${ timeQuery }`);
     }
 
