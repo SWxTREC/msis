@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SwtAltitudePlotComponent } from './swt-altitude-plot.component';
 
@@ -6,7 +6,7 @@ describe('SwtAltitudePlotComponent', () => {
     let component: SwtAltitudePlotComponent;
     let fixture: ComponentFixture<SwtAltitudePlotComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [ SwtAltitudePlotComponent ]
         })

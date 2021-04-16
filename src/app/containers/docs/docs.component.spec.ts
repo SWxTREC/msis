@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MarkdownModule } from 'ngx-markdown';
 import { MaterialModule } from 'src/app/modules';
 
@@ -9,7 +9,7 @@ describe('DocsComponent', () => {
     let component: DocsComponent;
     let fixture: ComponentFixture<DocsComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             declarations: [ DocsComponent ],
             imports: [
