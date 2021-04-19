@@ -1,3 +1,8 @@
+/***************************************************************************************************
+ * Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
+ */
+import '@angular/localize/init';
+import 'zone.js/dist/zone';  // Included with Angular CLI.
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
  * You can add your own extra polyfills to this file.
@@ -37,8 +42,7 @@
 // import 'core-js/es6/map';
 // import 'core-js/es6/weak-map';
 // import 'core-js/es6/set';
-import 'core-js/modules/es7.array.includes';
-import 'zone.js/dist/zone';  // Included with Angular CLI.
+// import 'core-js/modules/es7.array.includes';
 
 /***************************************************************************************************
  * APPLICATION IMPORTS

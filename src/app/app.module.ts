@@ -28,7 +28,7 @@ import { routes } from './routes';
         HttpClientModule,
         MarkdownModule.forRoot({ loader: HttpClient }),
         MaterialModule,
-        RouterModule.forRoot( routes, { scrollPositionRestoration: 'enabled' } )
+        RouterModule.forRoot( routes, { scrollPositionRestoration: 'enabled', relativeLinkResolution: 'legacy' } )
     ],
     providers: [
         {
