@@ -2,6 +2,8 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output }
 import * as d3 from 'd3';
 import { clamp } from 'lodash';
 import * as moment from 'moment';
+import { BehaviorSubject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { EARTH_MAP_URL, EMPTY_SURFACE_DATA, ISurfaceData } from 'src/app/models';
 
 @Component({
@@ -32,6 +34,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     surfaceColor: d3.ScaleSequential<string>;
     pathFromProjection: d3.GeoPath<any, d3.GeoPermissibleObjects>;
     projection: d3.GeoProjection;
+    rotate: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
     constructor(private elRef: ElementRef) {
         this.hostElement = this.elRef.nativeElement;
@@ -325,6 +328,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         const initialScale = 170;
         // Drag
         this.g.call(d3.drag().on('drag', (event: any) => {
+            this.rotate.next(false);
             const rotate = this.projection.rotate();
             const k = sensitivity / this.projection.scale();
             this.projection.rotate([
@@ -344,16 +348,35 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             }
         }));
 
-        // Automatic roation
-        d3.timer( () => {
-            const rotate = this.projection.rotate();
-            const k = sensitivity / this.projection.scale();
-            this.projection.rotate([
-                rotate[0] - 1 * k,
-                rotate[1]
-            ]);
-            this.updateDraw();
-        }, 400);
+        this.rotate
+            .pipe(distinctUntilChanged())
+            .subscribe( (rotating: boolean) => {
+                console.log({ rotating });
+                if ( rotating === false ) {
+                    const playButton = this.g2.append('polygon')
+                    .attr('transform', 'translate( ' + (this.width - 100) + ',' + 0 + ')' )
+                    .attr('points', '0 0, 15 10, 0 20' )
+                    .attr('fill', 'hotpink' )
+                    .on('click', () => {
+                        this.rotate.next(true);
+                    });
+                } else {
+                    d3.timer( () => {
+                        if ( this.rotate.getValue() === true ) {
+                            console.log('this rotate', this.rotate.getValue());
+                            const rotate = this.projection.rotate();
+                            const k = sensitivity / this.projection.scale();
+                            this.projection.rotate([
+                                rotate[0] - 1 * k,
+                                rotate[1]
+                            ]);
+                            this.updateDraw();
+                        }
+                    }, 400);
+                }
+            });
+
+
     }
 
     setInitialSvg(): void {
