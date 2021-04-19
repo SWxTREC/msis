@@ -40,7 +40,6 @@ export class VisualizerComponent implements OnInit {
     // extent of ap and penticton data
     invalidFieldMessage: string;
     invalidFields: string[];
-    // TODO: fix this to be the current day once Ap is updated to current day
     lastApDateWithValue: number;
     dataExtent: moment.Moment[];
     modelForm = new FormGroup({
@@ -154,7 +153,7 @@ export class VisualizerComponent implements OnInit {
                 debounceTime(300)
             ).subscribe( () => {
                 // I want this 'if' statement to be uneccessary…some day
-                if ( this.modelForm.controls.date && this.modelForm.controls.apForm ) {
+                if ( this.modelForm.controls.date && this.lastApDateWithValue && this.modelForm.controls.apForm ) {
                     this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
                         this.surfacePoints = cloneDeep(results);
                     });
