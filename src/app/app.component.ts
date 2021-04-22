@@ -8,6 +8,9 @@ import {
     ISocialLink,
     IVersion
 } from 'lasp-footer';
+import {
+    LatisService
+} from 'src/app/services';
 
 import { environment } from '../environments/environment';
 
@@ -68,7 +71,9 @@ export class AppComponent {
     ];
 
     constructor(
-        private _snippets: LaspBaseAppSnippetsService
+        private _snippets: LaspBaseAppSnippetsService,
+        // trigger latis service on app load to get most recent ap data
+        private _latis: LatisService
     ) {
         this._snippets.appComponent.allExcept([ this._snippets.appComponent.setupGoogleAnalytics ]);
     }

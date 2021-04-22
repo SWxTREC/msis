@@ -32,6 +32,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     surfaceColor: d3.ScaleSequential<string>;
     pathFromProjection: d3.GeoPath<any, d3.GeoPermissibleObjects>;
     projection: d3.GeoProjection;
+    rotate = true;
 
     constructor(private elRef: ElementRef) {
         this.hostElement = this.elRef.nativeElement;
@@ -325,6 +326,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         const initialScale = 170;
         // Drag
         this.g.call(d3.drag().on('drag', (event: any) => {
+            this.rotate = false;
             const rotate = this.projection.rotate();
             const k = sensitivity / this.projection.scale();
             this.projection.rotate([
@@ -346,13 +348,15 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
         // Automatic roation
         d3.timer( () => {
-            const rotate = this.projection.rotate();
-            const k = sensitivity / this.projection.scale();
-            this.projection.rotate([
-                rotate[0] - 1 * k,
-                rotate[1]
-            ]);
-            this.updateDraw();
+            if ( this.rotate ) {
+                const rotate = this.projection.rotate();
+                const k = sensitivity / this.projection.scale();
+                this.projection.rotate([
+                    rotate[0] - 1 * k,
+                    rotate[1]
+                ]);
+                this.updateDraw();
+            }
         }, 400);
     }
 
