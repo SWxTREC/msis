@@ -1,3 +1,4 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 import { LaspFooterModule } from 'lasp-footer';
@@ -10,6 +11,7 @@ describe('AppComponent', () => {
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
             imports: [
+                HttpClientModule,
                 RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
                 LaspFooterModule,
                 LaspNavModule
