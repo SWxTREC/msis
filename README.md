@@ -103,7 +103,7 @@ release shouldn't be made? -->
 
 ### Bump the version
 
-From the master branch, run `npm version <major | minor | patch>` where major indicates a breaking change, minor is noticeable but non-breaking interface change, and patch is a non-breaking, under-the-hood refinement.
+From the main branch, run `npm version <major | minor | patch>` where major indicates a breaking change, minor is noticeable but non-breaking interface change, and patch is a non-breaking, under-the-hood refinement.
 
 This will:
 
@@ -113,7 +113,7 @@ This will:
 
 ### Deploy to GitHub pages
 
-From the master branch, run `npm run deploy`
+From the main branch, run `npm run deploy`
 
 This will:
 
@@ -123,7 +123,7 @@ This will:
 
 After a few minutes, you will see the changes at the GitHub-hosted site https://swxtrec.github.io/msis.
 
-You can run this script from any branch, but the site should reflect the content of the current master branch.
+You can run this script from any branch, but the site should reflect the content of the current main branch.
 
 <!-- ## FAQs and Help
 
