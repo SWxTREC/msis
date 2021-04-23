@@ -1,6 +1,5 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
-
 import { LaspFooterModule } from 'lasp-footer';
 import { LaspNavModule, LaspNavService } from 'lasp-nav';
 
