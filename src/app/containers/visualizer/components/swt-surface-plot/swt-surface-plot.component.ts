@@ -51,6 +51,9 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             this.setSurfaceCells(this.data);
             this.fillSurfaceCells();
             this.drawColorBar();
+            if ( changes.latitude || changes.longitude ) {
+                this.drawAltitudeBox();
+            }
         }
     }
 
