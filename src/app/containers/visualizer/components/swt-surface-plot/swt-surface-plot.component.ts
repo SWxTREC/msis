@@ -47,6 +47,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             this.setSurfaceCells(this.data);
             this.fillSurfaceCells();
             this.drawColorBar();
+            this.drawAltitudeBox();
         }
     }
 
@@ -58,14 +59,15 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     drawAltitudeBox() {
+        // remove any existing altitude boxes
+        this.g2.selectAll('#altitude-box').remove();
         const geoBox: d3.GeoPermissibleObjects = this.geoBoxFromPoint(this.longitude, this.latitude);
         // draw a red box around the altitude profile location
-        this.g2.selectAll('#altitude-box')
-            .data([ geoBox ]) // feature
-            .enter()
+        this.g2
             .append('path')
-            .attr('pointer-events', 'none')
             .attr('id', 'altitude-box')
+            .datum(geoBox)
+            .attr('pointer-events', 'none')
             .attr('fill', 'none')
             .attr('stroke', 'red')
             .attr('stroke-width', 2)
@@ -337,16 +339,19 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         }));
 
         // Zoom
-        this.g.call(d3.zoom().on('zoom', (event: any) => {
-            if (event.transform.k > 0.3) {
-                this.projection.scale(initialScale * event.transform.k);
-                this.updateDraw();
-            } else {
-                event.transform.k = 0.3;
-            }
-        }));
+        this.g.call(d3.zoom()
+            .on('zoom', (event: any) => {
+                if (event.transform.k > 0.3) {
+                    this.projection.scale(initialScale * event.transform.k);
+                    this.updateDraw();
+                } else {
+                    event.transform.k = 0.3;
+                }
+            })
+        );
+        this.g.on('dblclick.zoom', null);
 
-        // Automatic roation
+        // Automatic rotation
         d3.timer( () => {
             if ( this.rotate ) {
                 const rotate = this.projection.rotate();
@@ -391,9 +396,6 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .append('path')
             .attr('class', 'surface__cell')
             .attr('d', this.pathFromProjection);
-
-        // Add an altitude Box in
-        this.drawAltitudeBox();
     }
 
     updateDraw() {
