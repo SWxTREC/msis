@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import * as d3 from 'd3';
 import { clamp } from 'lodash';
 import * as moment from 'moment';
@@ -42,8 +42,12 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.setInitialSvg();
     }
 
-    ngOnChanges() {
+    ngOnChanges( changes: SimpleChanges ) {
         if (this.data) {
+            if ( changes.date ) {
+                this.setProjection();
+                this.drawLatitudeLabels();
+            }
             this.setSurfaceCells(this.data);
             this.fillSurfaceCells();
             this.drawColorBar();
@@ -107,10 +111,10 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
 
     drawLatitudeLabels() {
         // Add 6am, noon, 6pm, and midnight lines
-        const l0 = this.centerLongitude > -90 ? this.centerLongitude - 90 : this.centerLongitude + 270;
-        const l1 = this.centerLongitude;
-        const l2 = this.centerLongitude < 90 ? this.centerLongitude + 90 : this.centerLongitude - 270;
-        const l3 = this.centerLongitude > 0 ? this.centerLongitude - 180 : this.centerLongitude + 180;
+        const sixAm = this.centerLongitude > -90 ? this.centerLongitude - 90 : this.centerLongitude + 270;
+        const noon = this.centerLongitude;
+        const sixPm = this.centerLongitude < 90 ? this.centerLongitude + 90 : this.centerLongitude - 270;
+        const midnight = this.centerLongitude > 0 ? this.centerLongitude - 180 : this.centerLongitude + 180;
 
         const featureCollection = {
             name: 'LatitudeLines',
@@ -118,23 +122,23 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             features: [
                 {
                     type: 'LineString',
-                    coordinates: [ [ l0, -90 ], [ l0, -45 ], [ l0, 0 ], [ l0, 45 ], [ l0, 90 ] ],
-                    properties: { name: '6 AM', longitude: l0 }
+                    coordinates: [ [ sixAm, -90 ], [ sixAm, -45 ], [ sixAm, 0 ], [ sixAm, 45 ], [ sixAm, 90 ] ],
+                    properties: { name: '6 AM', longitude: sixAm }
                 },
                 {
                     type: 'LineString',
-                    coordinates: [ [ l1, -90 ], [ l1, -45 ], [ l1, 0 ], [ l1, 45 ], [ l1, 90 ] ],
-                    properties: { name: 'noon', longitude: l1 }
+                    coordinates: [ [ noon, -90 ], [ noon, -45 ], [ noon, 0 ], [ noon, 45 ], [ noon, 90 ] ],
+                    properties: { name: 'noon', longitude: noon }
                 },
                 {
                     type: 'LineString',
-                    coordinates: [ [ l2, -90 ], [ l2, -45 ], [ l2, 0 ], [ l2, 45 ], [ l2, 90 ] ],
-                    properties: { name: '6 PM', longitude: l2 }
+                    coordinates: [ [ sixPm, -90 ], [ sixPm, -45 ], [ sixPm, 0 ], [ sixPm, 45 ], [ sixPm, 90 ] ],
+                    properties: { name: '6 PM', longitude: sixPm }
                 },
                 {
                     type: 'LineString',
-                    coordinates: [ [ l3, -90 ], [ l3, -45 ], [ l3, 0 ], [ l3, 45 ], [ l3, 90 ] ],
-                    properties: { name: 'midnight', longitude: l3 }
+                    coordinates: [ [ midnight, -90 ], [ midnight, -45 ], [ midnight, 0 ], [ midnight, 45 ], [ midnight, 90 ] ],
+                    properties: { name: 'midnight', longitude: midnight }
                 }
             ]
         };
