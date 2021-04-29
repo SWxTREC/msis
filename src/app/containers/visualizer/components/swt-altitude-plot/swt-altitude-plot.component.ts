@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as d3 from 'd3';
 import { IAltitudeData } from 'src/app/models';
 
@@ -31,17 +31,22 @@ export class SwtAltitudePlotComponent implements OnChanges {
     xDomain: [number, number] = [ 1e-10, 1e20 ];
     xScale: d3.ScaleLogarithmic<number, number>;
     yScale: d3.ScaleLinear<number, number>;
+    temperatureScale: d3.ScaleLogarithmic<number, number>;
+    massScale: d3.ScaleLogarithmic<number, number>;
 
     constructor( private elRef: ElementRef ) {
         this.hostElement = this.elRef.nativeElement;
     }
 
-    ngOnChanges(): void {
-        this.filteredVariables = [ ...this.variables ].filter( variable =>
-            variable !== 'Temperature' &&
-            variable !== 'Mass' &&
-            variable !== 'AnomO'
-        );
+    ngOnChanges( changes: SimpleChanges ): void {
+        console.log('changes!', changes);
+        if ( changes.variables?.firstChange ) {
+            this.filteredVariables = [ ...this.variables ].filter( variable =>
+                variable !== 'Temperature' &&
+                variable !== 'Mass' &&
+                variable !== 'AnomO'
+            );
+        }
         this.createAltitudeSvg();
     }
 
@@ -56,6 +61,8 @@ export class SwtAltitudePlotComponent implements OnChanges {
         this.setColors();
         this.setXDomain(this.filteredVariables);
         this.setXScale();
+        this.setTemperatureScale();
+        this.setMassScale();
         this.setYScale();
         this.addGraphicsElement();
         this.drawXAxis();
@@ -69,19 +76,37 @@ export class SwtAltitudePlotComponent implements OnChanges {
         const getLine = d3.line()
             .defined(d => d !== null)
             .x((d) => this.xScale(+d))
-            .y((d, i) => this.yScale(this.data['Altitude'][i]));
+            .y((_d, i) => this.yScale(this.data['Altitude'][i]));
+        const getTemperatureLine = d3.line()
+            .defined(d => d !== null)
+            .x((d) => this.temperatureScale(+d))
+            .y((_d, i) => this.yScale(this.data['Altitude'][i]));
+        const getMassLine = d3.line()
+            .defined(d => d !== null)
+            .x((d) => this.massScale(+d))
+            .y((_d, i) => this.yScale(this.data['Altitude'][i]));
         this.filteredVariables.forEach( d => {
             const color = this.colorArray[this.variables.indexOf(d)];
             if ( this.data[d] ) {
-                this.g.append('path')
+                const altitudeLine = this.g.append('path')
                     .datum(this.data[d])
                     .attr('id', d)
                     .attr('fill', 'none')
                     .attr('stroke-linejoin', 'round')
                     .attr('stroke-linecap', 'round')
                     .attr('stroke-width', d === this.variable ? 3 : 1) // thicker line for surface var
-                    .style('stroke', color) // dynamic variable coloring
-                    .attr('d', getLine);
+                    .style('stroke', color); // dynamic variable coloring
+                switch (d) {
+                case 'Temperature':
+                    altitudeLine.attr('d', getTemperatureLine);
+                    break;
+                case 'Mass':
+                    altitudeLine.attr('d', getMassLine);
+                    console.log(d);
+                    break;
+                default:
+                    altitudeLine.attr('d', getLine);
+                }
             }
         });
     }
@@ -201,6 +226,19 @@ export class SwtAltitudePlotComponent implements OnChanges {
     setXScale() {
         this.xScale = d3.scaleLog()
             .domain(this.xDomain)
+            .range([ 0, this.width ]);
+    }
+
+    setTemperatureScale() {
+        console.log(this.data.Temperature);
+        this.temperatureScale = d3.scaleLog()
+            .domain(d3.extent(this.data.Temperature))
+            .range([ 0, this.width ]);
+    }
+
+    setMassScale() {
+        this.massScale = d3.scaleLog()
+            .domain(d3.extent(this.data.Mass))
             .range([ 0, this.width ]);
     }
 
