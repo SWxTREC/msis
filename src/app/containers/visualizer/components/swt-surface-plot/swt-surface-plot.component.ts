@@ -43,19 +43,17 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     ngOnChanges( changes: SimpleChanges ) {
+        if ( changes.date && !changes.date.firstChange ) {
+            this.setProjection();
+            this.g2.selectAll('.lonLine').remove();
+            this.g2.selectAll('.lonLineText').remove();
+            this.drawLongitudeLines();
+            this.updateDraw();
+        }
         if (this.data) {
-            console.log({ changes });
-            if ( changes.date ) {
-                this.setProjection();
-                console.log('draw longitude lines');
-                this.drawLongitudeLines();
-            }
             this.setSurfaceCells(this.data);
             this.fillSurfaceCells();
             this.drawColorBar();
-            if ( changes.latitude || changes.longitude ) {
-            }
-            console.log('draw altitude box');
             this.drawAltitudeBox();
         }
     }
@@ -172,7 +170,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             .attr('dy', '0.8rem')
             .attr('font-size', '100%')
             .attr('text-anchor', 'middle')
-            .text(function(d) { return d.properties.name; });
+            .text(d => d.properties.name);
     }
 
     drawMap() {
@@ -409,10 +407,9 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.pathFromProjection = d3.geoPath(this.projection);
         // update all the geopaths
         this.svg.selectAll('path').attr('d', this.pathFromProjection);
-        const proj = this.projection;
         this.svg.selectAll('.lonLineText')
-            .attr('x', function(d: any) { return proj([ d.properties.longitude, 50 ])[0]; })
-            .attr('y', function(d: any) { return proj([ d.properties.longitude, 50 ])[1]; });
+            .attr('x', (d: any) => this.projection([ d.properties.longitude, 50 ])[0] )
+            .attr('y', (d: any) => this.projection([ d.properties.longitude, 50 ])[1] );
     }
 
     updateLegend() {
