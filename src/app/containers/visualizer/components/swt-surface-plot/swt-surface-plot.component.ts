@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import * as d3 from 'd3';
 import { clamp } from 'lodash';
 import * as moment from 'moment';
@@ -42,12 +42,18 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.setInitialSvg();
     }
 
-    ngOnChanges() {
+    ngOnChanges( changes: SimpleChanges ) {
         if (this.data) {
+            if ( changes.date ) {
+                this.setProjection();
+                this.drawLongitudeLines();
+            }
             this.setSurfaceCells(this.data);
             this.fillSurfaceCells();
             this.drawColorBar();
-            this.drawAltitudeBox();
+            if ( changes.latitude || changes.longitude ) {
+                this.drawAltitudeBox();
+            }
         }
     }
 
@@ -107,61 +113,59 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.updateLegend();
     }
 
-    drawLatitudeLabels() {
+    drawLongitudeLines() {
         // Add 6am, noon, 6pm, and midnight lines
-        const l0 = this.centerLongitude > -90 ? this.centerLongitude - 90 : this.centerLongitude + 270;
-        const l1 = this.centerLongitude;
-        const l2 = this.centerLongitude < 90 ? this.centerLongitude + 90 : this.centerLongitude - 270;
-        const l3 = this.centerLongitude > 0 ? this.centerLongitude - 180 : this.centerLongitude + 180;
+        const sixAm = this.centerLongitude > -90 ? this.centerLongitude - 90 : this.centerLongitude + 270;
+        const noon = this.centerLongitude;
+        const sixPm = this.centerLongitude < 90 ? this.centerLongitude + 90 : this.centerLongitude - 270;
+        const midnight = this.centerLongitude > 0 ? this.centerLongitude - 180 : this.centerLongitude + 180;
 
         const featureCollection = {
-            name: 'LatitudeLines',
+            name: 'LongitudeLines',
             type: 'FeatureCollection',
             features: [
                 {
                     type: 'LineString',
-                    coordinates: [ [ l0, -90 ], [ l0, -45 ], [ l0, 0 ], [ l0, 45 ], [ l0, 90 ] ],
-                    properties: { name: '6 AM', longitude: l0 }
+                    coordinates: [ [ sixAm, -90 ], [ sixAm, -45 ], [ sixAm, 0 ], [ sixAm, 45 ], [ sixAm, 90 ] ],
+                    properties: { name: '6 AM', longitude: sixAm }
                 },
                 {
                     type: 'LineString',
-                    coordinates: [ [ l1, -90 ], [ l1, -45 ], [ l1, 0 ], [ l1, 45 ], [ l1, 90 ] ],
-                    properties: { name: 'noon', longitude: l1 }
+                    coordinates: [ [ noon, -90 ], [ noon, -45 ], [ noon, 0 ], [ noon, 45 ], [ noon, 90 ] ],
+                    properties: { name: 'noon', longitude: noon }
                 },
                 {
                     type: 'LineString',
-                    coordinates: [ [ l2, -90 ], [ l2, -45 ], [ l2, 0 ], [ l2, 45 ], [ l2, 90 ] ],
-                    properties: { name: '6 PM', longitude: l2 }
+                    coordinates: [ [ sixPm, -90 ], [ sixPm, -45 ], [ sixPm, 0 ], [ sixPm, 45 ], [ sixPm, 90 ] ],
+                    properties: { name: '6 PM', longitude: sixPm }
                 },
                 {
                     type: 'LineString',
-                    coordinates: [ [ l3, -90 ], [ l3, -45 ], [ l3, 0 ], [ l3, 45 ], [ l3, 90 ] ],
-                    properties: { name: 'midnight', longitude: l3 }
+                    coordinates: [ [ midnight, -90 ], [ midnight, -45 ], [ midnight, 0 ], [ midnight, 45 ], [ midnight, 90 ] ],
+                    properties: { name: 'midnight', longitude: midnight }
                 }
             ]
         };
 
-        this.g2.selectAll('.latLines')
+        this.g2.selectAll('.lonLine')
             .data(<any>featureCollection.features)
             .enter()
             .append('path')
             .attr('pointer-events', 'none')
-            .attr('class', 'latLines')
+            .attr('class', 'lonLine')
             .attr('fill', 'none')
             .attr('stroke', 'black')
             .attr('stroke-width', 0.75)
             .attr('d', this.pathFromProjection);
 
-        // Need the projection saved outside to access from in the functions
-        const proj = this.projection;
-        this.g2.selectAll('.latLineText')
+        this.g2.selectAll('.lonLineText')
             .data(featureCollection.features)
             .enter()
             .append('text')
-            .attr('class', 'latLineText')
+            .attr('class', 'lonLineText')
             .attr('pointer-events', 'none')
-            .attr('x', function(d) { return proj([ d.properties.longitude, 50 ])[0]; })
-            .attr('y', function(d) { return proj([ d.properties.longitude, 50 ])[1]; })
+            .attr('x', (d) => this.projection([ d.properties.longitude, 50 ])[0])
+            .attr('y', (d) => this.projection([ d.properties.longitude, 50 ])[1])
             .attr('dy', '0.8rem')
             .attr('font-size', '100%')
             .attr('text-anchor', 'middle')
@@ -371,7 +375,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         this.addGraphicsElement();
         this.setSurfaceCells(this.data);
         this.drawMap();
-        this.drawLatitudeLabels();
+        this.drawLongitudeLines();
         this.setMapInteractivity();
     }
 
@@ -404,7 +408,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         // update all the geopaths
         this.svg.selectAll('path').attr('d', this.pathFromProjection);
         const proj = this.projection;
-        this.svg.selectAll('.latLineText')
+        this.svg.selectAll('.lonLineText')
             .attr('x', function(d: any) { return proj([ d.properties.longitude, 50 ])[0]; })
             .attr('y', function(d: any) { return proj([ d.properties.longitude, 50 ])[1]; });
     }
