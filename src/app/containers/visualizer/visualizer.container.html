@@ -1,12 +1,13 @@
 <mat-card class="viz__header">
     <form  [formGroup]="modelForm">
-        <mat-form-field  class="viz__field viz__field--highlight">
+        <lasp-date-time-picker formControlName="dateTime"></lasp-date-time-picker>
+        <!-- <mat-form-field  class="viz__field viz__field--highlight">
             <mat-label>Date</mat-label>
-            <input matInput formControlName="date" [matDatepicker]="date" formControlName="date" [matDatepickerFilter]="validDates" [min]="dataExtent[0]" [max]="dataExtent[1]">
+            <input matInput formControlName="date" [matDatepicker]="date" [matDatepickerFilter]="validDates" [min]="dataExtent[0]" [max]="dataExtent[1]">
             <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
             <mat-datepicker #date></mat-datepicker>
             <mat-error *ngIf="modelForm.controls.date.invalid">{{getValidationMessage('date')}}</mat-error>
-        </mat-form-field>
+        </mat-form-field> -->
         <mat-form-field floatLabel="always" class="viz__field">
             <mat-label>F10.7</mat-label>
             <input matInput type="number" formControlName="f107">
@@ -73,7 +74,7 @@
             <swt-surface-plot
                 #surfacePlot
                 [data]="surfacePoints"
-                [date]="modelForm.value.date"
+                [dateTime]="modelForm.value.dateTime"
                 [variable]="variableForm.value"
                 [latitude]="altitudeForm.value.latitude"
                 [longitude]="altitudeForm.value.longitude"

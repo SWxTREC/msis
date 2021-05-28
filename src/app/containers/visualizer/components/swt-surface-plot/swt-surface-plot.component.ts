@@ -11,7 +11,7 @@ import { EARTH_MAP_URL, EMPTY_SURFACE_DATA, ISurfaceData } from 'src/app/models'
 })
 export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     @Input() data: ISurfaceData = EMPTY_SURFACE_DATA;
-    @Input() date: moment.Moment;
+    @Input() dateTime: moment.Moment;
     @Input() latitude = 0;
     @Input() longitude = 0;
     @Input() variable: string;
@@ -43,7 +43,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     ngOnChanges( changes: SimpleChanges ) {
-        if ( changes.date && !changes.date.firstChange ) {
+        if ( changes.dateTime && !changes.dateTime.firstChange && this.dateTime ) {
             this.setProjection();
             this.g2.selectAll('.lonLine').remove();
             this.g2.selectAll('.lonLineText').remove();
@@ -380,7 +380,9 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     setProjection() {
-        this.centerLongitude = 180 - (this.date.hour() + this.date.minute() / 60) / 24 * 360;
+        const hour = moment(this.dateTime).hour();
+        const minute = moment(this.dateTime).minute();
+        this.centerLongitude = 180 - (hour + minute / 60) / 24 * 360;
         this.projection = d3.geoOrthographic()
             .scale(170)
             // Center the plot under local noon

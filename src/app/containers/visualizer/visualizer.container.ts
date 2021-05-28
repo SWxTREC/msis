@@ -43,7 +43,7 @@ export class VisualizerComponent implements OnInit {
     lastApDateWithValue: number;
     dataExtent: moment.Moment[];
     modelForm = new FormGroup({
-        date: new FormControl(undefined, [ Validators.required, Validators.min(0) ]),
+        dateTime: new FormControl(undefined, [ Validators.required ]),
         f107: new FormControl({ value: 75, disabled: true }, [ Validators.required, Validators.min(0) ]),
         f107a: new FormControl({ value: 75, disabled: true }, [ Validators.required, Validators.min(0) ]),
         apForm: new FormGroup({
@@ -95,7 +95,7 @@ export class VisualizerComponent implements OnInit {
         this.latisService.mostRecentAp.subscribe( (timestamp: number) => {
             this.lastApDateWithValue = timestamp;
             this.dataExtent = [ moment.utc('1947-01-01'), moment.utc(this.lastApDateWithValue) ];
-            this.modelForm.controls.date.setValue(this.dataExtent[1]);
+            this.modelForm.controls.dateTime.setValue(this.dataExtent[1]);
         });
 
     }
@@ -123,7 +123,7 @@ export class VisualizerComponent implements OnInit {
             this.setApValues( data );
         });
 
-        this.modelForm.controls.date.valueChanges.pipe(
+        this.modelForm.controls.dateTime.valueChanges.pipe(
                 debounceTime(300)
             ).subscribe( (newMomentDate) => {
                 this.resetForm();
@@ -151,9 +151,9 @@ export class VisualizerComponent implements OnInit {
 
         this.modelForm.valueChanges.pipe(
                 debounceTime(300)
-            ).subscribe( () => {
+            ).subscribe( ( change ) => {
                 // I want this 'if' statement to be uneccessary…some day
-                if ( this.modelForm.controls.date && this.lastApDateWithValue && this.modelForm.controls.apForm ) {
+                if ( this.modelForm.controls.dateTime && this.lastApDateWithValue && this.modelForm.controls.apForm ) {
                     this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
                         this.surfacePoints = cloneDeep(results);
                     });
@@ -196,7 +196,7 @@ export class VisualizerComponent implements OnInit {
     getAltitudeParams(): IAltitudeParameters {
         return {
             ap: Object.values(this.modelForm.value.apForm),
-            date: this.modelForm.value.date.format('YYYY-MM-DDTHH:mm'),
+            date: this.modelForm.value.dateTime.format('YYYY-MM-DDTHH:mm'),
             f107: this.modelForm.controls.f107.value,
             f107a: this.modelForm.controls.f107.value,
             latitude: this.altitudeForm.value.latitude,
@@ -208,7 +208,7 @@ export class VisualizerComponent implements OnInit {
         return {
             altitude: this.surfaceForm.value.altitude,
             ap: Object.values(this.modelForm.value.apForm),
-            date: this.modelForm.value.date.format('YYYY-MM-DDTHH:mm'),
+            date: this.modelForm.value.dateTime.format('YYYY-MM-DDTHH:mm'),
             f107: this.modelForm.controls.f107.value,
             f107a: this.modelForm.controls.f107.value
         };
@@ -216,8 +216,8 @@ export class VisualizerComponent implements OnInit {
 
     getValidationMessage( control: string ): string {
         switch (control) {
-        case 'date':
-            if ( this.modelForm.controls.date.hasError('required') ) {
+        case 'dateTime':
+            if ( this.modelForm.controls.dateTime.hasError('required') ) {
                 return 'you must select a date';
             }
             break;
@@ -242,7 +242,7 @@ export class VisualizerComponent implements OnInit {
     resetForm() {
         // keep the values as temporary values, but disable until they are replaced with real values??
         Object.keys(this.modelForm.controls).forEach( key => {
-            if ( key !== 'date') {
+            if ( key !== 'dateTime') {
                 this.modelForm.controls[key].disable();
             }
         });

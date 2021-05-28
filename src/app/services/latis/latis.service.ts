@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -12,7 +13,7 @@ export class LatisService {
 
     constructor(private http: HttpClient) {
         // get the most recent ap value on app load
-        this.http.get(`${environment.latisSwp}ap.jsond?last()`).subscribe( (response: any) => {
+        this.http.get(`${environment.latisSwp}ap.jsond?last()`).pipe(take(1)).subscribe( (response: any) => {
             // if there is a value, use that date,
             // otherwise app will default to today and show warning that no pre-filled data is available
             if ( response.ap.data[0][1] ) {
