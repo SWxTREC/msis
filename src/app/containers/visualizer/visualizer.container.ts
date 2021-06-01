@@ -41,7 +41,7 @@ export class VisualizerComponent implements OnInit {
     invalidFieldMessage: string;
     invalidFields: string[];
     lastApDateWithValue: number;
-    dataExtent: moment.Moment[];
+    dataExtent: number[];
     modelForm = new FormGroup({
         dateTime: new FormControl(undefined, [ Validators.required ]),
         f107: new FormControl({ value: 75, disabled: true }, [ Validators.required, Validators.min(0) ]),
@@ -82,11 +82,6 @@ export class VisualizerComponent implements OnInit {
     surfaceVariable = 'H';
     surfaceSvg: ISurfaceData;
     altitudeSvg: IAltitudeData;
-    validDates = (d: moment.Moment | null): boolean => {
-        if ( d && this.dataExtent ) {
-            return d.isSameOrAfter(this.dataExtent[0]) && d.isSameOrBefore(this.dataExtent[1]);
-        }
-    }
 
     constructor(
         private modelService: ModelService,
@@ -94,28 +89,28 @@ export class VisualizerComponent implements OnInit {
     ) {
         this.latisService.mostRecentAp.subscribe( (timestamp: number) => {
             this.lastApDateWithValue = timestamp;
-            this.dataExtent = [ moment.utc('1947-01-01'), moment.utc(this.lastApDateWithValue) ];
+            this.dataExtent = [ moment.utc('1947-01-01').valueOf(), moment.utc(this.lastApDateWithValue).valueOf() ];
             this.modelForm.controls.dateTime.setValue(this.dataExtent[1]);
         });
 
     }
 
     ngOnInit() {
-        const initialMomentDate: moment.Moment = this.dataExtent[1];
+        const initialTimestamp: number = this.dataExtent[1];
         // figure out which f10.7 range to use, 54 days to past or 81 days centered on date, all must have values
-        const f10DateRange: number[] = this.getF10Range( initialMomentDate.valueOf() );
+        const f10DateRange: number[] = this.getF10Range( initialTimestamp );
         const f10TimeQuery: string = this.latisService.getTimeQuery( f10DateRange[0], f10DateRange[1]);
         this.latisService.getF10Values( f10TimeQuery ).subscribe( (response: any) => {
             const data: number[] = response.penticton_radio_flux_nearest_noon.data;
-            this.setF107Values( data, initialMomentDate );
+            this.setF107Values( data, initialTimestamp );
         });
-        this.latisService.getDailyAp( initialMomentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
+        this.latisService.getDailyAp( moment.utc(initialTimestamp) ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
             const apValues = response.ap.data.map( values => values[1]);
             const averageDailyAp = mean(apValues);
             this.setDailyAp( averageDailyAp );
         });
-        this.latisService.getApValues( this.dataExtent[1].valueOf() ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
+        this.latisService.getApValues( this.dataExtent[1] ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // current time (closest 3hr value) time<=date&take_right(20).reverse();
             // NOTE: this will take the last 20 Ap values and put them into the model
             // if a value is missing, the next value is used, is this okay? The best we can do?
@@ -125,17 +120,18 @@ export class VisualizerComponent implements OnInit {
 
         this.modelForm.controls.dateTime.valueChanges.pipe(
                 debounceTime(300)
-            ).subscribe( (newMomentDate) => {
+            ).subscribe( (newTimestamp: number) => {
                 this.resetForm();
-                const f10Range: number[] = this.getF10Range( newMomentDate.valueOf() );
+                const f10Range: number[] = this.getF10Range( newTimestamp );
                 const timeQuery: string = this.latisService.getTimeQuery( f10Range[0], f10Range[1] );
-                this.latisService.getDailyAp( newMomentDate ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
+                this.latisService.getDailyAp( moment.utc(newTimestamp) )
+                .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
                     const apValues = response.ap.data.map( values => values[1]);
                     const averageDailyAp = mean(apValues);
                     this.setDailyAp( averageDailyAp );
                 });
-                this.latisService.getApValues( newMomentDate.valueOf() )
+                this.latisService.getApValues( newTimestamp )
                 .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // current time (closest 3hr value) time<=momentDate&take_right(20)
                     // NOTE: this will take the last 20 Ap values and put them into the model
@@ -145,15 +141,15 @@ export class VisualizerComponent implements OnInit {
                 });
                 this.latisService.getF10Values(timeQuery).subscribe( (response: any) => {
                     const data: number[] = response.penticton_radio_flux_nearest_noon.data;
-                    this.setF107Values( data, newMomentDate );
+                    this.setF107Values( data, newTimestamp );
                 });
             });
 
         this.modelForm.valueChanges.pipe(
                 debounceTime(300)
-            ).subscribe( ( change ) => {
+            ).subscribe( () => {
                 // I want this 'if' statement to be uneccessary…some day
-                if ( this.modelForm.controls.dateTime && this.lastApDateWithValue && this.modelForm.controls.apForm ) {
+                if ( this.modelForm.value.dateTime && this.lastApDateWithValue && this.modelForm.controls.apForm ) {
                     this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
                         this.surfacePoints = cloneDeep(results);
                     });
@@ -196,7 +192,7 @@ export class VisualizerComponent implements OnInit {
     getAltitudeParams(): IAltitudeParameters {
         return {
             ap: Object.values(this.modelForm.value.apForm),
-            date: this.modelForm.value.dateTime.format('YYYY-MM-DDTHH:mm'),
+            date: moment.utc(this.modelForm.value.dateTime).format('YYYY-MM-DDTHH:mm'),
             f107: this.modelForm.controls.f107.value,
             f107a: this.modelForm.controls.f107.value,
             latitude: this.altitudeForm.value.latitude,
@@ -208,7 +204,7 @@ export class VisualizerComponent implements OnInit {
         return {
             altitude: this.surfaceForm.value.altitude,
             ap: Object.values(this.modelForm.value.apForm),
-            date: this.modelForm.value.dateTime.format('YYYY-MM-DDTHH:mm'),
+            date: moment.utc(this.modelForm.value.dateTime).format('YYYY-MM-DDTHH:mm'),
             f107: this.modelForm.controls.f107.value,
             f107a: this.modelForm.controls.f107.value
         };
@@ -216,11 +212,6 @@ export class VisualizerComponent implements OnInit {
 
     getValidationMessage( control: string ): string {
         switch (control) {
-        case 'dateTime':
-            if ( this.modelForm.controls.dateTime.hasError('required') ) {
-                return 'you must select a date';
-            }
-            break;
         case 'altitude':
             if ( this.surfaceForm.controls.altitude.hasError('min') ) {
                 return 'altitude must be positive';
@@ -289,7 +280,7 @@ export class VisualizerComponent implements OnInit {
         apForm.controls.apDay.enable();
     }
 
-    setF107Values( data: number[], date: moment.Moment ) {
+    setF107Values( data: number[], timestamp: number ) {
         // group values by day
         const f107ByDay = data.reduce(  (aggregator, values)  => {
             const day = moment.utc(values[0]).startOf('day').valueOf();
@@ -301,7 +292,7 @@ export class VisualizerComponent implements OnInit {
             return aggregator;
         }, {});
         // get the previous day's value
-        const startOfPreviousDay = date.clone().subtract(1, 'day').startOf('day').valueOf();
+        const startOfPreviousDay = moment.utc(timestamp).clone().subtract(1, 'day').startOf('day').valueOf();
         const previousDayValue = f107ByDay[startOfPreviousDay];
         this.modelForm.controls.f107.setValue(+previousDayValue.toFixed(2));
         this.modelForm.controls.f107.enable();

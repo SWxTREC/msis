@@ -14,9 +14,45 @@ $helper-font-size: 8pt;
     &__body {
         display: flex;
     }
+    &__dateTime {
+        display: inline-block;
+        ::ng-deep {
+            .mat-form-field-outline-start {
+                color: $color-primary;
+                border-width: 2.5px;
+            }
+            .mat-form-field-outline-gap {
+                color: $color-primary;
+                border-width: 2.5px;
+            }
+            .mat-form-field-outline-end {
+                color: $color-primary;
+                border-width: 2.5px;
+            }
+        }
+    }
     &__download {
         position: absolute;
         right: 20px;
+    }
+    &__field {
+        width: 150px;
+        &:not(:last-child) {
+            margin-right: 0.5rem;
+        }
+        ::ng-deep {
+            .mat-form-field-subscript-wrapper {
+                margin-top: 0;
+                padding: 0;
+                font-size: 70%;
+            }
+            .mat-form-field-infix {
+                padding: 0.4rem 0;
+            }
+        }
+        &--small {
+            width: 110px;
+        }
     }
     &__form-group {
         padding: 0.3rem 0 0.7rem 0;
@@ -43,41 +79,6 @@ $helper-font-size: 8pt;
         &--column {
             flex-direction: column;
             align-items: center;
-        }
-    }
-    &__field {
-        width: 150px;
-        &:not(:last-child) {
-            margin-right: 0.5rem;
-        }
-        ::ng-deep {
-            .mat-form-field-subscript-wrapper {
-                margin-top: 0;
-                padding: 0;
-                font-size: 70%;
-            }
-            .mat-form-field-infix {
-                padding: 0.4rem 0;
-            }
-        }
-        &--small {
-            width: 110px;
-        }
-        &--highlight {
-            ::ng-deep {
-                .mat-form-field-outline-start {
-                    color: $color-primary;
-                    border-width: 2.5px;
-                }
-                .mat-form-field-outline-gap {
-                    color: $color-primary;
-                    border-width: 2.5px;
-                }
-                .mat-form-field-outline-end {
-                    color: $color-primary;
-                    border-width: 2.5px;
-                }
-            }
         }
     }
     &__surface {

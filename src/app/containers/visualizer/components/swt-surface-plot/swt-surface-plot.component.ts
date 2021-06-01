@@ -380,8 +380,8 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     }
 
     setProjection() {
-        const hour = moment(this.dateTime).hour();
-        const minute = moment(this.dateTime).minute();
+        const hour = moment.utc(this.dateTime).hour();
+        const minute = moment.utc(this.dateTime).minute();
         this.centerLongitude = 180 - (hour + minute / 60) / 24 * 360;
         this.projection = d3.geoOrthographic()
             .scale(170)

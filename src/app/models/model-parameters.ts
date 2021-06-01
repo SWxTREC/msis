@@ -15,7 +15,7 @@ export interface IAltitudeData {
 
 export interface IAltitudeParameters {
     ap: number[];
-    date: Date;
+    date: string;
     f107: number;
     f107a: number;
     latitude: number;
@@ -58,7 +58,7 @@ export const EMPTY_SURFACE_DATA: ISurfaceData = {
 export interface ISurfaceParameters {
     altitude: number;
     ap: number[];
-    date: Date;
+    date: string;
     f107: number;
     f107a: number;
     options?: string;
