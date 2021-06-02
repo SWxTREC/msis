@@ -17,7 +17,7 @@ describe('SwtSurfacePlotComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SwtSurfacePlotComponent);
         component = fixture.componentInstance;
-        component.date = moment.utc();
+        component.dateTime = moment.utc();
         fixture.detectChanges();
     });
 
