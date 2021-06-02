@@ -17,6 +17,9 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
+                        "allowedCommonJsDependencies": [
+                            "lodash"
+                        ],
                         "aot": true,
                         "outputPath": "dist/swt",
                         "index": "src/index.html",

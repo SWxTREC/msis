@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LaspDateTimePickerModule } from 'lasp-range-slider';
 import { MaterialModule } from 'src/app/modules';
 
 import { VisualizerComponent } from './visualizer.container';
@@ -16,6 +17,7 @@ describe('VisualizerComponent', () => {
             imports: [
                 BrowserAnimationsModule,
                 HttpClientModule,
+                LaspDateTimePickerModule,
                 ReactiveFormsModule,
                 MaterialModule
             ]
