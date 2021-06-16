@@ -4,7 +4,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { cloneDeep, mean } from 'lodash';
 import * as moment from 'moment';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, every } from 'rxjs/operators';
 import { IAltitudeData, IAltitudeParameters, ISurfaceData, ISurfaceParameters } from 'src/app/models';
 import {
     LatisService,
@@ -107,8 +107,10 @@ export class VisualizerComponent implements OnInit {
         this.latisService.getDailyAp( moment.utc(initialTimestamp) ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
             const apValues = response.ap.data.map( values => values[1]);
-            const averageDailyAp = mean(apValues);
-            this.setDailyAp( averageDailyAp );
+            const averageDailyAp = apValues.length ? mean( apValues ) : undefined;
+            if ( averageDailyAp ) {
+                this.setDailyAp( averageDailyAp );
+            }
         });
         this.latisService.getApValues( this.dataExtent[1] ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // current time (closest 3hr value) time<=date&take_right(20).reverse();
@@ -128,8 +130,10 @@ export class VisualizerComponent implements OnInit {
                 .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
                     const apValues = response.ap.data.map( values => values[1]);
-                    const averageDailyAp = mean(apValues);
-                    this.setDailyAp( averageDailyAp );
+                    const averageDailyAp = apValues.length ? mean( apValues ) : undefined;
+                    if ( averageDailyAp ) {
+                        this.setDailyAp( averageDailyAp );
+                    }
                 });
                 this.latisService.getApValues( newTimestamp )
                 .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
@@ -146,32 +150,37 @@ export class VisualizerComponent implements OnInit {
             });
 
         this.modelForm.valueChanges.pipe(
-                debounceTime(300)
-            ).subscribe( () => {
-                // I want this 'if' statement to be uneccessary…some day
-                if ( this.modelForm.value.dateTime && this.lastApDateWithValue && this.modelForm.controls.apForm ) {
-                    this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
-                        this.surfacePoints = cloneDeep(results);
-                    });
-                    this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
-                        this.altitudePoints = cloneDeep(results);
-                    });
+            // if no default ap value, when every ap value has been defined, submit the request
+            every( form => {
+                if ( form.apForm ) {
+                    return Object.values(form.apForm).some( value => value === undefined);
+                } else {
+                    return true;
                 }
+            }),
+            debounceTime(300)
+        ).subscribe( () => {
+            this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+                this.surfacePoints = cloneDeep(results);
             });
+            this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+                this.altitudePoints = cloneDeep(results);
+            });
+        });
         this.surfaceForm.valueChanges.pipe(
-                debounceTime(300)
-            ).subscribe( () => {
-                this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
-                    this.surfacePoints = cloneDeep(results);
-                });
+            debounceTime(300)
+        ).subscribe( () => {
+            this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+                this.surfacePoints = cloneDeep(results);
             });
+        });
         this.altitudeForm.valueChanges.pipe(
-                debounceTime(300)
-            ).subscribe( () => {
-                this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
-                    this.altitudePoints = cloneDeep(results);
-                });
+            debounceTime(300)
+        ).subscribe( () => {
+            this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+                this.altitudePoints = cloneDeep(results);
             });
+        });
     }
 
     getF10Range( date: number ): number[] {
@@ -244,20 +253,20 @@ export class VisualizerComponent implements OnInit {
         // current time -3hr
         // current time -6hr
         // current time -9hr
-        // average for 8 values from current time -12hr to current time -33hrs
-        // average for 8 values from current time -36hr to current time -57hrs
+        // average for 8 values from current time -12hr to current time -33hrs, don't allow NaN
+        // average for 8 values from current time -36hr to current time -57hrs, don't allow NaN
         const data12T33 = data.slice(4, 12);
         const data36T57 = data.slice(12, 20);
-        const average12T33 = mean(data12T33);
-        const average36T57 = mean(data36T57);
+        const average12T33 = data12T33.length ? mean(data12T33) : undefined;
+        const average36T57 = data36T57.length ? mean(data36T57) : undefined;
         const apForm = this.modelForm.controls.apForm as FormGroup;
         apForm.patchValue({
             apCurrent: data[0],
             ap3: data[1],
             ap6: data[2],
             ap9: data[3],
-            ap12T33: +average12T33.toFixed(2),
-            ap36T57: +average36T57.toFixed(2)
+            ap12T33: +average12T33 ? +average12T33.toFixed(2) : undefined,
+            ap36T57: +average36T57 ? +average36T57.toFixed(2) : undefined
         });
         apForm.enable();
     }

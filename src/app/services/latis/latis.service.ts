@@ -16,7 +16,7 @@ export class LatisService {
         this.http.get(`${environment.latisSwp}ap.jsond?last()`).pipe(take(1)).subscribe( (response: any) => {
             // if there is a value, use that date,
             // otherwise app will default to today and show warning that no pre-filled data is available
-            if ( response.ap.data[0][1] ) {
+            if ( response.ap.data[0][1] != null ) {
                 this.mostRecentAp.next(response.ap.data[ 0 ][ 0 ]);
             }
         });

@@ -35,6 +35,11 @@ $helper-font-size: 8pt;
         position: absolute;
         right: 20px;
     }
+    &__error-group {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
     &__field {
         width: 150px;
         &:not(:last-child) {
