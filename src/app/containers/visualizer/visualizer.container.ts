@@ -319,16 +319,17 @@ export class VisualizerComponent implements OnInit {
         const dataToDownload: ISurfaceData | IAltitudeData = plot === 'surfacePlot' ? this.surfacePoints : this.altitudePoints;
         const headers: string[] = Object.keys(dataToDownload);
         // for each index in a header, add a row of values from each header
-        const arrayOfDataRows: (number | string)[] = dataToDownload[headers[0]].reduce( (aggregator: [number[]], _value: number, index: number) => {
-            const row: number[] = headers.map( header => dataToDownload[header][index]);
-            aggregator.push( row );
-            return aggregator;
-        }, [])
+        const arrayOfDataRows: (number | string)[] = dataToDownload[headers[0]]
+            .reduce( (aggregator: [number[]], _value: number, index: number) => {
+                const row: number[] = headers.map( header => dataToDownload[header][index]);
+                aggregator.push( row );
+                return aggregator;
+            }, []);
         // add header column to front of arrayOfDataRows
         arrayOfDataRows.unshift(headers.join(','));
         // join rows
         const csv = arrayOfDataRows.join('\r\n');
-        this.triggerDownload( plot, csv, 'csv')
+        this.triggerDownload( plot, csv, 'csv');
     }
 
     downloadSvg( element: any ) {
@@ -337,7 +338,7 @@ export class VisualizerComponent implements OnInit {
         altitudeBox.style.display = 'none';
         const serializer = new XMLSerializer;
         const serializedSvg = serializer.serializeToString(nativeElement);
-        this.triggerDownload( element, serializedSvg, 'svg')
+        this.triggerDownload( element, serializedSvg, 'svg');
         altitudeBox.style.display = 'unset';
     }
 
