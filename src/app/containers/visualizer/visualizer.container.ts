@@ -315,22 +315,42 @@ export class VisualizerComponent implements OnInit {
         this.modelForm.controls.f107a.enable();
     }
 
+    downloadData( plot: string ) {
+        const dataToDownload: ISurfaceData | IAltitudeData = plot === 'surfacePlot' ? this.surfacePoints : this.altitudePoints;
+        const headers: string[] = Object.keys(dataToDownload);
+        // for each index in a header, add a row of values from each header
+        const arrayOfDataRows: (number | string)[] = dataToDownload[headers[0]].reduce( (aggregator: [number[]], _value: number, index: number) => {
+            const row: number[] = headers.map( header => dataToDownload[header][index]);
+            aggregator.push( row );
+            return aggregator;
+        }, [])
+        // add header column to front of arrayOfDataRows
+        arrayOfDataRows.unshift(headers.join(','));
+        // join rows
+        const csv = arrayOfDataRows.join('\r\n');
+        this.triggerDownload( plot, csv, 'csv')
+    }
+
     downloadSvg( element: any ) {
         const nativeElement = this[element].elRef.nativeElement;
         const altitudeBox = nativeElement.querySelector('#altitude-box');
         altitudeBox.style.display = 'none';
         const serializer = new XMLSerializer;
         const serializedSvg = serializer.serializeToString(nativeElement);
-        const blob = new Blob([ serializedSvg ], { type: 'image/svg+xml' });
+        this.triggerDownload( element, serializedSvg, 'svg')
+        altitudeBox.style.display = 'unset';
+    }
+
+    triggerDownload( plotName: string, data: any, type: string) {
+        const blob = new Blob([ data ], { type: type });
         const url = window.URL.createObjectURL(blob);
         const anchor = document.createElement('a');
         anchor.href = url;
-        anchor.download = 'swxtrec-msis-surface-plot-' + moment.utc(this.modelForm.value.date).format('YYYY-MM-DD') + '.svg';
+        anchor.download = 'swxtrec-msis-' + plotName + '-' + moment.utc(this.modelForm.value.date).format('YYYY-MM-DD') + '.' + type;
         anchor.target = '_self';
         anchor.click();
         window.URL.revokeObjectURL(url);
         anchor.remove();
-        altitudeBox.style.display = 'unset';
     }
 
     updateLocation( coordinates: number[] ) {

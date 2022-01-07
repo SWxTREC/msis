@@ -90,7 +90,13 @@
                         [value]="variable"
                     >{{ variable }}</mat-button-toggle>
                 </mat-button-toggle-group>
-                <button mat-icon-button matTooltip="Download surface plot" class="viz__download" (click)="downloadSvg('surfacePlot')"><mat-icon>download</mat-icon></button>
+                <div class="viz__download">
+                    <button mat-button [matMenuTriggerFor]="menu" matTooltip="Download options"><mat-icon>download</mat-icon></button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="downloadSvg('surfacePlot')">Image as SVG</button>
+                      <button mat-menu-item (click)="downloadData('surfacePlot')">Data as CSV</button>
+                    </mat-menu>
+                </div>
             </mat-toolbar-row>
         </mat-toolbar>
     </mat-card>
