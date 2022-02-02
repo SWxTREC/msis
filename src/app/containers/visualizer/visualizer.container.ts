@@ -336,7 +336,7 @@ export class VisualizerComponent implements OnInit {
     downloadSvg( element: string ) {
         const nativeElement = this[element].elRef.nativeElement;
         // if needed, a little plot-specific code to remove the red altitude box from the surfacePlot
-        let altitudeBox = undefined;
+        let altitudeBox;
         if ( element === 'surfacePlot' ) {
             altitudeBox = nativeElement.querySelector('#altitude-box');
             altitudeBox.style.display = 'none';
