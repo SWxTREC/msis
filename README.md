@@ -96,10 +96,9 @@ When you are ready to push your image, contact the web team infrastructure group
 
 ## Deploy MSIS
 
-MSIS is publicly hosted by GitHub in the SWxTREC organization.
-<!-- Who needs to be made aware of a release? What limitations/restrictions are there before making a
-release? For example, is there an explicit vetting process, or perhaps certain time windows when a
-release shouldn't be made? -->
+MSIS was originally hosted by GitHub in the SWxTREC organization.
+It now has a place on AWS at msis.swx-trec.com
+Deploy to both places for now (but soon the GitHub site will redirect to swx-trec.com).
 
 ### Bump the version
 
@@ -110,6 +109,14 @@ This will:
 * run the linter and unit tests, and abort if they fail
 * increment the version, commit the change, and create a git tag
 * push the changes and the new tag to the remote repo
+
+### Deploy to AWS
+
+From main, `npm run build:prod` to create the `dist/` folder. Upload the contents of `dist/` to AWS. (The plan is to get a Jenkins job to automate this part.)
+
+After a few minutes, you will see the changes at https://msis.swx-trec.com.
+
+You can run this script from any branch, but the deployed production site should reflect the content of the current `main` branch.
 
 ### Deploy to GitHub pages
 
@@ -124,13 +131,6 @@ This will:
 After a few minutes, you will see the changes at the GitHub-hosted site https://swxtrec.github.io/msis.
 
 You can run this script from any branch, but the site should reflect the content of the current main branch.
-
-<!-- ## FAQs and Help
-
-### MSIS-specific common issues, gotchas
-
-Any kind of project-specific issues that would pop up goes here, as well as any quirks or
-inconsistencies within the project (e.g. hacks, workarounds, "I don't know why this works but....")
 
 ## External Resources
 

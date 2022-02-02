@@ -33,7 +33,7 @@ $helper-font-size: 8pt;
     }
     &__download {
         position: absolute;
-        right: 20px;
+        right: 0px;
     }
     &__error-group {
         display: flex;
@@ -65,6 +65,7 @@ $helper-font-size: 8pt;
     &__header-form {
         display: flex;
         justify-content: center;
+        align-items: center;
         padding: 1rem;
     }
     &__graphic {

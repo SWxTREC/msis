@@ -102,6 +102,8 @@ export class SwtAltitudePlotComponent implements OnChanges {
         this.variables.forEach( (d, i) => {
             const activeVariable: boolean = this.filteredVariables.includes(d);
             this.g.append('text')
+                .attr('font-family', 'sans-serif')
+                .attr('font-size', 'small')
                 .attr('x', this.width - (space / 2))
                 .attr('y', i * space * 1.5 - (space / 2)) // spacing
                 .attr('text-anchor', 'end')
