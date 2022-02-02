@@ -91,10 +91,10 @@
                     >{{ variable }}</mat-button-toggle>
                 </mat-button-toggle-group>
                 <div class="viz__download">
-                    <button mat-button [matMenuTriggerFor]="menu" matTooltip="Download options"><mat-icon>download</mat-icon></button>
-                    <mat-menu #menu="matMenu">
-                      <button mat-menu-item (click)="downloadSvg('surfacePlot')">Image as SVG</button>
-                      <button mat-menu-item (click)="downloadData('surfacePlot')">Data as CSV</button>
+                    <button mat-button [matMenuTriggerFor]="surfaceMenu" matTooltip="Surface plot download options"><mat-icon>download</mat-icon></button>
+                    <mat-menu #surfaceMenu="matMenu">
+                        <button mat-menu-item (click)="downloadSvg('surfacePlot')">Image as SVG</button>
+                        <button mat-menu-item (click)="downloadData('surfacePlot')">Data as CSV</button>
                     </mat-menu>
                 </div>
             </mat-toolbar-row>
@@ -117,6 +117,7 @@
         </div>
         <div class="viz__graphic">
             <swt-altitude-plot
+                #altitudePlot
                 *ngIf="altitudePoints"
                 [data]="altitudePoints"
                 [altitude]="surfaceForm.value.altitude"
@@ -126,12 +127,16 @@
             </swt-altitude-plot>
         </div>
         <div class="viz__header-form">
-            <mat-slide-toggle disabled
-                color="primary"
-                >
-              Log axis
+            <mat-slide-toggle disabled color="primary">
+                Log axis
             </mat-slide-toggle>
-
+            <div class="viz__download">
+                <button mat-button [matMenuTriggerFor]="altitudeMenu" matTooltip="Altitude plot download options"><mat-icon>download</mat-icon></button>
+                <mat-menu #altitudeMenu="matMenu">
+                    <button mat-menu-item (click)="downloadSvg('altitudePlot')">Image as SVG</button>
+                    <button mat-menu-item (click)="downloadData('altitudePlot')">Data as CSV</button>
+                </mat-menu>
+            </div>
         </div>
     </mat-card>
 </div>

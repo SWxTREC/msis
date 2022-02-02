@@ -36,6 +36,7 @@ export const DATEPICKER_FORMAT = {
 })
 export class VisualizerComponent implements OnInit {
     @ViewChild('surfacePlot') surfacePlot: SwtSurfacePlotComponent;
+    @ViewChild('altitudePlot') altitudePlot: SwtSurfacePlotComponent;
 
     // extent of ap and penticton data
     invalidFieldMessage: string;
@@ -315,8 +316,8 @@ export class VisualizerComponent implements OnInit {
         this.modelForm.controls.f107a.enable();
     }
 
-    downloadData( plot: string ) {
-        const dataToDownload: ISurfaceData | IAltitudeData = plot === 'surfacePlot' ? this.surfacePoints : this.altitudePoints;
+    downloadData( plotName: string ) {
+        const dataToDownload: ISurfaceData | IAltitudeData = plotName === 'surfacePlot' ? this.surfacePoints : this.altitudePoints;
         const headers: string[] = Object.keys(dataToDownload);
         // for each index in a header, add a row of values from each header
         const arrayOfDataRows: (number | string)[] = dataToDownload[headers[0]]
@@ -329,17 +330,23 @@ export class VisualizerComponent implements OnInit {
         arrayOfDataRows.unshift(headers.join(','));
         // join rows
         const csv = arrayOfDataRows.join('\r\n');
-        this.triggerDownload( plot, csv, 'csv');
+        this.triggerDownload( plotName, csv, 'csv');
     }
 
-    downloadSvg( element: any ) {
+    downloadSvg( element: string ) {
         const nativeElement = this[element].elRef.nativeElement;
-        const altitudeBox = nativeElement.querySelector('#altitude-box');
-        altitudeBox.style.display = 'none';
+        // if needed, a little plot-specific code to remove the red altitude box from the surfacePlot
+        let altitudeBox = undefined;
+        if ( element === 'surfacePlot' ) {
+            altitudeBox = nativeElement.querySelector('#altitude-box');
+            altitudeBox.style.display = 'none';
+        }
         const serializer = new XMLSerializer;
         const serializedSvg = serializer.serializeToString(nativeElement);
         this.triggerDownload( element, serializedSvg, 'svg');
-        altitudeBox.style.display = 'unset';
+        if ( element === 'surfacePlot' ) {
+            altitudeBox.style.display = 'unset';
+        }
     }
 
     triggerDownload( plotName: string, data: any, type: string) {
