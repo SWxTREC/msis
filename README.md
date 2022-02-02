@@ -112,7 +112,7 @@ This will:
 
 ### Deploy to AWS
 
-From main, `npm run build:prod` to create the `/dist` folder. Upload the contents of `/dist` to AWS. (The plan is to get a Jenkins job to automate this part.)
+From main, `npm run build:prod` to create the `dist/` folder. Upload the contents of `dist/` to AWS. (The plan is to get a Jenkins job to automate this part.)
 
 After a few minutes, you will see the changes at https://msis.swx-trec.com.
 
