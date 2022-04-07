@@ -34,8 +34,8 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
     projection: d3.GeoProjection;
     timer: d3.Timer;
 
-    constructor(private elRef: ElementRef) {
-        this.hostElement = this.elRef.nativeElement;
+    constructor(private _elRef: ElementRef) {
+        this.hostElement = this._elRef.nativeElement;
     }
 
     ngOnInit() {
@@ -149,7 +149,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
         };
 
         this.g2.selectAll('.lonLine')
-            .data(<any>featureCollection.features)
+            .data(featureCollection.features as any)
             .enter()
             .append('path')
             .attr('pointer-events', 'none')
@@ -209,6 +209,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
                 return this.surfaceColor(this.getData(feature.properties.index));
             })
             .attr('fill-opacity', 0.8)
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             .on('mouseover', (_: any, feature: any) => {
                 // mouseover returns the MouseEvent and then the feature as the second argument
                 const coordinates: [number, number] = [ feature.properties.Longitude, feature.properties.Latitude ];
@@ -250,6 +251,7 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
                         .text('-3');
                 }
             })
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             .on('click', (_: any, feature: any) => {
                 this.changeLocation.emit([ feature.properties.Longitude, feature.properties.Latitude ]);
             });

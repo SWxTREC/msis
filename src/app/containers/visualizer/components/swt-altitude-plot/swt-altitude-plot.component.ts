@@ -32,8 +32,8 @@ export class SwtAltitudePlotComponent implements OnChanges {
     xScale: d3.ScaleLogarithmic<number, number>;
     yScale: d3.ScaleLinear<number, number>;
 
-    constructor( private elRef: ElementRef ) {
-        this.hostElement = this.elRef.nativeElement;
+    constructor( private _elRef: ElementRef ) {
+        this.hostElement = this._elRef.nativeElement;
     }
 
     ngOnChanges(): void {
