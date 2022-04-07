@@ -141,5 +141,8 @@
             }
         }
     },
-    "defaultProject": "swt"
+    "defaultProject": "swt",
+    "cli": {
+        "defaultCollection": "@angular-eslint/schematics"
+    }
 }
