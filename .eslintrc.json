@@ -1,0 +1,40 @@
+{
+    "root": true,
+    "overrides": [
+        {
+            "files": [ "*.ts" ],
+            "parserOptions": {
+                "project": [ "tsconfig.json", "e2e/tsconfig.e2e.json" ],
+                "createDefaultProgram": true
+            },
+            "extends": [
+                "./node_modules/tslint-default/default-angular-rules.jsonc",
+                "./node_modules/tslint-default/default-rules.jsonc"
+            ],
+            "rules": {
+                "@angular-eslint/component-selector": [
+                    "error",
+                    {
+                        "type": "element",
+                        "prefix": [ "swt", "lasp" ],
+                        "style": "kebab-case"
+                    }
+                ],
+                "@angular-eslint/directive-selector": [
+                    "error",
+                    {
+                        "type": "attribute",
+                        "prefix": [ "swt", "lasp" ],
+                        "style": "camelCase"
+                    }
+                ]
+            }
+        }, {
+            "files": [ "*.html" ],
+            "extends": [
+                "./node_modules/tslint-default/default-angular-rules.jsonc",
+                "./node_modules/tslint-default/default-rules.jsonc"
+            ]
+        }
+    ]
+}
