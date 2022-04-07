@@ -4,7 +4,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { CdkTreeModule } from '@angular/cdk/tree';
 import { NgModule } from '@angular/core';
 import {
-    MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS
+    MAT_MOMENT_DATE_ADAPTER_OPTIONS, MatMomentDateModule
 } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';

@@ -122,12 +122,12 @@ export class VisualizerComponent implements OnInit {
         });
 
         this.modelForm.controls.dateTime.valueChanges.pipe(
-                debounceTime(300)
-            ).subscribe( (newTimestamp: number) => {
-                this.resetForm();
-                const f10Range: number[] = this.getF10Range( newTimestamp );
-                const timeQuery: string = this.latisService.getTimeQuery( f10Range[0], f10Range[1] );
-                this.latisService.getDailyAp( moment.utc(newTimestamp) )
+            debounceTime(300)
+        ).subscribe( (newTimestamp: number) => {
+            this.resetForm();
+            const f10Range: number[] = this.getF10Range( newTimestamp );
+            const timeQuery: string = this.latisService.getTimeQuery( f10Range[0], f10Range[1] );
+            this.latisService.getDailyAp( moment.utc(newTimestamp) )
                 .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
                     const apValues = response.ap.data.map( values => values[1]);
@@ -136,7 +136,7 @@ export class VisualizerComponent implements OnInit {
                         this.setDailyAp( averageDailyAp );
                     }
                 });
-                this.latisService.getApValues( newTimestamp )
+            this.latisService.getApValues( newTimestamp )
                 .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // current time (closest 3hr value) time<=momentDate&take_right(20)
                     // NOTE: this will take the last 20 Ap values and put them into the model
@@ -144,11 +144,11 @@ export class VisualizerComponent implements OnInit {
                     const data = response.ap.data.map( values => values[1]).reverse();
                     this.setApValues( data );
                 });
-                this.latisService.getF10Values(timeQuery).subscribe( (response: any) => {
-                    const data: number[] = response.penticton_radio_flux_nearest_noon.data;
-                    this.setF107Values( data, newTimestamp );
-                });
+            this.latisService.getF10Values(timeQuery).subscribe( (response: any) => {
+                const data: number[] = response.penticton_radio_flux_nearest_noon.data;
+                this.setF107Values( data, newTimestamp );
             });
+        });
 
         this.modelForm.valueChanges.pipe(
             // if no default ap value, when every ap value has been defined, submit the request
@@ -341,7 +341,7 @@ export class VisualizerComponent implements OnInit {
             altitudeBox = nativeElement.querySelector('#altitude-box');
             altitudeBox.style.display = 'none';
         }
-        const serializer = new XMLSerializer;
+        const serializer = new XMLSerializer();
         const serializedSvg = serializer.serializeToString(nativeElement);
         this.triggerDownload( element, serializedSvg, 'svg');
         if ( element === 'surfacePlot' ) {

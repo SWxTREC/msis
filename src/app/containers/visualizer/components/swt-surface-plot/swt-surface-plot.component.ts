@@ -299,10 +299,10 @@ export class SwtSurfacePlotComponent implements OnChanges, OnInit {
             geometry: {
                 type: 'Polygon',
                 coordinates: [ [ [ minLon, minLat ],
-                [ minLon, maxLat ],
-                [ maxLon, maxLat ],
-                [ maxLon, minLat ],
-                [ minLon, minLat ] ] ]
+                    [ minLon, maxLat ],
+                    [ maxLon, maxLat ],
+                    [ maxLon, minLat ],
+                    [ minLon, minLat ] ] ]
             }
         };
     }

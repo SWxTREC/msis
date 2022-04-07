@@ -19,7 +19,7 @@ export class SwtAltitudePlotComponent implements OnChanges {
     filteredVariables: string[];
     g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
     hostElement: HTMLElement; // Native element hosting the SVG container
-    margin: { top: number, right: number, bottom: number, left: number} = {
+    margin: { top: number; right: number; bottom: number; left: number} = {
         top: 20,
         right: 0,
         bottom: 35,
