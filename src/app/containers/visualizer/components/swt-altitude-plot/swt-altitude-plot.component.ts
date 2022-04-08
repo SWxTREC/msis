@@ -19,7 +19,7 @@ export class SwtAltitudePlotComponent implements OnChanges {
     filteredVariables: string[];
     g: d3.Selection<SVGElement, {}, HTMLElement, any>; // SVG Group element
     hostElement: HTMLElement; // Native element hosting the SVG container
-    margin: { top: number, right: number, bottom: number, left: number} = {
+    margin: { top: number; right: number; bottom: number; left: number} = {
         top: 20,
         right: 0,
         bottom: 35,
@@ -32,8 +32,8 @@ export class SwtAltitudePlotComponent implements OnChanges {
     xScale: d3.ScaleLogarithmic<number, number>;
     yScale: d3.ScaleLinear<number, number>;
 
-    constructor( private elRef: ElementRef ) {
-        this.hostElement = this.elRef.nativeElement;
+    constructor( private _elRef: ElementRef ) {
+        this.hostElement = this._elRef.nativeElement;
     }
 
     ngOnChanges(): void {

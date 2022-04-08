@@ -85,10 +85,10 @@ export class VisualizerComponent implements OnInit {
     altitudeSvg: IAltitudeData;
 
     constructor(
-        private modelService: ModelService,
-        private latisService: LatisService
+        private _modelService: ModelService,
+        private _latisService: LatisService
     ) {
-        this.latisService.mostRecentAp.subscribe( (timestamp: number) => {
+        this._latisService.mostRecentAp.subscribe( (timestamp: number) => {
             this.lastApDateWithValue = timestamp;
             this.dataExtent = [ moment.utc('1947-01-01').valueOf(), moment.utc(this.lastApDateWithValue).valueOf() ];
             this.modelForm.controls.dateTime.setValue(this.dataExtent[1]);
@@ -100,12 +100,12 @@ export class VisualizerComponent implements OnInit {
         const initialTimestamp: number = this.dataExtent[1];
         // figure out which f10.7 range to use, 54 days to past or 81 days centered on date, all must have values
         const f10DateRange: number[] = this.getF10Range( initialTimestamp );
-        const f10TimeQuery: string = this.latisService.getTimeQuery( f10DateRange[0], f10DateRange[1]);
-        this.latisService.getF10Values( f10TimeQuery ).subscribe( (response: any) => {
+        const f10TimeQuery: string = this._latisService.getTimeQuery( f10DateRange[0], f10DateRange[1]);
+        this._latisService.getF10Values( f10TimeQuery ).subscribe( (response: any) => {
             const data: number[] = response.penticton_radio_flux_nearest_noon.data;
             this.setF107Values( data, initialTimestamp );
         });
-        this.latisService.getDailyAp( moment.utc(initialTimestamp) ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
+        this._latisService.getDailyAp( moment.utc(initialTimestamp) ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
             const apValues = response.ap.data.map( values => values[1]);
             const averageDailyAp = apValues.length ? mean( apValues ) : undefined;
@@ -113,7 +113,7 @@ export class VisualizerComponent implements OnInit {
                 this.setDailyAp( averageDailyAp );
             }
         });
-        this.latisService.getApValues( this.dataExtent[1] ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
+        this._latisService.getApValues( this.dataExtent[1] ).subscribe( (response: {[parameter: string]: { data: number[] }}) => {
             // current time (closest 3hr value) time<=date&take_right(20).reverse();
             // NOTE: this will take the last 20 Ap values and put them into the model
             // if a value is missing, the next value is used, is this okay? The best we can do?
@@ -122,12 +122,12 @@ export class VisualizerComponent implements OnInit {
         });
 
         this.modelForm.controls.dateTime.valueChanges.pipe(
-                debounceTime(300)
-            ).subscribe( (newTimestamp: number) => {
-                this.resetForm();
-                const f10Range: number[] = this.getF10Range( newTimestamp );
-                const timeQuery: string = this.latisService.getTimeQuery( f10Range[0], f10Range[1] );
-                this.latisService.getDailyAp( moment.utc(newTimestamp) )
+            debounceTime(300)
+        ).subscribe( (newTimestamp: number) => {
+            this.resetForm();
+            const f10Range: number[] = this.getF10Range( newTimestamp );
+            const timeQuery: string = this._latisService.getTimeQuery( f10Range[0], f10Range[1] );
+            this._latisService.getDailyAp( moment.utc(newTimestamp) )
                 .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // daily Ap, or up to 8 values for the day, range: [ startOfDay, endOfDay ] then average
                     const apValues = response.ap.data.map( values => values[1]);
@@ -136,7 +136,7 @@ export class VisualizerComponent implements OnInit {
                         this.setDailyAp( averageDailyAp );
                     }
                 });
-                this.latisService.getApValues( newTimestamp )
+            this._latisService.getApValues( newTimestamp )
                 .subscribe( (response: {[parameter: string]: { data: number[] }}) => {
                     // current time (closest 3hr value) time<=momentDate&take_right(20)
                     // NOTE: this will take the last 20 Ap values and put them into the model
@@ -144,11 +144,11 @@ export class VisualizerComponent implements OnInit {
                     const data = response.ap.data.map( values => values[1]).reverse();
                     this.setApValues( data );
                 });
-                this.latisService.getF10Values(timeQuery).subscribe( (response: any) => {
-                    const data: number[] = response.penticton_radio_flux_nearest_noon.data;
-                    this.setF107Values( data, newTimestamp );
-                });
+            this._latisService.getF10Values(timeQuery).subscribe( (response: any) => {
+                const data: number[] = response.penticton_radio_flux_nearest_noon.data;
+                this.setF107Values( data, newTimestamp );
             });
+        });
 
         this.modelForm.valueChanges.pipe(
             // if no default ap value, when every ap value has been defined, submit the request
@@ -161,24 +161,24 @@ export class VisualizerComponent implements OnInit {
             }),
             debounceTime(300)
         ).subscribe( () => {
-            this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+            this._modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
                 this.surfacePoints = cloneDeep(results);
             });
-            this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+            this._modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
                 this.altitudePoints = cloneDeep(results);
             });
         });
         this.surfaceForm.valueChanges.pipe(
             debounceTime(300)
         ).subscribe( () => {
-            this.modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
+            this._modelService.submitSurfaceRequest( this.getSurfaceParams() ).subscribe( (results: ISurfaceData) => {
                 this.surfacePoints = cloneDeep(results);
             });
         });
         this.altitudeForm.valueChanges.pipe(
             debounceTime(300)
         ).subscribe( () => {
-            this.modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
+            this._modelService.submitAltitudeRequest( this.getAltitudeParams() ).subscribe( (results: IAltitudeData) => {
                 this.altitudePoints = cloneDeep(results);
             });
         });
@@ -237,6 +237,8 @@ export class VisualizerComponent implements OnInit {
                 return 'must be between -180 and 360';
             }
             break;
+        default:
+            return '';
         }
     }
 
@@ -321,6 +323,7 @@ export class VisualizerComponent implements OnInit {
         const headers: string[] = Object.keys(dataToDownload);
         // for each index in a header, add a row of values from each header
         const arrayOfDataRows: (number | string)[] = dataToDownload[headers[0]]
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             .reduce( (aggregator: [number[]], _value: number, index: number) => {
                 const row: number[] = headers.map( header => dataToDownload[header][index]);
                 aggregator.push( row );
@@ -336,12 +339,12 @@ export class VisualizerComponent implements OnInit {
     downloadSvg( element: string ) {
         const nativeElement = this[element].elRef.nativeElement;
         // if needed, a little plot-specific code to remove the red altitude box from the surfacePlot
-        let altitudeBox;
+        let altitudeBox: { style: { display: string } };
         if ( element === 'surfacePlot' ) {
             altitudeBox = nativeElement.querySelector('#altitude-box');
             altitudeBox.style.display = 'none';
         }
-        const serializer = new XMLSerializer;
+        const serializer = new XMLSerializer();
         const serializedSvg = serializer.serializeToString(nativeElement);
         this.triggerDownload( element, serializedSvg, 'svg');
         if ( element === 'surfacePlot' ) {

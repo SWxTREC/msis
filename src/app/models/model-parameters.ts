@@ -1,3 +1,4 @@
+/* eslint-disable */
 export interface IAltitudeData {
     Altitude: number[];
     AnomO: number[];
@@ -63,3 +64,4 @@ export interface ISurfaceParameters {
     f107a: number;
     options?: string;
 }
+/* eslint-enable */

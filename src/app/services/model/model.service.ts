@@ -7,13 +7,13 @@ import { environment } from 'src/environments/environment';
     providedIn: 'root'
 })
 export class ModelService {
-    constructor(private http: HttpClient) { }
+    constructor(private _http: HttpClient) { }
 
     submitSurfaceRequest( params: ISurfaceParameters ) {
-        return this.http.get(environment.msisApi + '/surface', { params: <any>params } );
+        return this._http.get(environment.msisApi + '/surface', { params: params as any } );
     }
 
     submitAltitudeRequest( params: IAltitudeParameters ) {
-        return this.http.get<any>(environment.msisApi + '/altitude', { params: <any>params });
+        return this._http.get(environment.msisApi + '/altitude', { params: params as any });
     }
 }
