@@ -74,7 +74,7 @@ export class VisualizerComponent implements OnInit {
         'He',
         'N',
         'N2',
-        // 'NO', TODO: enable this when ready
+        'NO',
         'O',
         'O2',
         'Mass',
@@ -93,7 +93,6 @@ export class VisualizerComponent implements OnInit {
             this.dataExtent = [ moment.utc('1947-01-01').valueOf(), moment.utc(this.lastApDateWithValue).valueOf() ];
             this.modelForm.controls.dateTime.setValue(this.dataExtent[1]);
         });
-
     }
 
     ngOnInit() {
