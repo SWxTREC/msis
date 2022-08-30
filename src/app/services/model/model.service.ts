@@ -10,10 +10,10 @@ export class ModelService {
     constructor(private _http: HttpClient) { }
 
     submitSurfaceRequest( params: ISurfaceParameters ) {
-        return this._http.get(environment.msisApi + '/surface', { params: params as any } );
+        return this._http.get(environment.msisApi + 'surface', { params: params as any } );
     }
 
     submitAltitudeRequest( params: IAltitudeParameters ) {
-        return this._http.get(environment.msisApi + '/altitude', { params: params as any });
+        return this._http.get(environment.msisApi + 'altitude', { params: params as any });
     }
 }

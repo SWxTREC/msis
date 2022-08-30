@@ -9,7 +9,7 @@ export const environment = {
     // latisLisird: 'http://lisird-stage.pdmz.lasp.colorado.edu/lisird/latis/dap/',
     latisSwp: 'https://lasp.colorado.edu/space-weather-portal/latis/dap/',
     latisLisird: 'https://lasp.colorado.edu/lisird/latis/dap/',
-    msisApi: 'https://uqw5ak3cjh.execute-api.us-east-1.amazonaws.com/Prod/msis2',
+    msisApi: 'https://msis-api.dev.swx-trec.com/',
     production: false,
     version: version
 };
